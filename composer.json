@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php": ">=7.2",
+        "composer/ca-bundle": "^1.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "nesbot/carbon": "^2.41"
+    },
+    "autoload": {
+        "psr-4": {
+            "Payconiq\\": "src/"
+        }
+    }
+}
