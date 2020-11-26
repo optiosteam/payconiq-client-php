@@ -20,14 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad2e7464-7a75-4db4-acc5-3f3ef51fbd10" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Request/CreatePayment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Request/SearchPayments.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Resource/Payment/Creditor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Resource/Payment/Debtor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Resource/Payment/Payment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Exception/PayconiqApiException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PayconiqApiClient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/src/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +57,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1606393340775</updated>
-      <workItem from="1606393341893" duration="16764000" />
+      <workItem from="1606393341893" duration="17051000" />
     </task>
     <servers />
   </component>
