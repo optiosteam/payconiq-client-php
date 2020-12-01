@@ -1,13 +1,18 @@
 {
+    "name": "optiosteam/payconiq-client-php",
     "require": {
         "php": ">=7.2",
         "composer/ca-bundle": "^1.1",
         "guzzlehttp/guzzle": "^7.0",
-        "nesbot/carbon": "^2.41"
+        "nesbot/carbon": "^2.41",
+        "web-token/jwt-checker": "^2.2",
+        "web-token/jwt-signature": "^2.2",
+        "web-token/jwt-signature-algorithm-ecdsa": "^2.2",
+        "symfony/cache": "^5.2"
     },
     "autoload": {
         "psr-4": {
-            "Payconiq\\": "src/"
+            "Optios\\Payconiq\\": "src/"
         }
     }
 }

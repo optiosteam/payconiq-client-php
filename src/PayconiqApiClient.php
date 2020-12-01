@@ -1,15 +1,18 @@
 <?php
 declare(strict_types = 1);
 
-namespace Payconiq;
+namespace Optios\Payconiq;
 
+use Carbon\Exceptions\Exception;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Payconiq\Request\CreatePayment;
-use Payconiq\Resource\Payment\Payment;
+use Optios\Payconiq\Exception\PayconiqApiException;
+use Optios\Payconiq\Request\CreatePayment;
+use Optios\Payconiq\Resource\Payment\Payment;
 
 class PayconiqApiClient
 {
@@ -37,14 +40,16 @@ class PayconiqApiClient
     /**
      * PayconiqApiClient constructor.
      *
+     * @param string               $apiKey
      * @param ClientInterface|null $httpClient
+     * @param bool                 $useProd
      */
-    public function __construct(ClientInterface $httpClient = null, bool $useProd = true)
+    public function __construct(string $apiKey, ClientInterface $httpClient = null, bool $useProd = true)
     {
         if (null === $httpClient) {
             $httpClient = new Client([
                 RequestOptions::HEADERS => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Authorization' => 'Bearer ' . $apiKey,
                 ],
                 RequestOptions::TIMEOUT => self::TIMEOUT,
                 RequestOptions::CONNECT_TIMEOUT => self::CONNECT_TIMEOUT,
@@ -58,15 +63,20 @@ class PayconiqApiClient
 
     public function createPayment(CreatePayment $createPayment): Payment
     {
-        //todo figure out exception handling
-        $response = $this->httpClient->post(
-            $this->getApiEndpointBase() . '/payments',
-            [
-                RequestOptions::JSON => json_encode($createPayment->toArray()),
-            ]
-        );
+        try {
+            $response = $this->httpClient->post(
+                $this->getApiEndpointBase() . '/payments',
+                [
+                    RequestOptions::JSON => $createPayment->toArray(),
+//                RequestOptions::BODY => json_encode($createPayment->toArray()),
 
-        return Payment::createFromResponse($response);
+                ]
+            );
+
+            return Payment::createFromResponse($response);
+        } catch (ClientException $e) {
+            throw $this->convertToPayconiqApiException($e);
+        }
     }
 
     public function getPayment(string $paymentId): Payment
@@ -102,7 +112,7 @@ class PayconiqApiClient
     /**
      * @param string $apiKey
      */
-    public function setApiKey(string $apiKey)
+    public function setApiKey(string $apiKey): void
     {
         $this->apiKey = $apiKey;
     }
@@ -110,5 +120,21 @@ class PayconiqApiClient
     public function getApiEndpointBase(): string
     {
         return ($this->useProd ? self::API_ENDPOINT : self::API_EXT_ENDPOINT) . self::API_VERSION;
+    }
+
+    private function convertToPayconiqApiException(ClientException $e)
+    {
+        $message = json_decode(
+            $e->getResponse()->getBody()->getContents()
+        );
+
+        return new PayconiqApiException(
+            $message->message ?? null,
+            $message->code ?? null,
+            $message->traceId ?? null,
+            $message->spanId ?? null,
+            $e->getMessage(),
+            $e->getCode()
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Payconiq\Resource\Payment;
+namespace Optios\Payconiq\Resource\Payment;
 
 use Carbon\Carbon;
 use Psr\Http\Message\ResponseInterface;
