@@ -29,6 +29,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
+/**
+ * Class PayconiqCallbackSignatureVerifier
+ * @package Optios\Payconiq
+ */
 class PayconiqCallbackSignatureVerifier
 {
 //    const ALG                  = 'ES256'; //todo: remove?

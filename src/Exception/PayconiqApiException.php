@@ -1,8 +1,12 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Optios\Payconiq\Exception;
 
+/**
+ * Class PayconiqApiException
+ * @package Optios\Payconiq\Exception
+ */
 class PayconiqApiException extends PayconiqBaseException
 {
     /**
@@ -38,9 +42,9 @@ class PayconiqApiException extends PayconiqBaseException
         parent::__construct($isProd, $message, $code, $previous);
 
         $this->payconiqMessage = $payconiqMessage;
-        $this->payconiqCode = $payconiqCode;
-        $this->traceId      = $traceId;
-        $this->spanId       = $spanId;
+        $this->payconiqCode    = $payconiqCode;
+        $this->traceId         = $traceId;
+        $this->spanId          = $spanId;
     }
 
     /**

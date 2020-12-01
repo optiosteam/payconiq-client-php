@@ -1,9 +1,12 @@
 <?php
-
+declare(strict_types = 1);
 
 namespace Optios\Payconiq\Exception;
 
-
+/**
+ * Class PayconiqBaseException
+ * @package Optios\Payconiq\Exception
+ */
 abstract class PayconiqBaseException extends \Exception
 {
     /**

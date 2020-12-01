@@ -3,17 +3,19 @@ declare(strict_types = 1);
 
 namespace Optios\Payconiq;
 
-use Carbon\Exceptions\Exception;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Optios\Payconiq\Exception\PayconiqApiException;
 use Optios\Payconiq\Request\CreatePayment;
 use Optios\Payconiq\Resource\Payment\Payment;
 
+/**
+ * Class PayconiqApiClient
+ * @package Optios\Payconiq
+ */
 class PayconiqApiClient
 {
     const API_VERSION      = 'v3';
@@ -53,7 +55,7 @@ class PayconiqApiClient
                 ],
                 RequestOptions::TIMEOUT => self::TIMEOUT,
                 RequestOptions::CONNECT_TIMEOUT => self::CONNECT_TIMEOUT,
-                //RequestOptions::VERIFY => CaBundle::getBundledCaBundlePath(),
+                RequestOptions::VERIFY => CaBundle::getBundledCaBundlePath(),
             ]);
         }
 
@@ -68,7 +70,6 @@ class PayconiqApiClient
                 $this->getApiEndpointBase() . '/payments',
                 [
                     RequestOptions::JSON => $createPayment->toArray(),
-//                RequestOptions::BODY => json_encode($createPayment->toArray()),
 
                 ]
             );
@@ -133,6 +134,7 @@ class PayconiqApiClient
             $message->code ?? null,
             $message->traceId ?? null,
             $message->spanId ?? null,
+            $this->useProd,
             $e->getMessage(),
             $e->getCode()
         );
