@@ -4,7 +4,7 @@
 
 Supported API version: v3
 
-Development sponsored by [Optios](https://www.optios.net]
+Development sponsored by [Optios](https://www.optios.net)
 
 API Documentation: https://developer.payconiq.com/online-payments-dock/#payment-api-version-3-v3-
 
