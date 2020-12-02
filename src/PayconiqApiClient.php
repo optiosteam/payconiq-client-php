@@ -145,7 +145,6 @@ class PayconiqApiClient
                 $url->__toString(),
                 [
                     RequestOptions::JSON => $search->toArray(),
-
                 ]
             );
 
