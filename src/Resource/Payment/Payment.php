@@ -157,6 +157,12 @@ class Payment
         return Payment::createFromStdClass($response);
     }
 
+    /**
+     * @param \stdClass $response
+     *
+     * @return static
+     * @throws \Exception
+     */
     public static function createFromStdClass(\stdClass $response): self
     {
         $self = new self(
@@ -176,8 +182,8 @@ class Payment
 
         if (! empty($response->debtor)) {
             $self->setDebtor(new Debtor(
-                $response->debtor->name,
-                $response->debtor->iban
+                $response->debtor->name ?? null,
+                $response->debtor->iban ?? null
             ));
         }
 

@@ -1,6 +1,17 @@
 {
     "name": "optiosteam/payconiq-client-php",
     "description": "Payconiq API client library for PHP developed by Optios.",
+    "keywords": [
+        "payconiq",
+        "client",
+        "api",
+        "php"
+    ],
+    "support": {
+        "issues": "https://github.com/optiosteam/payconiq-client-php/issues",
+        "source": "https://github.com/optiosteam/payconiq-client-php"
+    },
+    "license": "MIT",
     "authors": [
         {
             "name": "Optios BV",

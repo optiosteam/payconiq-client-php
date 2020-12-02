@@ -66,39 +66,15 @@ class CreatePayment
     /**
      * CreatePayment constructor.
      *
-     * @param int         $amount
-     * @param string      $currency
-     * @param string|null $callbackUrl
-     * @param string|null $reference
-     * @param string|null $description
-     * @param string|null $bulkId
-     * @param string|null $posId
-     * @param string|null $shopId
-     * @param string|null $shopName
-     * @param string|null $returnUrl
+     * @param int    $amount
+     * @param string $currency
      */
     public function __construct(
         int $amount,
-        string $currency = 'EUR',
-        ?string $callbackUrl = null,
-        ?string $reference = null,
-        ?string $description = null,
-        ?string $bulkId = null,
-        ?string $posId = null,
-        ?string $shopId = null,
-        ?string $shopName = null,
-        ?string $returnUrl = null
+        string $currency = 'EUR'
     ) {
-        $this->amount      = $amount;
-        $this->currency    = $currency;
-        $this->callbackUrl = $callbackUrl;
-        $this->reference   = $reference;
-        $this->description = $description;
-        $this->bulkId      = $bulkId;
-        $this->posId       = $posId;
-        $this->shopId      = $shopId;
-        $this->shopName    = $shopName;
-        $this->returnUrl   = $returnUrl;
+        $this->amount   = $amount;
+        $this->currency = $currency;
     }
 
     /**

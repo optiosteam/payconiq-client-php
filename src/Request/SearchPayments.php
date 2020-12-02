@@ -34,21 +34,12 @@ class SearchPayments
     /**
      * SearchPayments constructor.
      *
-     * @param Carbon        $from
-     * @param Carbon|null   $to
-     * @param string[]|null $paymentStatuses
-     * @param string|null   $reference
+     * @param Carbon $from
      */
     public function __construct(
-        Carbon $from,
-        ?Carbon $to = null,
-        array $paymentStatuses = null,
-        ?string $reference = null
+        Carbon $from
     ) {
-        $this->from            = $from;
-        $this->to              = $to;
-        $this->paymentStatuses = $paymentStatuses;
-        $this->reference       = $reference;
+        $this->from = $from;
     }
 
     /**

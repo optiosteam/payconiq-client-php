@@ -10,55 +10,55 @@ namespace Optios\Payconiq\Resource\Payment;
 class Debtor
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $iban;
 
     /**
      * Debtor constructor.
      *
-     * @param string $name
-     * @param string $iban
+     * @param string|null $name
+     * @param string|null $iban
      */
-    public function __construct(string $name, string $iban)
+    public function __construct(?string $name, ?string $iban)
     {
         $this->name = $name;
         $this->iban = $iban;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban(): ?string
     {
         return $this->iban;
     }
 
     /**
-     * @param string $iban
+     * @param string|null $iban
      */
-    public function setIban(string $iban): void
+    public function setIban(?string $iban): void
     {
         $this->iban = $iban;
     }

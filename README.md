@@ -16,9 +16,9 @@ API Documentation: https://developer.payconiq.com/online-payments-dock/#payment-
 composer require optiosteam/payconiq-client-php
 ```
 
-## Examples
+## Some examples
 
-### Create Payment
+### Create payment
 ```php
 use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\CreatePayment;
@@ -28,31 +28,31 @@ $apiKey = 'MY_PAYCONIQ_API_KEY';
 $client = new PayconiqApiClient($apiKey, null, false);
 
 $createPayment = new CreatePayment(
-    100, // = € 1
-    'EUR',
-    'https://mywebsite.com/api/payconiq-webhook',
-    'ref123456',
-    null,
-    null,
-    'POS00001'
+    100 // = € 1
 );
+$createPayment->setCallbackUrl('https://mywebsite.com/api/payconiq-webhook');
+$createPayment->setReference('ref123456');
+$createPayment->setPosId('POS00001');
+
 $payment = $client->createPayment($createPayment);
 var_dump($payment);
 ```
 
-### Search Payment
+### Search payments
 ```php
+use Carbon\Carbon;
 use Optios\Payconiq\PayconiqApiClient;
+use Optios\Payconiq\Request\SearchPayments;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
 
 $client = new PayconiqApiClient($apiKey, null, false);
-
-$search = $client->searchPayments('2020-12-01 00:00:00');
-var_dump($search);
+$search = new SearchPayments(new Carbon('2020-12-01 00:00:00'));
+$searchResult = $client->searchPayments($search);
+var_dump($searchResult);
 ```
 
-### Verify Callback
+### Verify callback
 ```php
 use Optios\Payconiq\PayconiqCallbackSignatureVerifier;
 
@@ -72,7 +72,7 @@ echo $payconiqCallbackSignatureVerifier->isValid($signature, $payload) ? 'valid'
 var_dump($payconiqCallbackSignatureVerifier->loadAndVerifyJWS($signature, $payload));
 ```
 
-### QR Link Generation
+### QR link generation
 ```php
 use Optios\Payconiq\PayconiqQrCodeGenerator;
 
@@ -94,3 +94,5 @@ var_dump($staticQRLink);
 
 
 Feel free to submit pull requests for improvements & bugfixes.
+
+MIT License

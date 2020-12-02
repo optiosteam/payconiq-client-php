@@ -124,37 +124,21 @@ class PayconiqApiClient
     }
 
     /**
-     * @param string        $from
-     * @param string|null   $to
-     * @param string[]|null $paymentStatuses
-     * @param string|null   $reference
-     * @param int           $page
-     * @param int           $size
+     * @param SearchPayments $search
+     * @param int            $page
+     * @param int            $size
      *
      * @return SearchResult
      * @throws PayconiqApiException
      */
     public function searchPayments(
-        string $from,
-        ?string $to = null,
-        array $paymentStatuses = null,
-        ?string $reference = null,
+        SearchPayments $search,
         int $page = 0,
         int $size = 50
     ): SearchResult {
         try {
             $url = Url::createFromUrl($this->getApiEndpointBase() . '/payments/search');
             $url->getQuery()->modify(['page' => $page, 'size' => $size]);
-
-            $fromDate = new Carbon($from);
-            $toDate   = ! empty($to) ? new Carbon($from) : null;
-
-            $search = new SearchPayments(
-                $fromDate,
-                $toDate,
-                $paymentStatuses,
-                $reference
-            );
 
             $response = $this->httpClient->post(
                 $url->__toString(),
