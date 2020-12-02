@@ -64,6 +64,7 @@ class PayconiqApiClient
             ]);
         }
 
+        $this->apiKey     = $apiKey;
         $this->httpClient = $httpClient;
         $this->useProd    = $useProd;
     }
@@ -95,7 +96,7 @@ class PayconiqApiClient
     {
         try {
             $response = $this->httpClient->get(
-                $this->getApiEndpointBase() . '/payments/' / $paymentId
+                $this->getApiEndpointBase() . '/payments/' . $paymentId
             );
 
             return Payment::createFromResponse($response);
