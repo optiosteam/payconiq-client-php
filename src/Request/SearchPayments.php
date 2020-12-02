@@ -11,6 +11,8 @@ use Carbon\Carbon;
  */
 class SearchPayments
 {
+    private const SEARCH_DATE_FORMAT = 'Y-m-d\TH:i:s.v\Z';
+
     /**
      * @var Carbon
      */
@@ -48,11 +50,11 @@ class SearchPayments
     public function toArray(): array
     {
         $array = [
-            'from' => $this->from->format(\DateTime::ATOM),
+            'from' => $this->from->format(self::SEARCH_DATE_FORMAT),
         ];
 
         if (null !== $this->to) {
-            $array[ 'to' ] = $this->to->format(\DateTime::ATOM);
+            $array[ 'to' ] = $this->to->format(self::SEARCH_DATE_FORMAT);
         }
 
         if (! empty($this->paymentStatuses)) {
