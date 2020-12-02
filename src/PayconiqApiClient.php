@@ -69,6 +69,12 @@ class PayconiqApiClient
         $this->useProd    = $useProd;
     }
 
+    /**
+     * @param CreatePayment $createPayment
+     *
+     * @return Payment
+     * @throws PayconiqApiException
+     */
     public function createPayment(CreatePayment $createPayment): Payment
     {
         try {
@@ -81,7 +87,7 @@ class PayconiqApiClient
             );
 
             return Payment::createFromResponse($response);
-        } catch (ClientException $e) {
+        } catch (ClientException|GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -170,13 +176,33 @@ class PayconiqApiClient
         $this->apiKey = $apiKey;
     }
 
+    /**
+     * @return string
+     */
     public function getApiEndpointBase(): string
     {
         return ($this->useProd ? self::API_ENDPOINT : self::API_EXT_ENDPOINT) . self::API_VERSION;
     }
 
-    private function convertToPayconiqApiException(ClientException $e)
+    /**
+     * @param \Throwable $e
+     *
+     * @return PayconiqApiException
+     */
+    private function convertToPayconiqApiException(\Throwable $e)
     {
+        if (empty($e->getResponse()->getBody()->getContents())) {
+            return new PayconiqApiException(
+                null,
+                null,
+                null,
+                null,
+                $this->useProd,
+                $e->getMessage(),
+                $e->getCode()
+            );
+        }
+
         $message = json_decode(
             $e->getResponse()->getBody()->getContents()
         );
