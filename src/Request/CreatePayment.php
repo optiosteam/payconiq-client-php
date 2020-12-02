@@ -17,11 +17,6 @@ class CreatePayment
     /**
      * @var string
      */
-    private $posId;
-
-    /**
-     * @var string
-     */
     private $currency;
 
     /**
@@ -45,55 +40,74 @@ class CreatePayment
     private $bulkId;
 
     /**
+     * Used for Static QR Sticker
+     * @var string|null
+     */
+    private $posId;
+
+    /**
+     * Used for Static QR Sticker
      * @var string|null
      */
     private $shopId;
 
     /**
+     * Used for Static QR Sticker
      * @var string|null
      */
     private $shopName;
 
     /**
+     * Used for Checkout Flow Online
+     * @var string|null
+     */
+    private $returnUrl;
+
+    /**
      * CreatePayment constructor.
      *
      * @param int         $amount
-     * @param string      $posId
      * @param string      $currency
      * @param string|null $callbackUrl
      * @param string|null $reference
      * @param string|null $description
      * @param string|null $bulkId
+     * @param string|null $posId
      * @param string|null $shopId
      * @param string|null $shopName
+     * @param string|null $returnUrl
      */
     public function __construct(
         int $amount,
-        string $posId,
         string $currency = 'EUR',
         ?string $callbackUrl = null,
         ?string $reference = null,
         ?string $description = null,
         ?string $bulkId = null,
+        ?string $posId = null,
         ?string $shopId = null,
-        ?string $shopName = null
+        ?string $shopName = null,
+        ?string $returnUrl = null
     ) {
         $this->amount      = $amount;
-        $this->posId       = $posId;
         $this->currency    = $currency;
         $this->callbackUrl = $callbackUrl;
         $this->reference   = $reference;
         $this->description = $description;
         $this->bulkId      = $bulkId;
+        $this->posId       = $posId;
         $this->shopId      = $shopId;
         $this->shopName    = $shopName;
+        $this->returnUrl   = $returnUrl;
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         $array = [
             'amount' => $this->amount,
-            'posId' => $this->posId,
             'currency' => $this->currency,
         ];
 
@@ -101,8 +115,10 @@ class CreatePayment
         $this->reference ? $array[ 'reference' ] = $this->reference : null;
         $this->description ? $array[ 'description' ] = $this->description : null;
         $this->bulkId ? $array[ 'bulkId' ] = $this->bulkId : null;
+        $this->posId ? $array[ 'posId' ] = $this->posId : null;
         $this->shopId ? $array[ 'shopId' ] = $this->shopId : null;
         $this->shopName ? $array[ 'shopName' ] = $this->shopName : null;
+        $this->returnUrl ? $array[ 'returnUrl' ] = $this->returnUrl : null;
 
         return $array;
     }
@@ -121,22 +137,6 @@ class CreatePayment
     public function setAmount(int $amount): void
     {
         $this->amount = $amount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPosId(): string
-    {
-        return $this->posId;
-    }
-
-    /**
-     * @param string $posId
-     */
-    public function setPosId(string $posId): void
-    {
-        $this->posId = $posId;
     }
 
     /**
@@ -174,22 +174,6 @@ class CreatePayment
     /**
      * @return string|null
      */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getReference(): ?string
     {
         return $this->reference;
@@ -206,6 +190,22 @@ class CreatePayment
     /**
      * @return string|null
      */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getBulkId(): ?string
     {
         return $this->bulkId;
@@ -217,6 +217,22 @@ class CreatePayment
     public function setBulkId(?string $bulkId): void
     {
         $this->bulkId = $bulkId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPosId(): ?string
+    {
+        return $this->posId;
+    }
+
+    /**
+     * @param string|null $posId
+     */
+    public function setPosId(?string $posId): void
+    {
+        $this->posId = $posId;
     }
 
     /**
@@ -249,5 +265,21 @@ class CreatePayment
     public function setShopName(?string $shopName): void
     {
         $this->shopName = $shopName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReturnUrl(): ?string
+    {
+        return $this->returnUrl;
+    }
+
+    /**
+     * @param string|null $returnUrl
+     */
+    public function setReturnUrl(?string $returnUrl): void
+    {
+        $this->returnUrl = $returnUrl;
     }
 }

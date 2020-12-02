@@ -43,7 +43,7 @@ class Payment
     private $createdAt;
 
     /**
-     * @var Carbon
+     * @var Carbon|null
      */
     private $expiresAt;
 
@@ -122,7 +122,6 @@ class Payment
      *
      * @param string      $paymentId
      * @param Carbon      $createdAt
-     * @param Carbon      $expiresAt
      * @param string|null $currency
      * @param string      $status
      * @param Creditor    $creditor
@@ -131,7 +130,6 @@ class Payment
     public function __construct(
         string $paymentId,
         Carbon $createdAt,
-        Carbon $expiresAt,
         string $status,
         Creditor $creditor,
         int $amount,
@@ -139,7 +137,6 @@ class Payment
     ) {
         $this->paymentId = $paymentId;
         $this->createdAt = $createdAt;
-        $this->expiresAt = $expiresAt;
         $this->status    = $status;
         $this->creditor  = $creditor;
         $this->amount    = $amount;
@@ -157,10 +154,14 @@ class Payment
     {
         $response = json_decode($response->getBody()->getContents());
 
+        return Payment::createFromStdClass($response);
+    }
+
+    public static function createFromStdClass(\stdClass $response): self
+    {
         $self = new self(
             $response->paymentId,
             new Carbon($response->createdAt),
-            new Carbon($response->expiresAt),
             $response->status,
             new Creditor(
                 $response->creditor->profileId,
@@ -180,6 +181,7 @@ class Payment
             ));
         }
 
+        ! empty($response->expiresAt) ? $self->setExpiresAt(new Carbon($response->expiresAt)) : null;
         ! empty($response->transferAmount) ? $self->setTransferAmount($response->transferAmount) : null;
         ! empty($response->tippingAmount) ? $self->setTippingAmount($response->tippingAmount) : null;
         ! empty($response->totalAmount) ? $self->setTotalAmount($response->totalAmount) : null;

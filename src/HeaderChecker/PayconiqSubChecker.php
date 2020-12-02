@@ -42,14 +42,13 @@ final class PayconiqSubChecker implements HeaderChecker
             );
         }
 
-        //todo: uncomment when we get the correct merchantProfileId
-//        if ($value !== $this->merchantProfileId) {
-//            throw new InvalidHeaderException(
-//                sprintf('"%s" should match the merchant profile ID', self::HEADER_NAME),
-//                self::HEADER_NAME,
-//                $value
-//            );
-//        }
+        if ($value !== $this->merchantProfileId) {
+            throw new InvalidHeaderException(
+                sprintf('"%s" should match the merchant profile ID', self::HEADER_NAME),
+                self::HEADER_NAME,
+                $value
+            );
+        }
     }
 
     public function supportedHeader(): string

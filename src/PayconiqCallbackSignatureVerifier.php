@@ -35,13 +35,10 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class PayconiqCallbackSignatureVerifier
 {
-//    const ALG                  = 'ES256'; //todo: remove?
-    const CERTIFICATES_URL     = 'https://payconiq.com/certificates';
-    const CERTIFICATES_EXT_URL = 'https://ext.payconiq.com/certificates';
-//    const KID_URL              = 'es.signature.payconiq.com';     //todo: figure out if this is still needed since we use JWK set??
-//    const KID_EXT_URL          = 'es.signature.ext.payconiq.com'; //todo: figure out if this is still needed since we use JWK set??
-    const TIMEOUT         = 10;
-    const CONNECT_TIMEOUT = 2;
+    public const CERTIFICATES_URL     = 'https://payconiq.com/certificates';
+    public const CERTIFICATES_EXT_URL = 'https://ext.payconiq.com/certificates';
+    private const TIMEOUT              = 10;
+    private const CONNECT_TIMEOUT      = 2;
 
     /**
      * @var ClientInterface
@@ -97,13 +94,12 @@ class PayconiqCallbackSignatureVerifier
 
     /**
      * @param string      $token
-     * @param int         $signature
      * @param string|null $payload
+     * @param int|null    $signature
      *
      * @return bool
-     * @throws PayconiqCallbackSignatureVerificationException
      */
-    public function isValid(string $token, int $signature, ?string $payload = null): bool
+    public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool
     {
         try {
             $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
@@ -111,6 +107,28 @@ class PayconiqCallbackSignatureVerifier
             return true;
         } catch (\Throwable $e) {
             return false;
+        }
+    }
+
+    /**
+     * @param string      $token
+     * @param string|null $payload
+     * @param int|null    $signature
+     *
+     * @return JWS
+     * @throws PayconiqCallbackSignatureVerificationException
+     */
+    public function loadAndVerifyJWS(string $token, ?string $payload = null, ?int $signature = 0): JWS
+    {
+        try {
+            return $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
+        } catch (\Throwable $e) {
+            throw new PayconiqCallbackSignatureVerificationException(
+                $this->useProd,
+                sprintf('Something went wrong while loading and verifying the JWS. Error: %s', $e->getMessage()),
+                $e->getCode(),
+                $e
+            );
         }
     }
 
@@ -150,7 +168,7 @@ class PayconiqCallbackSignatureVerifier
      *
      * @return JWSLoader
      */
-    private function initializeJwsLoader(string $merchantProfileId)
+    private function initializeJwsLoader(string $merchantProfileId): JWSLoader
     {
         return new JWSLoader(
             new JWSSerializerManager([

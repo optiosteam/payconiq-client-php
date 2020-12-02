@@ -1,14 +1,23 @@
 {
     "name": "optiosteam/payconiq-client-php",
+    "description": "Payconiq API client library for PHP developed by Optios.",
+    "authors": [
+        {
+            "name": "Optios BV",
+            "email": "dev@optios.net"
+        }
+    ],
     "require": {
         "php": ">=7.2",
         "composer/ca-bundle": "^1.1",
+        "ext-json": "*",
         "guzzlehttp/guzzle": "^7.0",
+        "league/url": "^3.3",
         "nesbot/carbon": "^2.41",
+        "symfony/cache": "^5.2",
         "web-token/jwt-checker": "^2.2",
         "web-token/jwt-signature": "^2.2",
-        "web-token/jwt-signature-algorithm-ecdsa": "^2.2",
-        "symfony/cache": "^5.2"
+        "web-token/jwt-signature-algorithm-ecdsa": "^2.2"
     },
     "autoload": {
         "psr-4": {

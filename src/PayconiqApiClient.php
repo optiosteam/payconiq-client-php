@@ -3,14 +3,19 @@ declare(strict_types = 1);
 
 namespace Optios\Payconiq;
 
+use Carbon\Carbon;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use League\Url\Url;
 use Optios\Payconiq\Exception\PayconiqApiException;
 use Optios\Payconiq\Request\CreatePayment;
+use Optios\Payconiq\Request\SearchPayments;
 use Optios\Payconiq\Resource\Payment\Payment;
+use Optios\Payconiq\Resource\Search\SearchResult;
 
 /**
  * Class PayconiqApiClient
@@ -18,11 +23,11 @@ use Optios\Payconiq\Resource\Payment\Payment;
  */
 class PayconiqApiClient
 {
-    const API_VERSION      = 'v3';
-    const API_ENDPOINT     = 'https://api.payconiq.com/';
-    const API_EXT_ENDPOINT = 'https://api.ext.payconiq.com/';
-    const TIMEOUT          = 10;
-    const CONNECT_TIMEOUT  = 2;
+    public const  API_VERSION      = 'v3';
+    public const  API_ENDPOINT     = 'https://api.payconiq.com/';
+    public const  API_EXT_ENDPOINT = 'https://api.ext.payconiq.com/';
+    private const TIMEOUT          = 10;
+    private const CONNECT_TIMEOUT  = 2;
 
     /**
      * @var string
@@ -80,26 +85,89 @@ class PayconiqApiClient
         }
     }
 
+    /**
+     * @param string $paymentId
+     *
+     * @return Payment
+     * @throws PayconiqApiException
+     */
     public function getPayment(string $paymentId): Payment
     {
-        //todo figure out exception handling
-        $response = $this->httpClient->get(
-            $this->getApiEndpointBase() . '/payments/' / $paymentId
-        );
+        try {
+            $response = $this->httpClient->get(
+                $this->getApiEndpointBase() . '/payments/' / $paymentId
+            );
 
-        return Payment::createFromResponse($response);
+            return Payment::createFromResponse($response);
+        } catch (ClientException|GuzzleException $e) {
+            throw $this->convertToPayconiqApiException($e);
+        }
     }
 
-    public function cancelPayment(string $paymentId)
+    /**
+     * @param string $paymentId
+     *
+     * @return bool
+     * @throws PayconiqApiException
+     */
+    public function cancelPayment(string $paymentId): bool
     {
-        $this->httpClient->delete(
-            $this->getApiEndpointBase() . '/payments/' . $paymentId
-        );
+        try {
+            $this->httpClient->delete(
+                $this->getApiEndpointBase() . '/payments/' . $paymentId
+            );
+        } catch (ClientException|GuzzleException $e) {
+            throw $this->convertToPayconiqApiException($e);
+        }
+
+        return true;
     }
 
-    public function searchPayments()
-    {
-        //todo
+    /**
+     * @param string        $from
+     * @param string|null   $to
+     * @param string[]|null $paymentStatuses
+     * @param string|null   $reference
+     * @param int           $page
+     * @param int           $size
+     *
+     * @return SearchResult
+     * @throws PayconiqApiException
+     */
+    public function searchPayments(
+        string $from,
+        ?string $to = null,
+        array $paymentStatuses = null,
+        ?string $reference = null,
+        int $page = 0,
+        int $size = 50
+    ): SearchResult {
+        try {
+            $url = Url::createFromUrl($this->getApiEndpointBase() . '/payments/search');
+            $url->getQuery()->modify(['page' => $page, 'size' => $size]);
+
+            $fromDate = new Carbon($from);
+            $toDate   = ! empty($to) ? new Carbon($from) : null;
+
+            $search = new SearchPayments(
+                $fromDate,
+                $toDate,
+                $paymentStatuses,
+                $reference
+            );
+
+            $response = $this->httpClient->post(
+                $url->__toString(),
+                [
+                    RequestOptions::JSON => $search->toArray(),
+
+                ]
+            );
+
+            return SearchResult::createFromResponse($response);
+        } catch (ClientException|GuzzleException $e) {
+            throw $this->convertToPayconiqApiException($e);
+        }
     }
 
     /**
