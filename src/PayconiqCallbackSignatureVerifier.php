@@ -35,8 +35,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class PayconiqCallbackSignatureVerifier
 {
-    public const CERTIFICATES_URL     = 'https://payconiq.com/certificates';
-    public const CERTIFICATES_EXT_URL = 'https://ext.payconiq.com/certificates';
+    public const  CERTIFICATES_URL     = 'https://payconiq.com/certificates';
+    public const  CERTIFICATES_EXT_URL = 'https://ext.payconiq.com/certificates';
     private const TIMEOUT              = 10;
     private const CONNECT_TIMEOUT      = 2;
 
@@ -103,11 +103,11 @@ class PayconiqCallbackSignatureVerifier
     {
         try {
             $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
-
-            return true;
         } catch (\Throwable $e) {
             return false;
         }
+
+        return true;
     }
 
     /**
