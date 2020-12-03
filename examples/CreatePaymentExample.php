@@ -11,7 +11,6 @@ use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\CreatePayment;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
-
 $client = new PayconiqApiClient($apiKey, null, false);
 
 $createPayment1 = new CreatePayment(

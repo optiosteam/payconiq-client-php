@@ -24,7 +24,6 @@ use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\CreatePayment;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
-
 $client = new PayconiqApiClient($apiKey, null, false);
 
 $createPayment = new CreatePayment(
@@ -38,6 +37,27 @@ $payment = $client->createPayment($createPayment);
 var_dump($payment);
 ```
 
+### Get payment
+```php
+use Optios\Payconiq\PayconiqApiClient;
+
+$apiKey = 'MY_PAYCONIQ_API_KEY';
+$client = new PayconiqApiClient($apiKey, null, false);
+
+$payment = $client->getPayment('5bdb1685b93d1c000bde96f2');
+var_dump($payment);
+```
+
+### Cancel payment
+```php
+use Optios\Payconiq\PayconiqApiClient;
+
+$apiKey = 'MY_PAYCONIQ_API_KEY';
+$client = new PayconiqApiClient($apiKey, null, false);
+
+$client->cancelPayment('5bdb1685b93d1c000bde96f2');
+```
+
 ### Search payments
 ```php
 use Carbon\Carbon;
@@ -45,14 +65,24 @@ use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\SearchPayments;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
-
 $client = new PayconiqApiClient($apiKey, null, false);
+
 $search = new SearchPayments(new Carbon('2020-12-01 00:00:00'));
 $searchResult = $client->searchPayments($search);
 var_dump($searchResult);
 ```
 
-### Verify callback
+### Refund payment
+```php
+use Optios\Payconiq\PayconiqApiClient;
+
+$apiKey = 'MY_PAYCONIQ_API_KEY';
+$client = new PayconiqApiClient($apiKey, null, false);
+
+$client->refundPayment('5bdb1685b93d1c000bde96f2');
+```
+
+### Verify callback (JWS)
 ```php
 use Optios\Payconiq\PayconiqCallbackSignatureVerifier;
 

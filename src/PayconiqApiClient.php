@@ -161,6 +161,25 @@ class PayconiqApiClient
     }
 
     /**
+     * @param string $paymentId
+     *
+     * @return bool
+     * @throws PayconiqApiException
+     */
+    public function refundPayment(string $paymentId)
+    {
+        try {
+            $this->httpClient->get(
+                $this->getApiEndpointBase() . '/payments/' . $paymentId . '/debtor/refundIban'
+            );
+        } catch (ClientException|GuzzleException $e) {
+            throw $this->convertToPayconiqApiException($e);
+        }
+
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function getApiKey(): string
