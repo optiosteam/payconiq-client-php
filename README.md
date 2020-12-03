@@ -93,7 +93,7 @@ $merchantProfileId = '5fxxxxxxxxxxxf581'; //your payconiq merchant id
 $signature = 'eyJ0eXAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbg8xg';
 
 //POST body (payload)
-$payload = '{"paymentId":"7160xxxxxxxxxxxx0997a0a","transferAmount":0,"tippingAmount":0,"amount":100,"totalAmount":0,"createdAt":"2020-12-01T10:22:40.487Z","expireAt":"2020-12-01T10:42:40.487Z","status":"EXPIRED","currency":"EUR"}';
+$payload = '{"paymentId":"5bdb1685b93d1c000bde96f2","transferAmount":0,"tippingAmount":0,"amount":100,"totalAmount":0,"createdAt":"2020-12-01T10:22:40.487Z","expireAt":"2020-12-01T10:42:40.487Z","status":"EXPIRED","currency":"EUR"}';
 
 $payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier($merchantProfileId, null, null, false);
 
