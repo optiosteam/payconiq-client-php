@@ -8,23 +8,23 @@ error_reporting(E_ALL);
 require_once __DIR__ . "../vendor/autoload.php";
 
 use Optios\Payconiq\PayconiqApiClient;
-use Optios\Payconiq\Request\CreatePayment;
+use Optios\Payconiq\Request\RequestPayment;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
 $client = new PayconiqApiClient($apiKey, null, false);
 
-$createPayment1 = new CreatePayment(
+$requestPayment1 = new RequestPayment(
     100 // = € 1
 );
-$createPayment1->setCallbackUrl('https://mywebsite.com/api/payconiq-webhook');
-$createPayment1->setReference('ref123456');
-$createPayment1->setPosId('POS00001');
+$requestPayment1->setCallbackUrl('https://mywebsite.com/api/payconiq-webhook');
+$requestPayment1->setReference('ref123456');
+$requestPayment1->setPosId('POS00001');
 
-$payment1 = $client->createPayment($createPayment1);
+$payment1 = $client->requestPayment($requestPayment1);
 var_dump($payment1);
 
-$createPayment2 = new CreatePayment(
+$requestPayment2 = new RequestPayment(
     2500 // = € 25
 );
-$payment2 = $client->createPayment($createPayment2);
+$payment2 = $client->requestPayment($requestPayment2);
 var_dump($payment2);

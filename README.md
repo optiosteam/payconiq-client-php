@@ -1,6 +1,6 @@
 # PHP Payconiq API Client (unofficial)
 
-**THIS REPOSITORY IS STILL A WORK IN PROGRESS. NOT ALL API FUNCTIONS ARE SUPPORTED YET.**
+**THIS REPOSITORY IS STILL A WORK IN PROGRESS.**
 
 Supported API version: v3
 
@@ -18,22 +18,22 @@ composer require optiosteam/payconiq-client-php
 
 ## Some examples
 
-### Create payment
+### Request payment
 ```php
 use Optios\Payconiq\PayconiqApiClient;
-use Optios\Payconiq\Request\CreatePayment;
+use Optios\Payconiq\Request\RequestPayment;
 
 $apiKey = 'MY_PAYCONIQ_API_KEY';
 $client = new PayconiqApiClient($apiKey, null, false);
 
-$createPayment = new CreatePayment(
+$requestPayment = new RequestPayment(
     100 // = € 1
 );
-$createPayment->setCallbackUrl('https://mywebsite.com/api/payconiq-webhook');
-$createPayment->setReference('ref123456');
-$createPayment->setPosId('POS00001');
+$requestPayment->setCallbackUrl('https://mywebsite.com/api/payconiq-webhook');
+$requestPayment->setReference('ref123456');
+$requestPayment->setPosId('POS00001');
 
-$payment = $client->createPayment($createPayment);
+$payment = $client->requestPayment($requestPayment);
 var_dump($payment);
 ```
 
@@ -123,6 +123,6 @@ var_dump($staticQRLink);
 ```
 
 
-Feel free to submit pull requests for improvements & bugfixes.
+Feel free to submit pull requests for improvements & bug fixes.
 
 MIT License

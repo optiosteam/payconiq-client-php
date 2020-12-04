@@ -4,10 +4,10 @@ declare(strict_types = 1);
 namespace Optios\Payconiq\Request;
 
 /**
- * Class CreatePayment
+ * Class RequestPayment
  * @package Payconiq\Request
  */
-class CreatePayment
+class RequestPayment
 {
     /**
      * @var int
@@ -64,7 +64,7 @@ class CreatePayment
     private $returnUrl;
 
     /**
-     * CreatePayment constructor.
+     * RequestPayment constructor.
      *
      * @param int    $amount
      * @param string $currency

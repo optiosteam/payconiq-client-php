@@ -67,15 +67,15 @@ class PayconiqQrCodeGenerator
     ): string {
         $url = Url::createFromUrl($qrLink);
 
-        if (in_array($format, self::FORMATS)) {
+        if (in_array(strtoupper($format), self::FORMATS)) {
             $url->getQuery()->modify(['f' => $format]);
         }
 
-        if (in_array($size, self::SIZES)) {
+        if (in_array(strtoupper($size), self::SIZES)) {
             $url->getQuery()->modify(['s' => $size]);
         }
 
-        if (in_array($color, self::COLORS)) {
+        if (in_array(strtoupper($color), self::COLORS)) {
             $url->getQuery()->modify(['cl' => $color]);
         }
 

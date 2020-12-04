@@ -12,7 +12,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use League\Url\Url;
 use Optios\Payconiq\Exception\PayconiqApiException;
-use Optios\Payconiq\Request\CreatePayment;
+use Optios\Payconiq\Request\RequestPayment;
 use Optios\Payconiq\Request\SearchPayments;
 use Optios\Payconiq\Resource\Payment\Payment;
 use Optios\Payconiq\Resource\Search\SearchResult;
@@ -70,18 +70,18 @@ class PayconiqApiClient
     }
 
     /**
-     * @param CreatePayment $createPayment
+     * @param RequestPayment $requestPayment
      *
      * @return Payment
      * @throws PayconiqApiException
      */
-    public function createPayment(CreatePayment $createPayment): Payment
+    public function requestPayment(RequestPayment $requestPayment): Payment
     {
         try {
             $response = $this->httpClient->post(
                 $this->getApiEndpointBase() . '/payments',
                 [
-                    RequestOptions::JSON => $createPayment->toArray(),
+                    RequestOptions::JSON => $requestPayment->toArray(),
 
                 ]
             );
