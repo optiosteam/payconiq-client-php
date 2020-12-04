@@ -120,12 +120,12 @@ class Payment
     /**
      * Payment constructor.
      *
-     * @param string      $paymentId
-     * @param Carbon      $createdAt
-     * @param string|null $currency
-     * @param string      $status
-     * @param Creditor    $creditor
-     * @param int         $amount
+     * @param string   $paymentId
+     * @param Carbon   $createdAt
+     * @param string   $status
+     * @param Creditor $creditor
+     * @param int      $amount
+     * @param string   $currency
      */
     public function __construct(
         string $paymentId,
@@ -133,7 +133,7 @@ class Payment
         string $status,
         Creditor $creditor,
         int $amount,
-        ?string $currency = 'EUR'
+        string $currency = 'EUR'
     ) {
         $this->paymentId = $paymentId;
         $this->createdAt = $createdAt;
@@ -142,7 +142,6 @@ class Payment
         $this->amount    = $amount;
         $this->currency  = $currency;
     }
-
 
     /**
      * @param ResponseInterface $response
@@ -193,12 +192,46 @@ class Payment
         ! empty($response->totalAmount) ? $self->setTotalAmount($response->totalAmount) : null;
         ! empty($response->description) ? $self->setDescription($response->description) : null;
         ! empty($response->bulkId) ? $self->setBulkId($response->bulkId) : null;
+
         ! empty($response->_links->self->href) ? $self->setSelfLink($response->_links->self->href) : null;
         ! empty($response->_links->deeplink->href) ? $self->setDeepLink($response->_links->deeplink->href) : null;
         ! empty($response->_links->qrcode->href) ? $self->setQrLink($response->_links->qrcode->href) : null;
         ! empty($response->_links->refund->href) ? $self->setRefundLink($response->_links->refund->href) : null;
 
         return $self;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = [
+            'paymentId' => $this->paymentId,
+            'createdAt' => $this->createdAt,
+            'status' => $this->status,
+            'creditor' => $this->creditor->toArray(),
+            'amount' => $this->amount,
+            'currency' => $this->currency,
+        ];
+
+        if (null !== $this->debtor) {
+            $array[ 'debtor' ] = $this->debtor->toArray();
+        }
+
+        $this->expiresAt ? $array[ 'expiresAt' ] = $this->expiresAt : null;
+        $this->transferAmount ? $array[ 'transferAmount' ] = $this->transferAmount : null;
+        $this->tippingAmount ? $array[ 'tippingAmount' ] = $this->tippingAmount : null;
+        $this->totalAmount ? $array[ 'totalAmount' ] = $this->totalAmount : null;
+        $this->description ? $array[ 'description' ] = $this->description : null;
+        $this->bulkId ? $array[ 'bulkId' ] = $this->bulkId : null;
+
+        $this->selfLink ? $array[ 'selfLink' ] = $this->selfLink : null;
+        $this->deepLink ? $array[ 'deepLink' ] = $this->deepLink : null;
+        $this->qrLink ? $array[ 'qrLink' ] = $this->qrLink : null;
+        $this->refundLink ? $array[ 'refundLink' ] = $this->refundLink : null;
+
+        return $array;
     }
 
     /**

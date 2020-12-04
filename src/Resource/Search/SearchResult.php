@@ -83,6 +83,28 @@ class SearchResult
     }
 
     /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = [
+            'size' => $this->size,
+            'totalPages' => $this->totalPages,
+            'totalElements' => $this->totalElements,
+            'number' => $this->number,
+        ];
+
+        $details = [];
+        foreach ($this->details as $payment) {
+            $details[] = $payment->toArray();
+        }
+
+        $array[ 'details' ] = $details;
+
+        return $array;
+    }
+
+    /**
      * @return int
      */
     public function getSize(): int

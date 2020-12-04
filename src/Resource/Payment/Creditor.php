@@ -53,6 +53,23 @@ class Creditor
     }
 
     /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = [
+          'profileId' => $this->profileId,
+          'merchantId' => $this->merchantId,
+          'name' => $this->name,
+          'iban' => $this->iban,
+        ];
+
+        $this->callbackUrl ? $array['callbackUrl'] = $this->callbackUrl : null;
+
+        return $array;
+    }
+
+    /**
      * @return string
      */
     public function getProfileId(): string

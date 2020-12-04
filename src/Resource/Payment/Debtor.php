@@ -32,6 +32,19 @@ class Debtor
     }
 
     /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = [];
+
+        $this->name ? $array[ 'name' ] = $this->name : null;
+        $this->iban ? $array[ 'iban' ] = $this->iban : null;
+
+        return $array;
+    }
+
+    /**
      * @return string|null
      */
     public function getName(): ?string
