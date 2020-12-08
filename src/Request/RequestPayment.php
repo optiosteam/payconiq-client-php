@@ -78,6 +78,21 @@ class RequestPayment
     }
 
     /**
+     * @param int    $amount
+     * @param string $posId
+     * @param string $currency
+     *
+     * @return RequestPayment
+     */
+    public static function createForStaticQR(int $amount, string $posId, string $currency = 'EUR'): self
+    {
+        $self = new self($amount, $currency);
+        $self->setPosId($posId);
+
+        return $self;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

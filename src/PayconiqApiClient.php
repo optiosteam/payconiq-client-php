@@ -82,7 +82,6 @@ class PayconiqApiClient
                 $this->getApiEndpointBase() . '/payments',
                 [
                     RequestOptions::JSON => $requestPayment->toArray(),
-
                 ]
             );
 

@@ -36,12 +36,11 @@ class SearchPayments
     /**
      * SearchPayments constructor.
      *
-     * @param Carbon $from
+     * @param \DateTime $from
      */
-    public function __construct(
-        Carbon $from
-    ) {
-        $this->from = $from;
+    public function __construct(\DateTime $from)
+    {
+        $this->setFrom($from);
     }
 
     /**
@@ -77,11 +76,15 @@ class SearchPayments
     }
 
     /**
-     * @param Carbon $from
+     * @param \DateTime $from
      */
-    public function setFrom(Carbon $from): void
+    public function setFrom(\DateTime $from): void
     {
-        $this->from = $from;
+        if (! $from instanceof Carbon) {
+            $from = new Carbon($from);
+        }
+
+        $this->from = $from->clone()->setTimezone('UTC');
     }
 
     /**
@@ -93,11 +96,15 @@ class SearchPayments
     }
 
     /**
-     * @param Carbon|null $to
+     * @param \DateTime|null $to
      */
-    public function setTo(?Carbon $to): void
+    public function setTo(?\DateTime $to): void
     {
-        $this->to = $to;
+        if (! $to instanceof Carbon) {
+            $to = new Carbon($to);
+        }
+
+        $this->to = $to->clone()->setTimezone('UTC');
     }
 
     /**

@@ -208,7 +208,7 @@ class Payment
     {
         $array = [
             'paymentId' => $this->paymentId,
-            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt->toAtomString(),
             'status' => $this->status,
             'creditor' => $this->creditor->toArray(),
             'amount' => $this->amount,
@@ -219,7 +219,7 @@ class Payment
             $array[ 'debtor' ] = $this->debtor->toArray();
         }
 
-        $this->expiresAt ? $array[ 'expiresAt' ] = $this->expiresAt->format('Y-m-d H:i:s') : null;
+        $this->expiresAt ? $array[ 'expiresAt' ] = $this->expiresAt->toAtomString() : null;
         $this->transferAmount ? $array[ 'transferAmount' ] = $this->transferAmount : null;
         $this->tippingAmount ? $array[ 'tippingAmount' ] = $this->tippingAmount : null;
         $this->totalAmount ? $array[ 'totalAmount' ] = $this->totalAmount : null;
