@@ -222,7 +222,8 @@ class PayconiqApiClient
      */
     private function convertToPayconiqApiException(\Throwable $e)
     {
-        if (empty($e->getResponse()->getBody()->getContents())) {
+        $contents = $e->getResponse()->getBody()->getContents();
+        if (empty($contents)) {
             return new PayconiqApiException(
                 null,
                 null,
@@ -234,9 +235,7 @@ class PayconiqApiClient
             );
         }
 
-        $message = json_decode(
-            $e->getResponse()->getBody()->getContents()
-        );
+        $message = json_decode($contents);
 
         return new PayconiqApiException(
             $message->message ?? null,
