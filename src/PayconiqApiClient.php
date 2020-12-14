@@ -55,9 +55,6 @@ class PayconiqApiClient
     {
         if (null === $httpClient) {
             $httpClient = new Client([
-                RequestOptions::HEADERS => [
-                    'Authorization' => 'Bearer ' . $apiKey,
-                ],
                 RequestOptions::TIMEOUT => self::TIMEOUT,
                 RequestOptions::CONNECT_TIMEOUT => self::CONNECT_TIMEOUT,
                 RequestOptions::VERIFY => CaBundle::getBundledCaBundlePath(),
@@ -81,12 +78,15 @@ class PayconiqApiClient
             $response = $this->httpClient->post(
                 $this->getApiEndpointBase() . '/payments',
                 [
+                    RequestOptions::HEADERS => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                    ],
                     RequestOptions::JSON => $requestPayment->toArray(),
                 ]
             );
 
             return Payment::createFromResponse($response);
-        } catch (ClientException|GuzzleException $e) {
+        } catch (ClientException | GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -101,11 +101,16 @@ class PayconiqApiClient
     {
         try {
             $response = $this->httpClient->get(
-                $this->getApiEndpointBase() . '/payments/' . $paymentId
+                $this->getApiEndpointBase() . '/payments/' . $paymentId,
+                [
+                    RequestOptions::HEADERS => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                    ],
+                ]
             );
 
             return Payment::createFromResponse($response);
-        } catch (ClientException|GuzzleException $e) {
+        } catch (ClientException | GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -120,9 +125,14 @@ class PayconiqApiClient
     {
         try {
             $this->httpClient->delete(
-                $this->getApiEndpointBase() . '/payments/' . $paymentId
+                $this->getApiEndpointBase() . '/payments/' . $paymentId,
+                [
+                    RequestOptions::HEADERS => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                    ],
+                ]
             );
-        } catch (ClientException|GuzzleException $e) {
+        } catch (ClientException | GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
 
@@ -149,12 +159,15 @@ class PayconiqApiClient
             $response = $this->httpClient->post(
                 $url->__toString(),
                 [
+                    RequestOptions::HEADERS => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                    ],
                     RequestOptions::JSON => $search->toArray(),
                 ]
             );
 
             return SearchResult::createFromResponse($response);
-        } catch (ClientException|GuzzleException $e) {
+        } catch (ClientException | GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -171,7 +184,7 @@ class PayconiqApiClient
             $this->httpClient->get(
                 $this->getApiEndpointBase() . '/payments/' . $paymentId . '/debtor/refundIban'
             );
-        } catch (ClientException|GuzzleException $e) {
+        } catch (ClientException | GuzzleException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
 
