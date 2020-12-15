@@ -120,25 +120,22 @@ class Payment
     /**
      * Payment constructor.
      *
-     * @param string   $paymentId
-     * @param Carbon   $createdAt
-     * @param string   $status
-     * @param Creditor $creditor
-     * @param int      $amount
-     * @param string   $currency
+     * @param string $paymentId
+     * @param Carbon $createdAt
+     * @param string $status
+     * @param int    $amount
+     * @param string $currency
      */
     public function __construct(
         string $paymentId,
         Carbon $createdAt,
         string $status,
-        Creditor $creditor,
         int $amount,
         string $currency = 'EUR'
     ) {
         $this->paymentId = $paymentId;
         $this->createdAt = $createdAt;
         $this->status    = $status;
-        $this->creditor  = $creditor;
         $this->amount    = $amount;
         $this->currency  = $currency;
     }
@@ -168,17 +165,20 @@ class Payment
             $response->paymentId,
             new Carbon($response->createdAt),
             $response->status,
-            new Creditor(
+            $response->amount,
+            $response->currency ?? 'EUR'
+        );
+
+        if (! empty($response->creditor)) {
+            $self->setCreditor(new Creditor(
                 $response->creditor->profileId,
                 $response->creditor->merchantId,
                 $response->creditor->name,
                 $response->creditor->iban,
                 $response->creditor->callbackUrl ?? null
-            ),
-            $response->amount,
-            $response->currency ?? 'EUR'
-        );
-
+            ));
+        }
+        
         if (! empty($response->debtor)) {
             $self->setDebtor(new Debtor(
                 $response->debtor->name ?? null,
@@ -210,10 +210,13 @@ class Payment
             'paymentId' => $this->paymentId,
             'createdAt' => $this->createdAt->toAtomString(),
             'status' => $this->status,
-            'creditor' => $this->creditor->toArray(),
             'amount' => $this->amount,
             'currency' => $this->currency,
         ];
+
+        if (null !== $this->creditor) {
+            $array[ 'creditor' ] = $this->creditor->toArray();
+        }
 
         if (null !== $this->debtor) {
             $array[ 'debtor' ] = $this->debtor->toArray();
