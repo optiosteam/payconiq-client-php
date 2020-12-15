@@ -44,7 +44,7 @@ final class PayconiqSubChecker implements HeaderChecker
 
         if ($value !== $this->paymentProfileId) {
             throw new InvalidHeaderException(
-                sprintf('"%s" should match the merchant profile ID', self::HEADER_NAME),
+                sprintf('"%s" should match the Payment profile ID', self::HEADER_NAME),
                 self::HEADER_NAME,
                 $value
             );
