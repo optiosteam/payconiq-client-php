@@ -17,16 +17,16 @@ final class PayconiqSubChecker implements HeaderChecker
     /**
      * @var string
      */
-    private $merchantProfileId;
+    private $paymentProfileId;
 
     /**
      * PayconiqSubChecker constructor.
      *
-     * @param string $merchantProfileId
+     * @param string $paymentProfileId
      */
-    public function __construct(string $merchantProfileId)
+    public function __construct(string $paymentProfileId)
     {
-        $this->merchantProfileId = $merchantProfileId;
+        $this->paymentProfileId = $paymentProfileId;
     }
 
     /**
@@ -42,7 +42,7 @@ final class PayconiqSubChecker implements HeaderChecker
             );
         }
 
-        if ($value !== $this->merchantProfileId) {
+        if ($value !== $this->paymentProfileId) {
             throw new InvalidHeaderException(
                 sprintf('"%s" should match the merchant profile ID', self::HEADER_NAME),
                 self::HEADER_NAME,

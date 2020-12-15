@@ -86,7 +86,7 @@ $client->refundPayment('5bdb1685b93d1c000bde96f2');
 ```php
 use Optios\Payconiq\PayconiqCallbackSignatureVerifier;
 
-$merchantProfileId = '5fxxxxxxxxxxxf581'; //your payconiq merchant id
+$paymentProfileId = '5fxxxxxxxxxxxf581'; //your payconiq payment profile id
 
 // When Payconiq sends a POST to your webhook endpoint (callbackUrl), take the signature from the request header
 // e.g. Symfony: Symfony\Component\HttpFoundation\Request $request->headers->get('signature');
@@ -95,7 +95,7 @@ $signature = 'eyJ0eXAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //POST body (payload)
 $payload = '{"paymentId":"5bdb1685b93d1c000bde96f2","transferAmount":0,"tippingAmount":0,"amount":100,"totalAmount":0,"createdAt":"2020-12-01T10:22:40.487Z","expireAt":"2020-12-01T10:42:40.487Z","status":"EXPIRED","currency":"EUR"}';
 
-$payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier($merchantProfileId, null, null, false);
+$payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier($paymentProfileId, null, null, false);
 
 echo $payconiqCallbackSignatureVerifier->isValid($signature, $payload) ? 'valid' : 'invalid';
 

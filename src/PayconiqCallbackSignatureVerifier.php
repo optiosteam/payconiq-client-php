@@ -63,13 +63,13 @@ class PayconiqCallbackSignatureVerifier
     /**
      * PayconiqCallbackSignatureVerifier constructor.
      *
-     * @param string                $merchantProfileId
+     * @param string                $paymentProfileId
      * @param ClientInterface|null  $httpClient
      * @param AdapterInterface|null $cache
      * @param bool                  $useProd
      */
     public function __construct(
-        string $merchantProfileId,
+        string $paymentProfileId,
         ClientInterface $httpClient = null,
         AdapterInterface $cache = null,
         bool $useProd = true
@@ -89,7 +89,7 @@ class PayconiqCallbackSignatureVerifier
         $this->cache      = $cache;
         $this->useProd    = $useProd;
 
-        $this->jwsLoader = $this->initializeJwsLoader($merchantProfileId);
+        $this->jwsLoader = $this->initializeJwsLoader($paymentProfileId);
     }
 
     /**
@@ -164,11 +164,11 @@ class PayconiqCallbackSignatureVerifier
     }
 
     /**
-     * @param string $merchantProfileId
+     * @param string $paymentProfileId
      *
      * @return JWSLoader
      */
-    private function initializeJwsLoader(string $merchantProfileId): JWSLoader
+    private function initializeJwsLoader(string $paymentProfileId): JWSLoader
     {
         return new JWSLoader(
             new JWSSerializerManager([
@@ -182,7 +182,7 @@ class PayconiqCallbackSignatureVerifier
             new HeaderCheckerManager(
                 [
                     new AlgorithmChecker(['ES256']),
-                    new PayconiqSubChecker($merchantProfileId),
+                    new PayconiqSubChecker($paymentProfileId),
                     new PayconiqIssChecker(),
                     new PayconiqIssuedAtChecker(),
                     new PayconiqJtiChecker(),

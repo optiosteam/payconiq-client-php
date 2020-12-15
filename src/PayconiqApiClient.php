@@ -75,8 +75,9 @@ class PayconiqApiClient
     public function requestPayment(RequestPayment $requestPayment): Payment
     {
         try {
+            $uri      = $this->getApiEndpointBase() . '/payments' . ($requestPayment->getPosId() ? '/pos' : null);
             $response = $this->httpClient->post(
-                $this->getApiEndpointBase() . '/payments',
+                $uri,
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
