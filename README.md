@@ -1,12 +1,25 @@
 # PHP Payconiq API Client (unofficial)
 
-**THIS REPOSITORY IS STILL A WORK IN PROGRESS.**
-
 Supported API version: v3
 
 Development sponsored by [Optios](https://www.optios.net)
 
 API Documentation: https://developer.payconiq.com/online-payments-dock/#payment-api-version-3-v3-
+
+## Supported API functions
+This library provides support for the following Payconiq API (v3) functions:
+- Payconiq Instore (V3) - Terminal & Display
+- Payconiq Instore (V3) - Static QR Sticker
+- Payconiq Instore (V3) - Receipt
+- Payconiq Invoice (V3) - Invoice
+- Payconiq Online (V3) - Custom Online
+- Payconiq Online (V3) - Checkout Flow Online
+- Payconiq Online (V3) - App2App Linking
+- Payconiq Online (V3) - Top-up
+
+Not supported yet:
+- Loyalty Integration
+- Payout Reconciliation API
 
 ## Installation
 
@@ -15,6 +28,41 @@ API Documentation: https://developer.payconiq.com/online-payments-dock/#payment-
 ```
 composer require optiosteam/payconiq-client-php
 ```
+
+## Description
+This library provides 3 main classes:
+- `PayconiqApiClient`
+- `PayconiqCallbackSignatureVerifier`
+- `PayconiqQrCodeGenerator`
+
+### PayconiqApiClient
+This is the main class for performing REST calls to the Payconiq API, e.g. create payments, cancel payments, search payments & refund payments.
+
+In the constructor you have to pass your Payconiq API key, optionally you can also inject your own Guzzle Client and specify if you want to use the production environment of the Payconiq API or the testing (Ext) environment.
+```php
+public function __construct(string $apiKey, ClientInterface $httpClient = null, bool $useProd = true)
+```
+
+### PayconiqCallbackSignatureVerifier
+This class is used for TLS Two-way TLS Encryption Support (TLS-Mutual Authentication). It verifies the callback body, JSON Web Signature (JWS) and the header fields in the JOSE header.
+
+In the constructor you have to pass your Payconiq Payment Profile Id, optionally you can also inject your own Guzzle Client and Symfony Cache Adapter and specify if you want to use the production environment of the Payconiq API or the testing (Ext) environment.
+```php
+public function __construct(string $paymentProfileId, ClientInterface $httpClient = null, AdapterInterface $cache = null, bool $useProd = true)
+```
+
+The cache adapter is used to cache Payconiq's JWKS (JSON Web Key Set).
+By default this library will use the `FilesystemAdapter` which will use the file system for caching.
+If you'd like to use another caching system, like Redis for example, you can inject your own (e.g. `RedisAdapter`).
+
+List of Symfony's Cache Adapters: https://symfony.com/doc/current/components/cache.html#available-cache-adapters
+
+### PayconiqQrCodeGenerator
+This class offers static functions to: 
+- Customize (color, size, format) QR code links (Used for `Terminal & Display` & `Custom Online`)
+- Generate static QR code stickers links (Used for `Static QR Sticker`)
+- Generate QR code links with metadata, like: description, amount & reference (Used for `Receipt`, `Invoice` & `Top-up`)
+
 
 ## Some examples
 
