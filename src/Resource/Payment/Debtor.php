@@ -32,6 +32,19 @@ class Debtor
     }
 
     /**
+     * @param \stdClass $class
+     *
+     * @return Debtor
+     */
+    public static function createFromStdClass(\stdClass $class): Debtor
+    {
+        return new self(
+            $class->name ?? null,
+            $class->iban ?? null
+        );
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

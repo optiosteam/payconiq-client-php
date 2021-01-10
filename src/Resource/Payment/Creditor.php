@@ -53,6 +53,22 @@ class Creditor
     }
 
     /**
+     * @param \stdClass $class
+     *
+     * @return Creditor
+     */
+    public static function createFromStdClass(\stdClass $class): Creditor
+    {
+        return new self(
+            $class->profileId,
+            $class->merchantId,
+            $class->name,
+            $class->iban,
+            $class->callbackUrl ?? null
+        );
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

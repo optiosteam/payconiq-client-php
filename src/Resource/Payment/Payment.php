@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class Payment
  * @package Payconiq\Resource\Payment
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Payment
 {
@@ -154,6 +156,9 @@ class Payment
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @param \stdClass $response
      *
      * @return static
@@ -170,20 +175,11 @@ class Payment
         );
 
         if (! empty($response->creditor)) {
-            $self->setCreditor(new Creditor(
-                $response->creditor->profileId,
-                $response->creditor->merchantId,
-                $response->creditor->name,
-                $response->creditor->iban,
-                $response->creditor->callbackUrl ?? null
-            ));
+            $self->setCreditor(Creditor::createFromStdClass($response->creditor));
         }
         
         if (! empty($response->debtor)) {
-            $self->setDebtor(new Debtor(
-                $response->debtor->name ?? null,
-                $response->debtor->iban ?? null
-            ));
+            $self->setDebtor(Debtor::createFromStdClass($response->debtor));
         }
 
         ! empty($response->expiresAt) ? $self->setExpiresAt(new Carbon($response->expiresAt)) : null;
@@ -212,29 +208,21 @@ class Payment
             'status' => $this->status,
             'amount' => $this->amount,
             'currency' => $this->currency,
+            'creditor' => $this->creditor ? $this->creditor->toArray() : null,
+            'debtor' => $this->debtor ? $this->debtor->toArray() : null,
+            'expiresAt' => $this->expiresAt ? $this->expiresAt->toAtomString() : null,
+            'transferAmount' => $this->transferAmount,
+            'tippingAmount' => $this->tippingAmount,
+            'totalAmount' => $this->totalAmount,
+            'description' => $this->description,
+            'bulkId' => $this->bulkId,
+            'selfLink' => $this->selfLink,
+            'deepLink' => $this->deepLink,
+            'qrLink' => $this->qrLink,
+            'refundLink' => $this->refundLink
         ];
 
-        if (null !== $this->creditor) {
-            $array[ 'creditor' ] = $this->creditor->toArray();
-        }
-
-        if (null !== $this->debtor) {
-            $array[ 'debtor' ] = $this->debtor->toArray();
-        }
-
-        $this->expiresAt ? $array[ 'expiresAt' ]           = $this->expiresAt->toAtomString() : null;
-        $this->transferAmount ? $array[ 'transferAmount' ] = $this->transferAmount : null;
-        $this->tippingAmount ? $array[ 'tippingAmount' ]   = $this->tippingAmount : null;
-        $this->totalAmount ? $array[ 'totalAmount' ]       = $this->totalAmount : null;
-        $this->description ? $array[ 'description' ]       = $this->description : null;
-        $this->bulkId ? $array[ 'bulkId' ]                 = $this->bulkId : null;
-
-        $this->selfLink ? $array[ 'selfLink' ]     = $this->selfLink : null;
-        $this->deepLink ? $array[ 'deepLink' ]     = $this->deepLink : null;
-        $this->qrLink ? $array[ 'qrLink' ]         = $this->qrLink : null;
-        $this->refundLink ? $array[ 'refundLink' ] = $this->refundLink : null;
-
-        return $array;
+        return array_filter($array);
     }
 
     /**
