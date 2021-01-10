@@ -32,11 +32,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Optios\\Payconiq\\": "src/"
+            "Optios\\Payconiq\\": "src/",
+            "Tests\\Optios\\Payconiq\\": "tests/"
         }
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
-        "phpmd/phpmd": "^2.9"
+        "phpmd/phpmd": "^2.9",
+        "phpunit/phpunit": "^8.5"
     }
 }

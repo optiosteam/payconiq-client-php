@@ -1,0 +1,39 @@
+name: Run tests
+
+on: [push, pull_request]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: ['7.2', '7.3', '7.4']
+        phpunit-versions: ['latest']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, ast
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run phpunit
+        run: php vendor/bin/phpunit --stop-on-failure --testdox tests/
+
+      - name: Run mess detector
+        run: php vendor/bin/phpmd src/ ansi phpmd.xml
+
+      - name: Run code sniffer
+        run: php vendor/bin/phpcs src/ tests/ --colors -p
