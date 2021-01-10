@@ -222,16 +222,16 @@ class Payment
             $array[ 'debtor' ] = $this->debtor->toArray();
         }
 
-        $this->expiresAt ? $array[ 'expiresAt' ] = $this->expiresAt->toAtomString() : null;
+        $this->expiresAt ? $array[ 'expiresAt' ]           = $this->expiresAt->toAtomString() : null;
         $this->transferAmount ? $array[ 'transferAmount' ] = $this->transferAmount : null;
-        $this->tippingAmount ? $array[ 'tippingAmount' ] = $this->tippingAmount : null;
-        $this->totalAmount ? $array[ 'totalAmount' ] = $this->totalAmount : null;
-        $this->description ? $array[ 'description' ] = $this->description : null;
-        $this->bulkId ? $array[ 'bulkId' ] = $this->bulkId : null;
+        $this->tippingAmount ? $array[ 'tippingAmount' ]   = $this->tippingAmount : null;
+        $this->totalAmount ? $array[ 'totalAmount' ]       = $this->totalAmount : null;
+        $this->description ? $array[ 'description' ]       = $this->description : null;
+        $this->bulkId ? $array[ 'bulkId' ]                 = $this->bulkId : null;
 
-        $this->selfLink ? $array[ 'selfLink' ] = $this->selfLink : null;
-        $this->deepLink ? $array[ 'deepLink' ] = $this->deepLink : null;
-        $this->qrLink ? $array[ 'qrLink' ] = $this->qrLink : null;
+        $this->selfLink ? $array[ 'selfLink' ]     = $this->selfLink : null;
+        $this->deepLink ? $array[ 'deepLink' ]     = $this->deepLink : null;
+        $this->qrLink ? $array[ 'qrLink' ]         = $this->qrLink : null;
         $this->refundLink ? $array[ 'refundLink' ] = $this->refundLink : null;
 
         return $array;

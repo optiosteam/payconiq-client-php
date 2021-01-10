@@ -103,13 +103,13 @@ class RequestPayment
         ];
 
         $this->callbackUrl ? $array[ 'callbackUrl' ] = $this->callbackUrl : null;
-        $this->reference ? $array[ 'reference' ] = $this->reference : null;
+        $this->reference ? $array[ 'reference' ]     = $this->reference : null;
         $this->description ? $array[ 'description' ] = $this->description : null;
-        $this->bulkId ? $array[ 'bulkId' ] = $this->bulkId : null;
-        $this->posId ? $array[ 'posId' ] = $this->posId : null;
-        $this->shopId ? $array[ 'shopId' ] = $this->shopId : null;
-        $this->shopName ? $array[ 'shopName' ] = $this->shopName : null;
-        $this->returnUrl ? $array[ 'returnUrl' ] = $this->returnUrl : null;
+        $this->bulkId ? $array[ 'bulkId' ]           = $this->bulkId : null;
+        $this->posId ? $array[ 'posId' ]             = $this->posId : null;
+        $this->shopId ? $array[ 'shopId' ]           = $this->shopId : null;
+        $this->shopName ? $array[ 'shopName' ]       = $this->shopName : null;
+        $this->returnUrl ? $array[ 'returnUrl' ]     = $this->returnUrl : null;
 
         return $array;
     }
