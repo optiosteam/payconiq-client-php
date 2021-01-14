@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Optios\Payconiq;
 
-use Carbon\Carbon;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;

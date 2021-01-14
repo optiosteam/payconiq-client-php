@@ -170,7 +170,14 @@ $staticQRLink = PayconiqQrCodeGenerator::generateStaticQRCodeLink('abc123', 'POS
 var_dump($staticQRLink);
 ```
 
-
+## Contributing
 Feel free to submit pull requests for improvements & bug fixes.
+
+please ensure your pull request adheres to the following guidelines:
+
+* Enter a meaningful pull request description.
+* Put a link to each library in your pull request ticket so it's easier to review.
+* Use the following format for libraries: [LIBRARY](LINK) - DESCRIPTION.
+* Make sure your text editor is set to remove trailing whitespace.
 
 MIT License

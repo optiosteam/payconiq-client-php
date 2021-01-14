@@ -100,18 +100,17 @@ class RequestPayment
         $array = [
             'amount' => $this->amount,
             'currency' => $this->currency,
+            'callbackUrl' => $this->callbackUrl,
+            'reference' => $this->reference,
+            'description' => $this->description,
+            'bulkId' => $this->bulkId,
+            'posId' => $this->posId,
+            'shopId' => $this->shopId,
+            'shopName' => $this->shopName,
+            'returnUrl' => $this->returnUrl
         ];
 
-        $this->callbackUrl ? $array[ 'callbackUrl' ] = $this->callbackUrl : null;
-        $this->reference ? $array[ 'reference' ] = $this->reference : null;
-        $this->description ? $array[ 'description' ] = $this->description : null;
-        $this->bulkId ? $array[ 'bulkId' ] = $this->bulkId : null;
-        $this->posId ? $array[ 'posId' ] = $this->posId : null;
-        $this->shopId ? $array[ 'shopId' ] = $this->shopId : null;
-        $this->shopName ? $array[ 'shopName' ] = $this->shopName : null;
-        $this->returnUrl ? $array[ 'returnUrl' ] = $this->returnUrl : null;
-
-        return $array;
+        return array_filter($array);
     }
 
     /**

@@ -32,6 +32,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * Class PayconiqCallbackSignatureVerifier
  * @package Optios\Payconiq
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PayconiqCallbackSignatureVerifier
 {
