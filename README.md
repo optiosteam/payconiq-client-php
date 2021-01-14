@@ -178,10 +178,6 @@ please ensure your pull request adheres to the following guidelines:
 * Enter a meaningful pull request description.
 * Put a link to each library in your pull request ticket so it's easier to review.
 * Use the following format for libraries: [LIBRARY](LINK) - DESCRIPTION.
-* Please keep descriptions short, simple and unbiased. No buzzwords or marketing jargon.
-* End all descriptions with a full stop/period.
-* Check your spelling and grammar.
 * Make sure your text editor is set to remove trailing whitespace.
-* Your entry has been added alphabetically within the category.
 
 MIT License
