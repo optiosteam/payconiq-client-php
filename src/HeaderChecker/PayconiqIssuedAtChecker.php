@@ -22,17 +22,17 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
     {
         try {
             $iat = new Carbon($value);
-
-            if ($iat->gt(Carbon::now('UTC'))) {
-                throw new InvalidHeaderException(
-                    'The JWT is issued in the future.',
-                    self::HEADER_NAME,
-                    $value
-                );
-            }
         } catch (\Exception $e) {
             throw new InvalidHeaderException(
                 sprintf('"%s" has an invalid date format', self::HEADER_NAME),
+                self::HEADER_NAME,
+                $value
+            );
+        }
+
+        if ($iat->gt(Carbon::now('UTC'))) {
+            throw new InvalidHeaderException(
+                'The JWT is issued in the future.',
                 self::HEADER_NAME,
                 $value
             );
