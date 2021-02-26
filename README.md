@@ -57,6 +57,8 @@ If you'd like to use another caching system, like Redis for example, you can inj
 
 List of Symfony's Cache Adapters: https://symfony.com/doc/current/components/cache.html#available-cache-adapters
 
+**Note**: when using the `PayconiqCallbackSignatureVerifier`, make sure your server time is correct because the verifier checks the issued-at header timestamp.
+
 ### PayconiqQrCodeGenerator
 This class offers static functions to: 
 - Customize (color, size, format) QR code links (Used for `Terminal & Display` & `Custom Online`)
