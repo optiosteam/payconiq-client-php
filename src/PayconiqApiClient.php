@@ -7,7 +7,6 @@ use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use League\Url\Url;
 use Optios\Payconiq\Exception\PayconiqApiException;
@@ -86,7 +85,7 @@ class PayconiqApiClient
             );
 
             return Payment::createFromResponse($response);
-        } catch (ClientException | GuzzleException $e) {
+        } catch (ClientException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -110,7 +109,7 @@ class PayconiqApiClient
             );
 
             return Payment::createFromResponse($response);
-        } catch (ClientException | GuzzleException $e) {
+        } catch (ClientException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -132,7 +131,7 @@ class PayconiqApiClient
                     ],
                 ]
             );
-        } catch (ClientException | GuzzleException $e) {
+        } catch (ClientException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
 
@@ -167,7 +166,7 @@ class PayconiqApiClient
             );
 
             return SearchResult::createFromResponse($response);
-        } catch (ClientException | GuzzleException $e) {
+        } catch (ClientException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
     }
@@ -184,7 +183,7 @@ class PayconiqApiClient
             $this->httpClient->get(
                 $this->getApiEndpointBase() . '/payments/' . $paymentId . '/debtor/refundIban'
             );
-        } catch (ClientException | GuzzleException $e) {
+        } catch (ClientException $e) {
             throw $this->convertToPayconiqApiException($e);
         }
 
@@ -216,11 +215,11 @@ class PayconiqApiClient
     }
 
     /**
-     * @param \Throwable $e
+     * @param ClientException $e
      *
      * @return PayconiqApiException
      */
-    private function convertToPayconiqApiException(\Throwable $e)
+    private function convertToPayconiqApiException(ClientException $e)
     {
         $contents = $e->getResponse()->getBody()->getContents() ?? null;
         if (empty($contents)) {
