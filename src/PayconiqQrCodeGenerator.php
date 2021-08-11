@@ -75,7 +75,7 @@ class PayconiqQrCodeGenerator
             $url->getQuery()->modify(['s' => $size]);
         }
 
-        if (in_array(strtoupper($color), self::COLORS)) {
+        if (in_array(strtolower($color), self::COLORS)) {
             $url->getQuery()->modify(['cl' => $color]);
         }
 
@@ -137,19 +137,31 @@ class PayconiqQrCodeGenerator
         $urlPayload = Url::createFromUrl(self::LOCATION_URL_SCHEME_METADATA . $paymentProfileId);
 
         if (! empty($description)) {
-            $urlPayload->setQuery(['D' => $description]);
+            if (strlen($description) > 35) {
+                throw new \InvalidArgumentException('Description max length is 35 characters');
+            }
+
+            $urlPayload->getQuery()->modify(['D' => $description]);
         }
 
         if (null !== $amount) {
-            $urlPayload->setQuery(['A' => $amount]);
+            if ($amount < 1 || $amount > 999999) {
+                throw new \InvalidArgumentException('Amount must be between 1 - 999999 Euro cents');
+            }
+
+            $urlPayload->getQuery()->modify(['A' => $amount]);
         }
 
         if (! empty($reference)) {
-            $urlPayload->setQuery(['R' => $reference]);
+            if (strlen($reference) > 35) {
+                throw new \InvalidArgumentException('Reference max length is 35 characters');
+            }
+
+            $urlPayload->getQuery()->modify(['R' => $reference]);
         }
 
         $url = Url::createFromUrl(self::PORTAL_URL);
-        $url->setQuery(['c' => $urlPayload]);
+        $url->setQuery(['c' => $urlPayload->__toString()]);
 
         return self::customizePaymentQrLink($url->__toString(), $format, $size, $color);
     }
