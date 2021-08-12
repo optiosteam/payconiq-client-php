@@ -34,7 +34,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
         $qrLink = 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fpay%2F2%2F73a222957726d63d26400964';
 
         return [
-            'Default' => [
+            'Customize - Default' => [
                 'data' => [
                     'link' => $qrLink,
                     'format' => PayconiqQrCodeGenerator::FORMAT_PNG,
@@ -43,7 +43,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fpay%2F2%2F73a222957726d63d26400964&f=PNG&s=S&cl=magenta',
             ],
-            'SVG Medium Black' => [
+            'Customize - SVG Medium Black' => [
                 'data' => [
                     'link' => $qrLink,
                     'format' => PayconiqQrCodeGenerator::FORMAT_SVG,
@@ -52,7 +52,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fpay%2F2%2F73a222957726d63d26400964&f=SVG&s=M&cl=black',
             ],
-            'PNG Large Magenta' => [
+            'Customize - PNG Large Magenta' => [
                 'data' => [
                     'link' => $qrLink,
                     'format' => PayconiqQrCodeGenerator::FORMAT_PNG,
@@ -94,7 +94,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
         $posId            = 'POS0001';
 
         return [
-            'Default' => [
+            'Static - Default' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'pos_id' => $posId,
@@ -104,7 +104,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fl%2F1%2Fabc123%2FPOS0001&f=PNG&s=S&cl=magenta',
             ],
-            'SVG Medium Black' => [
+            'Static - SVG Medium Black' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'pos_id' => $posId,
@@ -114,7 +114,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fl%2F1%2Fabc123%2FPOS0001&f=SVG&s=M&cl=black',
             ],
-            'PNG Large Magenta' => [
+            'Static - PNG Large Magenta' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'pos_id' => $posId,
@@ -123,6 +123,16 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                     'color' => PayconiqQrCodeGenerator::COLOR_MAGENTA,
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fl%2F1%2Fabc123%2FPOS0001&f=PNG&s=L&cl=magenta',
+            ],
+            'Static - All wrong params' => [
+                'data' => [
+                    'payment_profile_id' => $paymentProfileId,
+                    'pos_id' => $posId,
+                    'format' => 'wrong',
+                    'size' => 'wrong',
+                    'color' => 'wrong',
+                ],
+                'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fl%2F1%2Fabc123%2FPOS0001',
             ],
         ];
         //phpcs:enable
@@ -163,7 +173,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
         $paymentProfileId = 'abc123';
 
         return [
-            'Default with Amount and Reference' => [
+            'Metadata - Default with Amount and Reference' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => null,
@@ -175,7 +185,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Ft%2F1%2Fabc123%3FA%3D1000%26R%3D%2523123.abc%2521%2540&f=PNG&s=S&cl=magenta',
             ],
-            'SVG Medium Black with Description, Amount and Reference' => [
+            'Metadata - SVG Medium Black with Description, Amount and Reference' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => 'please pay me',
@@ -187,7 +197,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Ft%2F1%2Fabc123%3FD%3Dplease%2520pay%2520me%26A%3D1000%26R%3D%2523123.abc%2521%2540--%2525123--&f=SVG&s=M&cl=black',
             ],
-            'PNG Large Magenta with Amount' => [
+            'Metadata - PNG Large Magenta with Amount' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => null,
@@ -199,7 +209,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Ft%2F1%2Fabc123%3FA%3D9900&f=PNG&s=L&cl=magenta',
             ],
-            'Expect Exception for too long description' => [
+            'Metadata - Expect Exception for too long description' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
@@ -211,7 +221,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => new \InvalidArgumentException('Description max length is 35 characters'),
             ],
-            'Expect Exception for too small amount' => [
+            'Metadata - Expect Exception for too small amount' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => 'xxx',
@@ -223,7 +233,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => new \InvalidArgumentException('Amount must be between 1 - 999999 Euro cents'),
             ],
-            'Expect Exception for too big amount' => [
+            'Metadata - Expect Exception for too big amount' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => 'xxx',
@@ -235,7 +245,7 @@ class PayconiqQrCodeGeneratorTest extends TestCase
                 ],
                 'expected' => new \InvalidArgumentException('Amount must be between 1 - 999999 Euro cents'),
             ],
-            'Expect Exception for too long reference' => [
+            'Metadata - Expect Exception for too long reference' => [
                 'data' => [
                     'payment_profile_id' => $paymentProfileId,
                     'description' => 'xxx',
