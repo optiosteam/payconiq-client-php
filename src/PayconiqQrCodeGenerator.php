@@ -3,7 +3,12 @@ declare(strict_types = 1);
 
 namespace Optios\Payconiq;
 
-use League\Url\Url;
+use League\Uri\Components\Query;
+
+//use League\Uri\Parser\QueryString;
+use League\Uri\Uri;
+use League\Uri\QueryString;
+use League\Uri\UriModifier;
 
 /**
  * Class PayconiqQrCodeGenerator
@@ -65,21 +70,22 @@ class PayconiqQrCodeGenerator
         string $size = self::SIZE_SMALL,
         string $color = self::COLOR_MAGENTA
     ): string {
-        $url = Url::createFromUrl($qrLink);
+        $uri   = Uri::createFromString($qrLink);
+        $query = Query::createFromUri($uri);
 
         if (in_array(strtoupper($format), self::FORMATS)) {
-            $url->getQuery()->modify(['f' => $format]);
+            $query = $query->merge('f=' . $format);
         }
 
         if (in_array(strtoupper($size), self::SIZES)) {
-            $url->getQuery()->modify(['s' => $size]);
+            $query = $query->merge('s=' . $size);
         }
 
         if (in_array(strtolower($color), self::COLORS)) {
-            $url->getQuery()->modify(['cl' => $color]);
+            $query = $query->merge('cl=' . $color);
         }
 
-        return $url->__toString();
+        return (string) $uri->withQuery($query->toRFC1738());
     }
 
     /**
@@ -103,10 +109,10 @@ class PayconiqQrCodeGenerator
     ): string {
         $urlPayload = self::LOCATION_URL_SCHEME_STATIC . $paymentProfileId . '/' . $posId;
 
-        $url = Url::createFromUrl(self::PORTAL_URL);
-        $url->setQuery(['c' => $urlPayload]);
+        $uri = Uri::createFromString(self::PORTAL_URL);
+        $uri = UriModifier::appendQuery($uri, 'c=' . $urlPayload);
 
-        return self::customizePaymentQrLink($url->__toString(), $format, $size, $color);
+        return self::customizePaymentQrLink((string) $uri, $format, $size, $color);
     }
 
     /**
@@ -126,22 +132,28 @@ class PayconiqQrCodeGenerator
      * @return string
      */
     public static function generateQRCodeWithMetadata(
-        string $paymentProfileId,
+        string  $paymentProfileId,
         ?string $description,
-        ?int $amount,
+        ?int    $amount,
         ?string $reference,
-        string $format = self::FORMAT_PNG,
-        string $size = self::SIZE_SMALL,
-        string $color = self::COLOR_MAGENTA
+        string  $format = self::FORMAT_PNG,
+        string  $size = self::SIZE_SMALL,
+        string  $color = self::COLOR_MAGENTA
     ): string {
-        $urlPayload = Url::createFromUrl(self::LOCATION_URL_SCHEME_METADATA . $paymentProfileId);
+        $uriPayload   = Uri::createFromString(self::LOCATION_URL_SCHEME_METADATA . $paymentProfileId);
+        $queryPayload = Query::createFromUri($uriPayload);
+
+        $test  = [];
+        $test2 = [];
 
         if (! empty($description)) {
             if (strlen($description) > 35) {
                 throw new \InvalidArgumentException('Description max length is 35 characters');
             }
 
-            $urlPayload->getQuery()->modify(['D' => $description]);
+            $queryPayload = $queryPayload->merge('D=' . $description);
+            $test[]       = ['D', $description];
+            $test2[ 'D' ] = $description;
         }
 
         if (null !== $amount) {
@@ -149,7 +161,9 @@ class PayconiqQrCodeGenerator
                 throw new \InvalidArgumentException('Amount must be between 1 - 999999 Euro cents');
             }
 
-            $urlPayload->getQuery()->modify(['A' => $amount]);
+            $queryPayload = $queryPayload->merge('A=' . $amount);
+            $test[]       = ['A', $amount];
+            $test2[ 'A' ] = $amount;
         }
 
         if (! empty($reference)) {
@@ -157,12 +171,76 @@ class PayconiqQrCodeGenerator
                 throw new \InvalidArgumentException('Reference max length is 35 characters');
             }
 
-            $urlPayload->getQuery()->modify(['R' => $reference]);
+            $queryPayload = $queryPayload->merge('R=' . $reference);
+            $test[]       = ['R', $reference];
+            $test2[ 'R' ] = $reference;
         }
 
-        $url = Url::createFromUrl(self::PORTAL_URL);
-        $url->setQuery(['c' => $urlPayload->__toString()]);
+//        $url = Url::createFromUrl(self::PORTAL_URL);
+//        $url->setQuery(['c' => $urlPayload->__toString()]);
 
-        return self::customizePaymentQrLink($url->__toString(), $format, $size, $color);
+
+        $queryString = $queryPayload->toRFC1738(); //todo:remove
+        echo '---  queryString ----';
+        var_dump($queryString);
+
+        $queryString2 = $queryPayload->getContent(); //todo:remove
+        echo '---  queryString2 ----';
+        var_dump($queryString2);
+
+
+        $fullPayloadUrl = (string) $uriPayload->withQuery($queryPayload->toRFC1738());
+
+        $fullPayloadUrl2 = (string) $uriPayload->withQuery(QueryString::build($test));
+        $fullPayloadUrl3 = (string) $uriPayload->withQuery(QueryString::build($test, '&', PHP_QUERY_RFC1738));
+
+        $fullPayloadUrl4 = (string) $uriPayload->withQuery(\League\Uri\Parser\QueryString::build($test));
+        $fullPayloadUrl5 = (string) $uriPayload->withQuery(\League\Uri\Parser\QueryString::build($test,
+            '&',
+            PHP_QUERY_RFC1738));
+
+
+        echo '--- fullPayloadUrl 1 ----';
+        var_dump($fullPayloadUrl);
+        echo '--- fullPayloadUrl 2 ----';
+        var_dump($fullPayloadUrl2);
+        echo '--- fullPayloadUrl 3 ----';
+        var_dump($fullPayloadUrl3);
+        echo '--- fullPayloadUrl 4 ----';
+        var_dump($fullPayloadUrl4);
+        echo '--- fullPayloadUrl 5 ----';
+        var_dump($fullPayloadUrl5);
+
+        $uri = Uri::createFromString(self::PORTAL_URL);
+//        (string) $uri->withQuery('c=' . $fullPayloadUrl);
+        $query = Query::createFromUri($uri);
+
+        echo '---  queryString pre-append ----';
+        var_dump($query->getContent());
+
+        $query = $query->append('c=' . $fullPayloadUrl);
+
+        echo '---  queryString post-append : getContent() ----';
+        var_dump($query->getContent());
+
+        echo '---  queryString post-append : toRFC1738() ----';
+        var_dump($query->toRFC1738());
+
+        echo '---  queryString post-append : toRFC3986() ----';
+        var_dump($query->toRFC3986());
+
+//        $link = (string) $uri->withQuery($query->toRFC1738());
+        $link = self::PORTAL_URL . '?c=' . $fullPayloadUrl;
+        echo '---  2 ----';
+        var_dump($link);
+
+
+        //----------------
+
+
+//        QueryString::build()
+
+
+        return self::customizePaymentQrLink($link, $format, $size, $color);
     }
 }
