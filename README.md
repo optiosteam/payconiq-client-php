@@ -1,7 +1,8 @@
-# PHP Payconiq API Client (unofficial)
-
 [![CI](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml)
 [![codecov](https://codecov.io/gh/robiningelbrecht/payconiq-client-php/branch/main/graph/badge.svg?token=0B5HFVIJBY)](https://codecov.io/gh/robiningelbrecht/payconiq-client-php)
+
+# PHP Payconiq API Client (unofficial)
+
 Supported API version: v3
 
 Development sponsored by [Optios](https://www.optios.net)
