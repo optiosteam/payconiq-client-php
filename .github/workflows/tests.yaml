@@ -31,7 +31,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Run phpunit
-        run: php vendor/bin/phpunit --stop-on-failure --testdox tests/ --coverage-clover clover.xml
+        run: php vendor/bin/phpunit --stop-on-failure --testsuite unit-tests --coverage-clover clover.xml
 
       - name: Run mess detector
         run: php vendor/bin/phpmd src/ ansi phpmd.xml
