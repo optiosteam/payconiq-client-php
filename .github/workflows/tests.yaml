@@ -36,8 +36,8 @@ jobs:
       - name: Run mess detector
         run: php vendor/bin/phpmd src/ ansi phpmd.xml
 
-      - name: Run code sniffer
-        run: php vendor/bin/phpcs src/ tests/ --colors -p
+      # - name: Run code sniffer
+      # run: php vendor/bin/phpcs src/ tests/ --colors -p
 
       - name: Send test coverage to codecov.io
         uses: codecov/codecov-action@v2.1.0
