@@ -263,7 +263,7 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId . '/debtor/refundIban',
+                'https://api.ext.payconiq.com/v3/payments/' . $paymentId . '/debtor/refundIban'
             )
             ->willThrowException(new ClientException(
                 'some-message',
