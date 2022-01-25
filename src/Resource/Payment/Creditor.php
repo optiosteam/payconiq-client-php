@@ -152,7 +152,7 @@ class Creditor
     /**
      * @return string|null
      */
-    public function getCallbackUrl(): string
+    public function getCallbackUrl(): ?string
     {
         return $this->callbackUrl;
     }

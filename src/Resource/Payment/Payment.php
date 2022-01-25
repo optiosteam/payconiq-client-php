@@ -260,7 +260,7 @@ class Payment
     /**
      * @return Carbon
      */
-    public function getExpiresAt(): Carbon
+    public function getExpiresAt(): ?Carbon
     {
         return $this->expiresAt;
     }

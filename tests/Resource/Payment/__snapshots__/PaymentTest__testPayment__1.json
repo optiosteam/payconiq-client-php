@@ -1,0 +1,27 @@
+{
+    "paymentId": "new-payment-id",
+    "createdAt": "2022-01-26T00:00:00+00:00",
+    "status": "new-status",
+    "amount": 20,
+    "currency": "USD",
+    "creditor": {
+        "profileId": "profile-id2",
+        "merchantId": "merchant-id",
+        "name": "name",
+        "iban": "iban"
+    },
+    "debtor": {
+        "name": "name",
+        "iban": "iban"
+    },
+    "expiresAt": "2022-01-26T00:00:00+00:00",
+    "transferAmount": 10,
+    "tippingAmount": 10,
+    "totalAmount": 10,
+    "description": "desc",
+    "bulkId": "bulk-id",
+    "selfLink": "some-uri",
+    "deepLink": "some-uri",
+    "qrLink": "some-uri",
+    "refundLink": "some-uri"
+}
