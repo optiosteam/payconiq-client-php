@@ -23,5 +23,6 @@
     "selfLink": "some-uri",
     "deepLink": "some-uri",
     "qrLink": "some-uri",
-    "refundLink": "some-uri"
+    "refundLink": "some-uri",
+    "checkoutLink": "some-uri"
 }

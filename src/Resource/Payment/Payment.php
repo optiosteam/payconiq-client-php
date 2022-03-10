@@ -120,6 +120,11 @@ class Payment
     private $refundLink;
 
     /**
+     * @var string|null
+     */
+    private $checkoutLink;
+
+    /**
      * Payment constructor.
      *
      * @param string $paymentId
@@ -177,7 +182,7 @@ class Payment
         if (! empty($response->creditor)) {
             $self->setCreditor(Creditor::createFromStdClass($response->creditor));
         }
-        
+
         if (! empty($response->debtor)) {
             $self->setDebtor(Debtor::createFromStdClass($response->debtor));
         }
@@ -193,6 +198,7 @@ class Payment
         ! empty($response->_links->deeplink->href) ? $self->setDeepLink($response->_links->deeplink->href) : null;
         ! empty($response->_links->qrcode->href) ? $self->setQrLink($response->_links->qrcode->href) : null;
         ! empty($response->_links->refund->href) ? $self->setRefundLink($response->_links->refund->href) : null;
+        ! empty($response->_links->checkout->href) ? $self->setCheckoutLink($response->_links->checkout->href) : null;
 
         return $self;
     }
@@ -219,7 +225,8 @@ class Payment
             'selfLink' => $this->selfLink,
             'deepLink' => $this->deepLink,
             'qrLink' => $this->qrLink,
-            'refundLink' => $this->refundLink
+            'refundLink' => $this->refundLink,
+            'checkoutLink' => $this->checkoutLink
         ];
 
         return array_filter($array);
@@ -496,4 +503,23 @@ class Payment
     {
         $this->refundLink = $refundLink;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getCheckoutLink(): ?string
+    {
+        return $this->checkoutLink;
+    }
+
+    /**
+     * @param string|null $checkoutLink
+     */
+    public function setCheckoutLink(?string $checkoutLink): void
+    {
+        $this->checkoutLink = $checkoutLink;
+    }
+
+
+
 }
