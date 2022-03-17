@@ -25,10 +25,3 @@ test-phpmd:
 
 test-phpcs:
 	 ${EXEC_PHP} ./vendor/bin/phpcs src/ tests/ --colors -p
-
-## —— Docker ✅ —————————————————————————————————————————————————————————————————
-build: ## Build container docker
-	docker build -t payconiq .
-
-sh: ## Run shell on container docker
-	docker run -it --rm --name payconiq-app -v "$$PWD":/srv/app  payconiq sh
