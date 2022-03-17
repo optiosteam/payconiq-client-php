@@ -125,6 +125,11 @@ class Payment
     private $checkoutLink;
 
     /**
+     * @var string|null
+     */
+    private $reference;
+
+    /**
      * Payment constructor.
      *
      * @param string $paymentId
@@ -193,6 +198,7 @@ class Payment
         ! empty($response->totalAmount) ? $self->setTotalAmount($response->totalAmount) : null;
         ! empty($response->description) ? $self->setDescription($response->description) : null;
         ! empty($response->bulkId) ? $self->setBulkId($response->bulkId) : null;
+        ! empty($response->reference) ? $self->setReference($response->reference) : null;
 
         ! empty($response->_links->self->href) ? $self->setSelfLink($response->_links->self->href) : null;
         ! empty($response->_links->deeplink->href) ? $self->setDeepLink($response->_links->deeplink->href) : null;
@@ -226,7 +232,8 @@ class Payment
             'deepLink' => $this->deepLink,
             'qrLink' => $this->qrLink,
             'refundLink' => $this->refundLink,
-            'checkoutLink' => $this->checkoutLink
+            'checkoutLink' => $this->checkoutLink,
+            'reference' => $this->reference
         ];
 
         return array_filter($array);
@@ -518,6 +525,22 @@ class Payment
     public function setCheckoutLink(?string $checkoutLink): void
     {
         $this->checkoutLink = $checkoutLink;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string|null $reference
+     */
+    public function setReference(?string $reference): void
+    {
+        $this->reference = $reference;
     }
 
 
