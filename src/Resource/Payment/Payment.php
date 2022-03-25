@@ -166,13 +166,14 @@ class Payment
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param \stdClass $response
      *
      * @return static
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.CyclomaticComplexity
      */
     public static function createFromStdClass(\stdClass $response): self
     {
@@ -208,6 +209,7 @@ class Payment
 
         return $self;
     }
+    //phpcs:enable
 
     /**
      * @return array
@@ -233,7 +235,7 @@ class Payment
             'qrLink' => $this->qrLink,
             'refundLink' => $this->refundLink,
             'checkoutLink' => $this->checkoutLink,
-            'reference' => $this->reference
+            'reference' => $this->reference,
         ];
 
         return array_filter($array);
