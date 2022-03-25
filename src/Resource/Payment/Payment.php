@@ -120,6 +120,16 @@ class Payment
     private $refundLink;
 
     /**
+     * @var string|null
+     */
+    private $checkoutLink;
+
+    /**
+     * @var string|null
+     */
+    private $reference;
+
+    /**
      * Payment constructor.
      *
      * @param string $paymentId
@@ -156,13 +166,14 @@ class Payment
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param \stdClass $response
      *
      * @return static
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.CyclomaticComplexity
      */
     public static function createFromStdClass(\stdClass $response): self
     {
@@ -177,7 +188,7 @@ class Payment
         if (! empty($response->creditor)) {
             $self->setCreditor(Creditor::createFromStdClass($response->creditor));
         }
-        
+
         if (! empty($response->debtor)) {
             $self->setDebtor(Debtor::createFromStdClass($response->debtor));
         }
@@ -188,14 +199,17 @@ class Payment
         ! empty($response->totalAmount) ? $self->setTotalAmount($response->totalAmount) : null;
         ! empty($response->description) ? $self->setDescription($response->description) : null;
         ! empty($response->bulkId) ? $self->setBulkId($response->bulkId) : null;
+        ! empty($response->reference) ? $self->setReference($response->reference) : null;
 
         ! empty($response->_links->self->href) ? $self->setSelfLink($response->_links->self->href) : null;
         ! empty($response->_links->deeplink->href) ? $self->setDeepLink($response->_links->deeplink->href) : null;
         ! empty($response->_links->qrcode->href) ? $self->setQrLink($response->_links->qrcode->href) : null;
         ! empty($response->_links->refund->href) ? $self->setRefundLink($response->_links->refund->href) : null;
+        ! empty($response->_links->checkout->href) ? $self->setCheckoutLink($response->_links->checkout->href) : null;
 
         return $self;
     }
+    //phpcs:enable
 
     /**
      * @return array
@@ -219,7 +233,9 @@ class Payment
             'selfLink' => $this->selfLink,
             'deepLink' => $this->deepLink,
             'qrLink' => $this->qrLink,
-            'refundLink' => $this->refundLink
+            'refundLink' => $this->refundLink,
+            'checkoutLink' => $this->checkoutLink,
+            'reference' => $this->reference,
         ];
 
         return array_filter($array);
@@ -260,7 +276,7 @@ class Payment
     /**
      * @return Carbon
      */
-    public function getExpiresAt(): Carbon
+    public function getExpiresAt(): ?Carbon
     {
         return $this->expiresAt;
     }
@@ -495,5 +511,37 @@ class Payment
     public function setRefundLink(?string $refundLink): void
     {
         $this->refundLink = $refundLink;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCheckoutLink(): ?string
+    {
+        return $this->checkoutLink;
+    }
+
+    /**
+     * @param string|null $checkoutLink
+     */
+    public function setCheckoutLink(?string $checkoutLink): void
+    {
+        $this->checkoutLink = $checkoutLink;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string|null $reference
+     */
+    public function setReference(?string $reference): void
+    {
+        $this->reference = $reference;
     }
 }

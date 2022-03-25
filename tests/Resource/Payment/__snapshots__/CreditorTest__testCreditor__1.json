@@ -1,0 +1,7 @@
+{
+    "profileId": "new-profile-id",
+    "merchantId": "new-merchant-id",
+    "name": "new-name",
+    "iban": "new-iban",
+    "callbackUrl": "some-uri"
+}

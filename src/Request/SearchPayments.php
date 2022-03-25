@@ -110,7 +110,7 @@ class SearchPayments
     /**
      * @return string[]
      */
-    public function getPaymentStatuses(): array
+    public function getPaymentStatuses(): ?array
     {
         return $this->paymentStatuses;
     }

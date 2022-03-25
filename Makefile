@@ -18,7 +18,7 @@ update: composer.json ## Update vendors according to the composer.json file
 test: test-phpunit test-phpmd test-phpcs ## Launch all tests
 
 test-phpunit: ## Run phpunit tests
-	${EXEC_PHP} ./vendor/bin/phpunit --stop-on-failure --testdox tests/
+	${EXEC_PHP} ./vendor/bin/phpunit --stop-on-failure --testsuite unit-tests
 
 test-phpmd:
 	 ${EXEC_PHP} ./vendor/bin/phpmd src/ ansi phpmd.xml
