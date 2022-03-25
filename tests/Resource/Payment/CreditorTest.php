@@ -12,11 +12,11 @@ class CreditorTest extends TestCase
 
     public function testCreditor(): void
     {
-        $obj = new \stdClass();
-        $obj->profileId = 'profile-id';
+        $obj             = new \stdClass();
+        $obj->profileId  = 'profile-id';
         $obj->merchantId = 'merchant-id';
-        $obj->name = 'name';
-        $obj->iban = 'iban';
+        $obj->name       = 'name';
+        $obj->iban       = 'iban';
 
         $creditor = Creditor::createFromStdClass($obj);
 

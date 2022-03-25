@@ -1,5 +1,5 @@
 [![CI](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml)
-[![codecov](https://codecov.io/gh/robiningelbrecht/payconiq-client-php/branch/ci-and-more-unit-tests/graph/badge.svg?token=0B5HFVIJBY)](https://codecov.io/gh/robiningelbrecht/payconiq-client-php)
+[![codecov](https://codecov.io/gh/optiosteam/payconiq-client-php/branch/main/graph/badge.svg?token=S62YDUXV7A)](https://codecov.io/gh/optiosteam/payconiq-client-php)
 
 # PHP Payconiq API Client (unofficial)
 

@@ -281,9 +281,9 @@ class PayconiqApiClientTest extends TestCase
     {
         parent::setUp();
 
-        $this->apiKey = 'some-api-key';
+        $this->apiKey     = 'some-api-key';
         $this->httpClient = $this->createMock(Client::class);
-        $this->useProd = false;
+        $this->useProd    = false;
 
         $this->payconiqApiClient = new PayconiqApiClient(
             $this->apiKey,

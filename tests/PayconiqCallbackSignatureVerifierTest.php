@@ -23,7 +23,7 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
 
     public function testIsValid(): void
     {
-        $url = 'https://ext.payconiq.com/certificates';
+        $url        = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -42,7 +42,7 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
 
     public function testIsInvalid(): void
     {
-        $url = 'https://ext.payconiq.com/certificates';
+        $url        = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -62,7 +62,7 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
 
     public function testLoadAndVerifyJWS(): void
     {
-        $url = 'https://ext.payconiq.com/certificates';
+        $url        = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -77,12 +77,15 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
             ->with('some-token', JWKSet::createFromJson($jwkSetJson), 0, null)
             ->willReturn(new JWS('the-payload', 'encoded-payload'));
 
-        $this->assertInstanceOf(JWS::class, $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token'));
+        $this->assertInstanceOf(
+            JWS::class,
+            $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token')
+        );
     }
 
     public function testLoadAndVerifyJWSItShouldThrow(): void
     {
-        $url = 'https://ext.payconiq.com/certificates';
+        $url        = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -98,7 +101,9 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
             ->willThrowException(new \Exception('Unable to load and verify the token.'));
 
         $this->expectException(PayconiqCallbackSignatureVerificationException::class);
+        //phpcs:disable
         $this->expectExceptionMessage('Something went wrong while loading and verifying the JWS. Error: Unable to load and verify the token.');
+        //phpcs:enable
 
         $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token');
     }
@@ -108,9 +113,9 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
         parent::setUp();
 
         $this->paymentProfileId = 'profileId';
-        $this->httpClient = $this->createMock(Client::class);
-        $this->cache = $this->createMock(FilesystemAdapter::class);
-        $this->useProd = false;
+        $this->httpClient       = $this->createMock(Client::class);
+        $this->cache            = $this->createMock(FilesystemAdapter::class);
+        $this->useProd          = false;
 
         $this->payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier(
             $this->paymentProfileId,
@@ -124,7 +129,7 @@ class PayconiqCallbackSignatureVerifierTest extends TestCase
         // Because the jwsLoader is not injected in to the verifier,
         // we need to do some magic to make sure we can mock it.
         // Ideally this should be refactored to DI.
-        $class = new \ReflectionClass(PayconiqCallbackSignatureVerifier::class);
+        $class    = new \ReflectionClass(PayconiqCallbackSignatureVerifier::class);
         $property = $class->getProperty('jwsLoader');
         $property->setAccessible(true);
         $property->setValue($this->payconiqCallbackSignatureVerifier, $this->jwsLoader);

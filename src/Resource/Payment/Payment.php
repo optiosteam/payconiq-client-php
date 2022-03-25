@@ -542,7 +542,4 @@ class Payment
     {
         $this->reference = $reference;
     }
-
-
-
 }

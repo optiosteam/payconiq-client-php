@@ -15,17 +15,17 @@ class PaymentTest extends TestCase
 
     public function testPayment(): void
     {
-        $obj = new \stdClass();
-        $obj->paymentId = 'payment-id';
-        $obj->createdAt = '2022-01-25';
-        $obj->status = 'status';
-        $obj->amount = 10;
-        $obj->creditor = new \stdClass();
-        $obj->creditor->profileId = 'profile-id';
+        $obj                       = new \stdClass();
+        $obj->paymentId            = 'payment-id';
+        $obj->createdAt            = '2022-01-25';
+        $obj->status               = 'status';
+        $obj->amount               = 10;
+        $obj->creditor             = new \stdClass();
+        $obj->creditor->profileId  = 'profile-id';
         $obj->creditor->merchantId = 'merchant-id';
-        $obj->creditor->name = 'name';
-        $obj->creditor->iban = 'iban';
-        $obj->debtor = new \stdClass();
+        $obj->creditor->name       = 'name';
+        $obj->creditor->iban       = 'iban';
+        $obj->debtor               = new \stdClass();
 
         $payment = Payment::createFromStdClass($obj);
 
