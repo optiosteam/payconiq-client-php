@@ -29,4 +29,9 @@ class PayconiqPathCheckerTest extends TestCase
     {
         $this->assertEquals('https://payconiq.com/path', $this->checker->supportedHeader());
     }
+
+    public function testProtectedHeaderOnly()
+    {
+        $this->assertFalse($this->checker->protectedHeaderOnly());
+    }
 }

@@ -28,4 +28,9 @@ class PayconiqJtiCheckerTest extends TestCase
     {
         $this->assertEquals('https://payconiq.com/jti', $this->checker->supportedHeader());
     }
+
+    public function testProtectedHeaderOnly()
+    {
+        $this->assertFalse($this->checker->protectedHeaderOnly());
+    }
 }
