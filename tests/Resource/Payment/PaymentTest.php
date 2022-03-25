@@ -97,6 +97,14 @@ class PaymentTest extends TestCase
         $payment->setRefundLink('some-uri');
         $this->assertEquals('some-uri', $payment->getRefundLink());
 
+        $this->assertNull($payment->getCheckoutLink());
+        $payment->setCheckoutLink('some-uri');
+        $this->assertEquals('some-uri',$payment->getCheckoutLink());
+
+        $this->assertNull($payment->getReference());
+        $payment->setReference('reference');
+        $this->assertEquals('reference',$payment->getReference());
+
         $this->assertMatchesJsonSnapshot($payment->toArray());
     }
 }

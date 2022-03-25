@@ -2,6 +2,7 @@
     "paymentId": "new-payment-id",
     "createdAt": "2022-01-26T00:00:00+00:00",
     "status": "new-status",
+    "reference": "reference",
     "amount": 20,
     "currency": "USD",
     "creditor": {
@@ -23,5 +24,6 @@
     "selfLink": "some-uri",
     "deepLink": "some-uri",
     "qrLink": "some-uri",
-    "refundLink": "some-uri"
+    "refundLink": "some-uri",
+    "checkoutLink": "some-uri"
 }
