@@ -20,7 +20,7 @@ class PayconiqIssuedAtCheckerTest extends TestCase
 
     public function testCheckHeader()
     {
-        $this->checker->checkHeader('2020-02-01 00:00:00');
+        $this->checker->checkHeader('2023-08-25T08:28:21.675129286Z');
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('"https://payconiq.com/iat" has an invalid date format');
         $this->checker->checkHeader('Invalid date');
@@ -30,7 +30,7 @@ class PayconiqIssuedAtCheckerTest extends TestCase
     {
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('The JWT is issued in the future.');
-        $this->checker->checkHeader(Carbon::tomorrow()->toString());
+        $this->checker->checkHeader(Carbon::tomorrow()->format('Y-m-d\TH:i:s.vuO'));
     }
 
     public function testSupportedHeader()
