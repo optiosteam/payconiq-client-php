@@ -22,7 +22,7 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
     {
         try {
             // Payconiq unexpectedly changed their format on 2023-08-23 to include nanoseconds,
-            // Since PHP doesn't support nanoseconds, we're "hacking" it trimming it to microseconds
+            // Since PHP doesn't support nanoseconds, we're "hacking" it by trimming it to microseconds
             $pos     = strpos($value, '.');
             $trimmed = substr($value, 0, $pos + 7) . substr($value, $pos + 10);
 
