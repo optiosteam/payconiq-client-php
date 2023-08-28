@@ -38,7 +38,7 @@ class PayconiqIssuedAtCheckerTest extends TestCase
     {
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('The JWT is issued in the future.');
-        $this->checker->checkHeader(Carbon::tomorrow()->format(PayconiqIssuedAtChecker::IAT_FORMAT));
+        $this->checker->checkHeader('3023-08-25T08:28:21.675129286Z');
     }
 
     public function testSupportedHeader()
