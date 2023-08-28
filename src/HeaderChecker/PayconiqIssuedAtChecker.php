@@ -22,9 +22,11 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
     {
         try {
             // Payconiq unexpectedly changed their format on 2023-08-23 to include nanoseconds,
-            // Since PHP doesn't support nanoseconds, we're "hacking" it by concatting miliseconds and microseconds
-            // substr is too risky because of time zones.
-            $iat = Carbon::createFromFormat('Y-m-d\TH:i:s.vuO', $value);
+            // Since PHP doesn't support nanoseconds, we're "hacking" it trimming it to microseconds
+            $pos     = strpos($value, '.');
+            $trimmed = substr($value, 0, $pos + 7) . substr($value, $pos + 10);
+
+            $iat = Carbon::createFromFormat('Y-m-d\TH:i:s.uO', $trimmed);
         } catch (\Exception $e) {
             throw new InvalidHeaderException(
                 sprintf('"%s" has an invalid date format', self::HEADER_NAME),
