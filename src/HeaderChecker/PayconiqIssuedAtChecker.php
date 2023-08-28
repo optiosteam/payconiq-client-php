@@ -30,7 +30,7 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
             // their api, the regex determines if it's nanosecond or microsecond format and trims when needed
 
             if (preg_match('/(?:\.)(\d{9})(?:Z|\+|-)/', $value)) { // format with nanoseconds
-                $pos = strpos($value, '.');
+                $pos     = strpos($value, '.');
                 $trimmed = substr($value, 0, $pos + 7) . substr($value, $pos + 10);
 
                 $iat = Carbon::createFromFormat(self::IAT_FORMAT, $trimmed);
