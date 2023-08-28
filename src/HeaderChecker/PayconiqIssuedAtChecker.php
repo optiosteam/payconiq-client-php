@@ -37,7 +37,7 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
             );
         }
 
-        if ($iat->gt(Carbon::now('UTC'))) {
+        if ($iat->setMicroseconds(0)->gt(Carbon::now('UTC'))) {
             throw new InvalidHeaderException(
                 'The JWT is issued in the future.',
                 self::HEADER_NAME,
