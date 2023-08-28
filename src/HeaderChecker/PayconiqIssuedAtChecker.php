@@ -13,6 +13,8 @@ use Jose\Component\Checker\InvalidHeaderException;
  */
 final class PayconiqIssuedAtChecker implements HeaderChecker
 {
+    public const IAT_FORMAT = 'Y-m-d\TH:i:s.uO';
+
     private const HEADER_NAME = 'https://payconiq.com/iat';
 
     /**
@@ -22,9 +24,11 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
     {
         try {
             // Payconiq unexpectedly changed their format on 2023-08-23 to include nanoseconds,
-            // Since PHP doesn't support nanoseconds, we're "hacking" it by concatting miliseconds and microseconds
-            // substr is too risky because of time zones.
-            $iat = Carbon::createFromFormat('Y-m-d\TH:i:s.vuO', $value);
+            // Since PHP doesn't support nanoseconds, we're "hacking" it by trimming it to microseconds
+            $pos     = strpos($value, '.');
+            $trimmed = substr($value, 0, $pos + 7) . substr($value, $pos + 10);
+
+            $iat = Carbon::createFromFormat(self::IAT_FORMAT, $trimmed);
         } catch (\Exception $e) {
             throw new InvalidHeaderException(
                 sprintf('"%s" has an invalid date format', self::HEADER_NAME),
