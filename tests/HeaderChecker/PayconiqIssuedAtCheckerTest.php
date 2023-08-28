@@ -20,21 +20,34 @@ class PayconiqIssuedAtCheckerTest extends TestCase
 
     public function testCheckHeader()
     {
-        $this->checker->checkHeader('2023-08-25T08:28:21.675129286Z');
-        $this->expectException(InvalidHeaderException::class);
-        $this->expectExceptionMessage('"https://payconiq.com/iat" has an invalid date format');
-        $this->checker->checkHeader('Invalid date');
+        $this->checker->checkHeader('2023-08-25T08:28:21.675129Z');
     }
 
-    public function testCheckHeaderOtherTimeZone()
+    public function testCheckHeaderNanoSeconds()
+    {
+        $this->checker->checkHeader('2023-08-25T08:28:21.675129286Z');
+    }
+
+    public function testCheckHeaderNanoSecondsOtherTimeZone()
     {
         $this->checker->checkHeader('2023-08-25T08:28:21.675129286+02:00');
+    }
+
+    public function testCheckHeaderException()
+    {
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('"https://payconiq.com/iat" has an invalid date format');
         $this->checker->checkHeader('Invalid date');
     }
 
     public function testCheckHeaderWhenInFuture()
+    {
+        $this->expectException(InvalidHeaderException::class);
+        $this->expectExceptionMessage('The JWT is issued in the future.');
+        $this->checker->checkHeader(Carbon::tomorrow()->format(PayconiqIssuedAtChecker::IAT_FORMAT));
+    }
+
+    public function testCheckHeaderWhenInFutureOtherFormat()
     {
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('The JWT is issued in the future.');
