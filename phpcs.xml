@@ -2,9 +2,6 @@
 <ruleset name="Project Standard">
     <description>PSR-12 + focused Generic/Squiz rules</description>
 
-    <arg name="colors" value="1"/>
-    <arg name="parallel" value="80"/>
-
     <fileExtensions>
         <extension>php</extension>
     </fileExtensions>
