@@ -10,30 +10,35 @@ class PayconiqIssCheckerTest extends TestCase
 {
     private $checker;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         $this->checker = new PayconiqIssChecker();
     }
 
-    public function testCheckHeader() {
+    public function testCheckHeader()
+    {
         $this->checker->checkHeader('Payconiq');
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('"https://payconiq.com/iss" should be "Payconiq"');
         $this->checker->checkHeader('InvalidPayconiq');
     }
 
-    public function testCheckHeaderWhenNotString() {
+    public function testCheckHeaderWhenNotString()
+    {
         $this->expectException(InvalidHeaderException::class);
         $this->expectExceptionMessage('"https://payconiq.com/iss" must be a string.');
         $this->checker->checkHeader([]);
     }
 
-    public function testSupportedHeader() {
+    public function testSupportedHeader()
+    {
         $this->assertEquals('https://payconiq.com/iss', $this->checker->supportedHeader());
     }
 
-    public function testProtectedHeaderOnly() {
+    public function testProtectedHeaderOnly()
+    {
         $this->assertFalse($this->checker->protectedHeaderOnly());
     }
 }

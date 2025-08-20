@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Optios\Payconiq\Resource\Payment;
@@ -17,11 +18,13 @@ final readonly class Creditor
     /**
      * @deprecated Use createFromObject() instead.
      */
-    public static function createFromStdClass(\stdClass $class): self {
+    public static function createFromStdClass(\stdClass $class): self
+    {
         return self::createFromObject($class);
     }
 
-    public static function createFromObject(object $obj): self {
+    public static function createFromObject(object $obj): self
+    {
         return new self(
             profileId: $obj->profileId,
             merchantId: $obj->merchantId,
@@ -31,7 +34,8 @@ final readonly class Creditor
         );
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
             'profileId' => $this->profileId,
             'merchantId' => $this->merchantId,
@@ -41,23 +45,28 @@ final readonly class Creditor
         ];
     }
 
-    public function getProfileId(): string {
+    public function getProfileId(): string
+    {
         return $this->profileId;
     }
 
-    public function getMerchantId(): string {
+    public function getMerchantId(): string
+    {
         return $this->merchantId;
     }
 
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function getIban(): string {
+    public function getIban(): string
+    {
         return $this->iban;
     }
 
-    public function getCallbackUrl(): ?string {
+    public function getCallbackUrl(): ?string
+    {
         return $this->callbackUrl;
     }
 }

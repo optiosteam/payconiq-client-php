@@ -23,7 +23,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     private $useProd;
     private $jwsLoader;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         CarbonImmutable::setTestNow(
@@ -56,11 +57,13 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $property->setValue($this->payconiqCallbackSignatureVerifier, $this->jwsLoader);
     }
 
-    protected function tearDown(): void {
+    protected function tearDown(): void
+    {
         CarbonImmutable::setTestNow();
     }
 
-    public function testIsValid(): void {
+    public function testIsValid(): void
+    {
         $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -78,7 +81,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertTrue($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testIsInvalid(): void {
+    public function testIsInvalid(): void
+    {
         $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -97,7 +101,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertFalse($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testLoadAndVerifyJWS(): void {
+    public function testLoadAndVerifyJWS(): void
+    {
         $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -119,7 +124,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         );
     }
 
-    public function testLoadAndVerifyJWSItShouldThrow(): void {
+    public function testLoadAndVerifyJWSItShouldThrow(): void
+    {
         $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache

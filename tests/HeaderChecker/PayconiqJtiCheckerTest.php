@@ -10,23 +10,27 @@ class PayconiqJtiCheckerTest extends TestCase
 {
     private $checker;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         $this->checker = new PayconiqJtiChecker();
     }
 
-    public function testCheckHeader() {
+    public function testCheckHeader()
+    {
         $this->checker->checkHeader('valid');
         $this->expectException(InvalidHeaderException::class);
         $this->checker->checkHeader(null);
     }
 
-    public function testSupportedHeader() {
+    public function testSupportedHeader()
+    {
         $this->assertEquals('https://payconiq.com/jti', $this->checker->supportedHeader());
     }
 
-    public function testProtectedHeaderOnly() {
+    public function testProtectedHeaderOnly()
+    {
         $this->assertFalse($this->checker->protectedHeaderOnly());
     }
 }

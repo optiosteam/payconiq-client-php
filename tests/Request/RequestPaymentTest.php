@@ -10,7 +10,8 @@ class RequestPaymentTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testRequestPayment(): void {
+    public function testRequestPayment(): void
+    {
         $requestPayment = RequestPayment::createForStaticQR(1, 'posId');
 
         $this->assertEquals(1, $requestPayment->getAmount());

@@ -7,7 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class PayconiqApiExceptionTest extends TestCase
 {
-    public function testException(): void {
+    public function testException(): void
+    {
         $exception = new PayconiqApiException(
             payconiqMessage: 'a message',
             payconiqCode: 'code',

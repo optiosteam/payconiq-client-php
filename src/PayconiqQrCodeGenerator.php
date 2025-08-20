@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Optios\Payconiq;
@@ -17,7 +18,8 @@ class PayconiqQrCodeGenerator
     public const LOCATION_URL_SCHEME_STATIC = 'https://payconiq.com/l/1/';
     public const LOCATION_URL_SCHEME_METADATA = 'https://payconiq.com/t/1/';
 
-    private static function getEndpoint(): string {
+    private static function getEndpoint(): string
+    {
         if (true === MigrationHelper::switchToNewEndpoints()) {
             // new endpoints
             return self::PORTAL_URL_NEW;
@@ -42,7 +44,7 @@ class PayconiqQrCodeGenerator
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
     ): string {
-        return (string)Modifier::from(Http::new($qrLink))
+        return (string) Modifier::from(Http::new($qrLink))
             ->mergeQueryParameters([
                 'f' => $format->value,
                 's' => $size->value,
@@ -68,7 +70,7 @@ class PayconiqQrCodeGenerator
             ->mergeQueryParameters(['c' => $urlPayload])
             ->getUri();
 
-        return self::customizePaymentQrLink((string)$uri, $format, $size, $color);
+        return self::customizePaymentQrLink((string) $uri, $format, $size, $color);
     }
 
     /**
@@ -120,9 +122,9 @@ class PayconiqQrCodeGenerator
         }
 
         $uri = Modifier::from(Http::new(self::getEndpoint()))
-            ->mergeQueryParameters(['c' => (string)$payloadUri])
+            ->mergeQueryParameters(['c' => (string) $payloadUri])
             ->getUri();
 
-        return self::customizePaymentQrLink((string)$uri, $format, $size, $color);
+        return self::customizePaymentQrLink((string) $uri, $format, $size, $color);
     }
 }

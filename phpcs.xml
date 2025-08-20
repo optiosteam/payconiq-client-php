@@ -2,13 +2,8 @@
 <ruleset name="Project Standard">
     <description>PSR-12 + focused Generic/Squiz rules</description>
 
-    <fileExtensions>
-        <extension>php</extension>
-    </fileExtensions>
-    <exclude-pattern>vendor/*</exclude-pattern>
-    <exclude-pattern>var/*</exclude-pattern>
-    <exclude-pattern>build/*</exclude-pattern>
-    <exclude-pattern>coverage/*</exclude-pattern>
+    <file>src</file>
+    <file>tests</file>
 
     <rule ref="PSR12"/>
     <rule ref="Generic.Classes.DuplicateClassName"/>

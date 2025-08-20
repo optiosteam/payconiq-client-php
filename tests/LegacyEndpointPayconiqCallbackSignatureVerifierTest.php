@@ -23,7 +23,8 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     private $useProd;
     private $jwsLoader;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         CarbonImmutable::setTestNow(CarbonImmutable::parse('2025-09-01 12:00:00', MigrationHelper::TIMEZONE));
@@ -51,11 +52,13 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $property->setValue($this->payconiqCallbackSignatureVerifier, $this->jwsLoader);
     }
 
-    protected function tearDown(): void {
+    protected function tearDown(): void
+    {
         CarbonImmutable::setTestNow();
     }
 
-    public function testIsValid(): void {
+    public function testIsValid(): void
+    {
         $url = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -73,7 +76,8 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertTrue($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testIsInvalid(): void {
+    public function testIsInvalid(): void
+    {
         $url = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -92,7 +96,8 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertFalse($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testLoadAndVerifyJWS(): void {
+    public function testLoadAndVerifyJWS(): void
+    {
         $url = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
@@ -114,7 +119,8 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         );
     }
 
-    public function testLoadAndVerifyJWSItShouldThrow(): void {
+    public function testLoadAndVerifyJWSItShouldThrow(): void
+    {
         $url = 'https://ext.payconiq.com/certificates';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache

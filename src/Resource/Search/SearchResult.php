@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Optios\Payconiq\Resource\Search;
@@ -24,7 +25,8 @@ final readonly class SearchResult
      * @throws \JsonException
      * @throws \Exception
      */
-    public static function createFromResponse(ResponseInterface $response): self {
+    public static function createFromResponse(ResponseInterface $response): self
+    {
         $response = json_decode(
             json: $response->getBody()->getContents(),
             associative: false,
@@ -48,7 +50,8 @@ final readonly class SearchResult
         );
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
             'size' => $this->size,
             'totalPages' => $this->totalPages,
@@ -61,26 +64,31 @@ final readonly class SearchResult
         ];
     }
 
-    public function getSize(): int {
+    public function getSize(): int
+    {
         return $this->size;
     }
 
-    public function getTotalPages(): int {
+    public function getTotalPages(): int
+    {
         return $this->totalPages;
     }
 
-    public function getTotalElements(): int {
+    public function getTotalElements(): int
+    {
         return $this->totalElements;
     }
 
-    public function getNumber(): int {
+    public function getNumber(): int
+    {
         return $this->number;
     }
 
     /**
      * @return array<Payment>
      */
-    public function getDetails(): array {
+    public function getDetails(): array
+    {
         return $this->details;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Optios\Payconiq\HeaderChecker;
@@ -14,7 +15,8 @@ final class PayconiqPathChecker implements HeaderChecker
      * {@inheritdoc}
      * @throws InvalidHeaderException
      */
-    public function checkHeader($value): void {
+    public function checkHeader($value): void
+    {
         if (false === filter_var($value, FILTER_VALIDATE_URL)) {
             throw new InvalidHeaderException(
                 message: sprintf('"%s" must be a valid url.', self::HEADER_NAME),
@@ -24,11 +26,13 @@ final class PayconiqPathChecker implements HeaderChecker
         }
     }
 
-    public function supportedHeader(): string {
+    public function supportedHeader(): string
+    {
         return self::HEADER_NAME;
     }
 
-    public function protectedHeaderOnly(): bool {
+    public function protectedHeaderOnly(): bool
+    {
         return false;
     }
 }

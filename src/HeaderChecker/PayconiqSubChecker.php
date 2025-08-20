@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Optios\Payconiq\HeaderChecker;
@@ -23,7 +24,8 @@ final readonly class PayconiqSubChecker implements HeaderChecker
      * {@inheritdoc}
      * @throws InvalidHeaderException
      */
-    public function checkHeader($value): void {
+    public function checkHeader($value): void
+    {
         if (false === is_string($value)) {
             throw new InvalidHeaderException(
                 message: sprintf('"%s" must be a string.', self::HEADER_NAME),
@@ -41,11 +43,13 @@ final readonly class PayconiqSubChecker implements HeaderChecker
         }
     }
 
-    public function supportedHeader(): string {
+    public function supportedHeader(): string
+    {
         return self::HEADER_NAME;
     }
 
-    public function protectedHeaderOnly(): bool {
+    public function protectedHeaderOnly(): bool
+    {
         return false;
     }
 }

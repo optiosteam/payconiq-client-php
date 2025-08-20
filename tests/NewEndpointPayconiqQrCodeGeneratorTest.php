@@ -13,7 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
 {
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         CarbonImmutable::setTestNow(
@@ -24,13 +25,16 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         );
     }
 
-    protected function tearDown(): void {
+    protected function tearDown(): void
+    {
         CarbonImmutable::setTestNow();
     }
 
     #[DataProvider('getCustomizePaymentQrLinkData')]
-    public function testCustomizePaymentQrLink(array $data, string $expected) {
-        $this->assertEquals($expected,
+    public function testCustomizePaymentQrLink(array $data, string $expected)
+    {
+        $this->assertEquals(
+            $expected,
             PayconiqQrCodeGenerator::customizePaymentQrLink(
                 $data['link'],
                 $data['format'],
@@ -40,7 +44,8 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         );
     }
 
-    public static function getCustomizePaymentQrLinkData(): array {
+    public static function getCustomizePaymentQrLinkData(): array
+    {
         //phpcs:disable
         $qrLink = 'https://qrcodegenerator.api.bancontact.net/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fpay%2F2%2F73a222957726d63d26400964';
 
@@ -77,8 +82,10 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
     }
 
     #[DataProvider('getGenerateStaticQRCodeLinkData')]
-    public function testGenerateStaticQRCodeLink(array $data, string $expected) {
-        $this->assertEquals($expected,
+    public function testGenerateStaticQRCodeLink(array $data, string $expected)
+    {
+        $this->assertEquals(
+            $expected,
             PayconiqQrCodeGenerator::generateStaticQRCodeLink(
                 $data['payment_profile_id'],
                 $data['pos_id'],
@@ -89,7 +96,8 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         );
     }
 
-    public static function getGenerateStaticQRCodeLinkData(): array {
+    public static function getGenerateStaticQRCodeLinkData(): array
+    {
         //phpcs:disable
         $paymentProfileId = 'abc123';
         $posId = 'POS0001';
@@ -130,7 +138,8 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
     }
 
     #[DataProvider('getGenerateQRCodeWithMetadataData')]
-    public function testGenerateQRCodeWithMetadata(array $data, $expected) {
+    public function testGenerateQRCodeWithMetadata(array $data, $expected)
+    {
         if ($expected instanceof \Exception) {
             $this->expectException(\InvalidArgumentException::class);
             $this->expectExceptionMessage($expected->getMessage());
@@ -149,7 +158,8 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public static function getGenerateQRCodeWithMetadataData(): array {
+    public static function getGenerateQRCodeWithMetadataData(): array
+    {
         //phpcs:disable
         $paymentProfileId = 'abc123';
 
