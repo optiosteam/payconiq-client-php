@@ -60,11 +60,12 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     public function testIsValid(): void
     {
         $url = 'https://ext.payconiq.com/certificates';
+        $cacheKey = 'payconiq_certificates_' . md5($url);
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($url, function (ItemInterface $item) use ($url) {
+            ->with($cacheKey, function (ItemInterface $item) use ($url) {
             })
             ->willReturn($jwkSetJson);
 
@@ -79,11 +80,12 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     public function testIsInvalid(): void
     {
         $url = 'https://ext.payconiq.com/certificates';
+        $cacheKey = 'payconiq_certificates_' . md5($url);
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($url, function (ItemInterface $item) use ($url) {
+            ->with($cacheKey, function (ItemInterface $item) use ($url) {
             })
             ->willReturn($jwkSetJson);
 
@@ -99,11 +101,12 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     public function testLoadAndVerifyJWS(): void
     {
         $url = 'https://ext.payconiq.com/certificates';
+        $cacheKey = 'payconiq_certificates_' . md5($url);
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($url, function (ItemInterface $item) use ($url) {
+            ->with($cacheKey, function (ItemInterface $item) use ($url) {
             })
             ->willReturn($jwkSetJson);
 
@@ -122,11 +125,12 @@ class LegacyEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     public function testLoadAndVerifyJWSItShouldThrow(): void
     {
         $url = 'https://ext.payconiq.com/certificates';
+        $cacheKey = 'payconiq_certificates_' . md5($url);
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($url, function (ItemInterface $item) use ($url) {
+            ->with($cacheKey, function (ItemInterface $item) use ($url) {
             })
             ->willReturn($jwkSetJson);
 
