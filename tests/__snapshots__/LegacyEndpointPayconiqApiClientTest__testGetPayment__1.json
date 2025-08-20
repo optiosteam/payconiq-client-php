@@ -1,5 +1,5 @@
 {
-    "headers": {
-        "Authorization": "Bearer some-api-key"
-    }
+  "headers": {
+    "Authorization": "Bearer some-api-key"
+  }
 }

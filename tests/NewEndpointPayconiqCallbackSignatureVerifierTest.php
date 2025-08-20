@@ -9,8 +9,8 @@ use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSLoader;
 use Optios\Payconiq\Exception\PayconiqCallbackSignatureVerificationException;
 use Optios\Payconiq\MigrationHelper;
-use PHPUnit\Framework\TestCase;
 use Optios\Payconiq\PayconiqCallbackSignatureVerifier;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -143,7 +143,9 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
 
         $this->expectException(PayconiqCallbackSignatureVerificationException::class);
         //phpcs:disable
-        $this->expectExceptionMessage('Something went wrong while loading and verifying the JWS. Error: Unable to load and verify the token.');
+        $this->expectExceptionMessage(
+            'Something went wrong while loading and verifying the JWS. Error: Unable to load and verify the token.',
+        );
         //phpcs:enable
 
         $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token');

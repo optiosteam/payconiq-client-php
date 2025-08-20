@@ -1,7 +1,7 @@
 {
-    "profileId": "profile-id",
-    "merchantId": "merchant-id",
-    "name": "name",
-    "iban": "iban",
-    "callbackUrl": null
+  "profileId": "profile-id",
+  "merchantId": "merchant-id",
+  "name": "name",
+  "iban": "iban",
+  "callbackUrl": null
 }

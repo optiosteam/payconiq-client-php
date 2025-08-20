@@ -66,7 +66,8 @@ final readonly class Payment
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * phpcs:ignore Generic.Metrics.CyclomaticComplexity
+     *
+     * phpcs:disable Generic.Metrics.CyclomaticComplexity
      */
     public static function createFromObject(object $obj): self
     {
@@ -118,6 +119,7 @@ final readonly class Payment
             reference: $reference,
         );
     }
+    // phpcs:enable Generic.Metrics.CyclomaticComplexity
 
     public function toArray(): array
     {

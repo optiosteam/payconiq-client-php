@@ -15,7 +15,8 @@ class SearchResultTest extends TestCase
     {
         $searchResult = SearchResult::createFromResponse(new Response(200, [], json_encode([
             'details' => [
-                json_decode('{
+                json_decode(
+                    '{
     "paymentId": "new-payment-id",
     "createdAt": "2022-01-26T00:00:00+00:00",
     "status": "PENDING",
@@ -41,7 +42,9 @@ class SearchResultTest extends TestCase
     "deepLink": "some-uri",
     "qrLink": "some-uri",
     "refundLink": "some-uri"
-}', true),
+}',
+                    true,
+                ),
             ],
             'size' => 1,
             'totalPages' => 2,

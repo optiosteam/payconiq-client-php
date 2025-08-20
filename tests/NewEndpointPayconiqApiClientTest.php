@@ -105,11 +105,13 @@ class NewEndpointPayconiqApiClientTest extends TestCase
                     RequestOptions::JSON => $requestPayment->toArray(),
                 ],
             )
-            ->willThrowException(new ClientException(
-                'some-message',
-                $this->createMock(Request::class),
-                $this->createMock(Response::class),
-            ));
+            ->willThrowException(
+                new ClientException(
+                    'some-message',
+                    $this->createMock(Request::class),
+                    $this->createMock(Response::class),
+                ),
+            );
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
@@ -159,11 +161,13 @@ class NewEndpointPayconiqApiClientTest extends TestCase
                     ],
                 ],
             )
-            ->willThrowException(new ClientException(
-                'some-message',
-                $this->createMock(Request::class),
-                $this->createMock(Response::class),
-            ));
+            ->willThrowException(
+                new ClientException(
+                    'some-message',
+                    $this->createMock(Request::class),
+                    $this->createMock(Response::class),
+                ),
+            );
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
@@ -202,11 +206,13 @@ class NewEndpointPayconiqApiClientTest extends TestCase
                     ],
                 ],
             )
-            ->willThrowException(new ClientException(
-                'some-message',
-                $this->createMock(Request::class),
-                $this->createMock(Response::class),
-            ));
+            ->willThrowException(
+                new ClientException(
+                    'some-message',
+                    $this->createMock(Request::class),
+                    $this->createMock(Response::class),
+                ),
+            );
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
@@ -231,7 +237,10 @@ class NewEndpointPayconiqApiClientTest extends TestCase
                 ],
             )
             ->willReturnCallback(function ($uri, array $options) {
-                $this->assertEquals('https://merchant.api.preprod.bancontact.net/v3/payments/search?page=0&size=100', $uri);
+                $this->assertEquals(
+                    'https://merchant.api.preprod.bancontact.net/v3/payments/search?page=0&size=100',
+                    $uri,
+                );
                 $this->assertMatchesJsonSnapshot($options);
 
                 return new Response(200, [], json_encode([
@@ -261,11 +270,13 @@ class NewEndpointPayconiqApiClientTest extends TestCase
                     RequestOptions::JSON => $searchPayments->toArray(),
                 ],
             )
-            ->willThrowException(new ClientException(
-                'some-message',
-                $this->createMock(Request::class),
-                $this->createMock(Response::class),
-            ));
+            ->willThrowException(
+                new ClientException(
+                    'some-message',
+                    $this->createMock(Request::class),
+                    $this->createMock(Response::class),
+                ),
+            );
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
@@ -293,11 +304,13 @@ class NewEndpointPayconiqApiClientTest extends TestCase
             ->with(
                 'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId . '/debtor/refundIban',
             )
-            ->willThrowException(new ClientException(
-                'some-message',
-                $this->createMock(Request::class),
-                $this->createMock(Response::class),
-            ));
+            ->willThrowException(
+                new ClientException(
+                    'some-message',
+                    $this->createMock(Request::class),
+                    $this->createMock(Response::class),
+                ),
+            );
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
