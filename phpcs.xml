@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="pcsg-generated-ruleset">
-    <description>Created with the PHP Coding Standard Generator. http://edorian.github.com/php-coding-standard-generator/
-    </description>
+<ruleset name="Project Standard">
+    <description>PSR-12 + focused Generic/Squiz rules</description>
+
+    <arg name="colors" value="1"/>
+    <arg name="parallel" value="80"/>
+
+    <fileExtensions>
+        <extension>php</extension>
+    </fileExtensions>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>var/*</exclude-pattern>
+    <exclude-pattern>build/*</exclude-pattern>
+    <exclude-pattern>coverage/*</exclude-pattern>
+
+    <rule ref="PSR12"/>
     <rule ref="Generic.Classes.DuplicateClassName"/>
     <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
     <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
@@ -19,11 +31,6 @@
         </properties>
     </rule>
     <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
-    <rule ref="Generic.Formatting.MultipleStatementAlignment">
-        <properties>
-            <property name="ignoreMultiLine" value="true"/>
-        </properties>
-    </rule>
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
     <rule ref="Generic.Metrics.CyclomaticComplexity"/>
     <rule ref="Generic.Metrics.NestingLevel">
@@ -40,22 +47,6 @@
     <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
-    <rule ref="MySource.PHP.EvalObjectFactory"/>
-    <rule ref="PEAR.Commenting.InlineComment"/>
-    <rule ref="PEAR.ControlStructures.ControlSignature"/>
-    <rule ref="PEAR.NamingConventions.ValidClassName"/>
-    <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
-    <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
-    <rule ref="PSR1.Classes.ClassDeclaration"/>
-    <rule ref="PSR1.Files.SideEffects"/>
-    <rule ref="PSR2.Classes.ClassDeclaration"/>
-    <rule ref="PSR2.Classes.PropertyDeclaration"/>
-    <rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
-    <rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
-    <rule ref="PSR2.Files.EndFileNewline"/>
-    <rule ref="PSR2.Methods.MethodDeclaration"/>
-    <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
-    <rule ref="PSR2.Namespaces.UseDeclaration"/>
     <rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
     <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
     <rule ref="Squiz.PHP.Eval"/>

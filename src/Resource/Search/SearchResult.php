@@ -40,11 +40,11 @@ final readonly class SearchResult
         }
 
         return new self(
-            $response->size,
-            $response->totalPages,
-            $response->totalElements,
-            $response->number,
-            $details,
+            size: $response->size,
+            totalPages: $response->totalPages,
+            totalElements: $response->totalElements,
+            number: $response->number,
+            details: $details,
         );
     }
 
