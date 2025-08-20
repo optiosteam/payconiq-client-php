@@ -1,7 +1,7 @@
 [![CI](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml)
 [![codecov](https://codecov.io/gh/optiosteam/payconiq-client-php/branch/main/graph/badge.svg?token=S62YDUXV7A)](https://codecov.io/gh/optiosteam/payconiq-client-php)
 
-# PHP Payconiq API Client (unofficial)
+# PHP Payconiq/Wero/Bancontact API Client (unofficial)
 
 Supported API version: v3
 
