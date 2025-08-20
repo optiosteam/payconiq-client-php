@@ -2,20 +2,21 @@
 
 namespace Tests\Optios\Payconiq;
 
+use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Optios\Payconiq\Exception\PayconiqApiException;
+use Optios\Payconiq\MigrationHelper;
 use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\RequestPayment;
 use Optios\Payconiq\Request\SearchPayments;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class PayconiqApiClientTest extends TestCase
+class NewEndpointPayconiqApiClientTest extends TestCase
 {
     use MatchesSnapshots;
 
@@ -23,6 +24,33 @@ class PayconiqApiClientTest extends TestCase
     private $apiKey;
     private $httpClient;
     private $useProd;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        CarbonImmutable::setTestNow(
+            CarbonImmutable::parse(
+                MigrationHelper::SWITCH_DATETIME,
+                MigrationHelper::TIMEZONE
+            )
+        );
+
+        $this->apiKey = 'some-api-key';
+        $this->httpClient = $this->createMock(Client::class);
+        $this->useProd = false;
+
+        $this->payconiqApiClient = new PayconiqApiClient(
+            $this->apiKey,
+            $this->httpClient,
+            $this->useProd,
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        CarbonImmutable::setTestNow();
+    }
 
     public function testSetApiKey(): void
     {
@@ -38,22 +66,22 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('post')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/pos',
+                'https://merchant.api.preprod.bancontact.net/v3/payments/pos',
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
                     RequestOptions::JSON => $requestPayment->toArray(),
-                ]
+                ],
             )
             ->willReturnCallback(function ($uri, array $options) {
-                $this->assertEquals('https://api.ext.payconiq.com/v3/payments/pos', $uri);
+                $this->assertEquals('https://merchant.api.preprod.bancontact.net/v3/payments/pos', $uri);
                 $this->assertMatchesJsonSnapshot($options);
 
                 return new Response(200, [], json_encode([
                     'paymentId' => 'payment-id',
                     'createdAt' => '2022-01-25',
-                    'status' => 'active',
+                    'status' => 'PENDING',
                     'amount' => 10,
                 ]));
             });
@@ -69,18 +97,18 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('post')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/pos',
+                'https://merchant.api.preprod.bancontact.net/v3/payments/pos',
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
                     RequestOptions::JSON => $requestPayment->toArray(),
-                ]
+                ],
             )
             ->willThrowException(new ClientException(
                 'some-message',
                 $this->createMock(Request::class),
-                $this->createMock(Response::class)
+                $this->createMock(Response::class),
             ));
 
         $this->expectException(PayconiqApiException::class);
@@ -95,21 +123,21 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId,
+                'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId,
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
-                ]
+                ],
             )
             ->willReturnCallback(function ($uri, array $options) {
-                $this->assertEquals('https://api.ext.payconiq.com/v3/payments/payment-id', $uri);
+                $this->assertEquals('https://merchant.api.preprod.bancontact.net/v3/payments/payment-id', $uri);
                 $this->assertMatchesJsonSnapshot($options);
 
                 return new Response(200, [], json_encode([
                     'paymentId' => 'payment-id',
                     'createdAt' => '2022-01-25',
-                    'status' => 'active',
+                    'status' => 'PENDING',
                     'amount' => 10,
                 ]));
             });
@@ -124,17 +152,17 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId,
+                'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId,
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
-                ]
+                ],
             )
             ->willThrowException(new ClientException(
                 'some-message',
                 $this->createMock(Request::class),
-                $this->createMock(Response::class)
+                $this->createMock(Response::class),
             ));
 
         $this->expectException(PayconiqApiException::class);
@@ -149,12 +177,12 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('delete')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId,
+                'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId,
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
-                ]
+                ],
             );
 
         $this->payconiqApiClient->cancelPayment($paymentId);
@@ -167,17 +195,17 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('delete')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId,
+                'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId,
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
-                ]
+                ],
             )
             ->willThrowException(new ClientException(
                 'some-message',
                 $this->createMock(Request::class),
-                $this->createMock(Response::class)
+                $this->createMock(Response::class),
             ));
 
         $this->expectException(PayconiqApiException::class);
@@ -194,16 +222,16 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('post')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/search?page=0&size=100',
+                'https://merchant.api.preprod.bancontact.net/v3/payments/search?page=0&size=100',
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
                     RequestOptions::JSON => $searchPayments->toArray(),
-                ]
+                ],
             )
             ->willReturnCallback(function ($uri, array $options) {
-                $this->assertEquals('https://api.ext.payconiq.com/v3/payments/search?page=0&size=100', $uri);
+                $this->assertEquals('https://merchant.api.preprod.bancontact.net/v3/payments/search?page=0&size=100', $uri);
                 $this->assertMatchesJsonSnapshot($options);
 
                 return new Response(200, [], json_encode([
@@ -225,18 +253,18 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('post')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/search?page=0&size=100',
+                'https://merchant.api.preprod.bancontact.net/v3/payments/search?page=0&size=100',
                 [
                     RequestOptions::HEADERS => [
                         'Authorization' => 'Bearer ' . $this->apiKey,
                     ],
                     RequestOptions::JSON => $searchPayments->toArray(),
-                ]
+                ],
             )
             ->willThrowException(new ClientException(
                 'some-message',
                 $this->createMock(Request::class),
-                $this->createMock(Response::class)
+                $this->createMock(Response::class),
             ));
 
         $this->expectException(PayconiqApiException::class);
@@ -251,7 +279,7 @@ class PayconiqApiClientTest extends TestCase
         $this->httpClient
             ->expects($this->once())
             ->method('get')
-            ->with('https://api.ext.payconiq.com/v3/payments/' . $paymentId . '/debtor/refundIban');
+            ->with('https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId . '/debtor/refundIban');
 
         $this->payconiqApiClient->refundPayment($paymentId);
     }
@@ -263,32 +291,17 @@ class PayconiqApiClientTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(
-                'https://api.ext.payconiq.com/v3/payments/' . $paymentId . '/debtor/refundIban'
+                'https://merchant.api.preprod.bancontact.net/v3/payments/' . $paymentId . '/debtor/refundIban',
             )
             ->willThrowException(new ClientException(
                 'some-message',
                 $this->createMock(Request::class),
-                $this->createMock(Response::class)
+                $this->createMock(Response::class),
             ));
 
         $this->expectException(PayconiqApiException::class);
         $this->expectExceptionMessage('some-message');
 
         $this->payconiqApiClient->refundPayment($paymentId);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKey     = 'some-api-key';
-        $this->httpClient = $this->createMock(Client::class);
-        $this->useProd    = false;
-
-        $this->payconiqApiClient = new PayconiqApiClient(
-            $this->apiKey,
-            $this->httpClient,
-            $this->useProd
-        );
     }
 }

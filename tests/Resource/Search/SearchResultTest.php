@@ -18,7 +18,7 @@ class SearchResultTest extends TestCase
                 json_decode('{
     "paymentId": "new-payment-id",
     "createdAt": "2022-01-26T00:00:00+00:00",
-    "status": "new-status",
+    "status": "PENDING",
     "amount": 20,
     "currency": "USD",
     "creditor": {
@@ -50,24 +50,9 @@ class SearchResultTest extends TestCase
         ])));
 
         $this->assertEquals(1, $searchResult->getSize());
-        $searchResult->setSize(2);
-        $this->assertEquals(2, $searchResult->getSize());
-
         $this->assertEquals(2, $searchResult->getTotalPages());
-        $searchResult->setTotalPages(3);
-        $this->assertEquals(3, $searchResult->getTotalPages());
-
         $this->assertEquals(3, $searchResult->getTotalElements());
-        $searchResult->setTotalElements(4);
-        $this->assertEquals(4, $searchResult->getTotalElements());
-
         $this->assertEquals(4, $searchResult->getNumber());
-        $searchResult->setNumber(5);
-        $this->assertEquals(5, $searchResult->getNumber());
-
         $this->assertMatchesJsonSnapshot($searchResult->toArray());
-
-        $searchResult->setDetails([]);
-        $this->assertEmpty($searchResult->getDetails());
     }
 }

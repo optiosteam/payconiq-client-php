@@ -1,20 +1,21 @@
 {
-    "size": 2,
-    "totalPages": 3,
-    "totalElements": 4,
-    "number": 5,
+    "size": 1,
+    "totalPages": 2,
+    "totalElements": 3,
+    "number": 4,
     "details": [
         {
             "paymentId": "new-payment-id",
             "createdAt": "2022-01-26T00:00:00+00:00",
-            "status": "new-status",
+            "status": "PENDING",
             "amount": 20,
             "currency": "USD",
             "creditor": {
                 "profileId": "profile-id2",
                 "merchantId": "merchant-id",
                 "name": "name",
-                "iban": "iban"
+                "iban": "iban",
+                "callbackUrl": null
             },
             "debtor": {
                 "name": "name",
@@ -25,7 +26,13 @@
             "tippingAmount": 10,
             "totalAmount": 10,
             "description": "desc",
-            "bulkId": "bulk-id"
+            "bulkId": "bulk-id",
+            "qrLink": null,
+            "deepLink": null,
+            "reference": null,
+            "refundLink": null,
+            "selfLink": null,
+            "checkoutLink": null
         }
     ]
 }

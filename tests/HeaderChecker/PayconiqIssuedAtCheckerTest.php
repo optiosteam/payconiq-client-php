@@ -5,6 +5,7 @@ namespace Tests\Optios\Payconiq\HeaderChecker;
 use Carbon\Carbon;
 use Jose\Component\Checker\InvalidHeaderException;
 use Optios\Payconiq\HeaderChecker\PayconiqIssuedAtChecker;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class PayconiqIssuedAtCheckerTest extends TestCase
@@ -13,21 +14,24 @@ class PayconiqIssuedAtCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checker = new PayconiqIssuedAtChecker();
-
         parent::setUp();
+
+        $this->checker = new PayconiqIssuedAtChecker();
     }
 
+    #[DoesNotPerformAssertions]
     public function testCheckHeader()
     {
         $this->checker->checkHeader('2023-08-25T08:28:21.675129Z');
     }
 
+    #[DoesNotPerformAssertions]
     public function testCheckHeaderNanoSeconds()
     {
         $this->checker->checkHeader('2023-08-25T08:28:21.675129286Z');
     }
 
+    #[DoesNotPerformAssertions]
     public function testCheckHeaderNanoSecondsOtherTimeZone()
     {
         $this->checker->checkHeader('2023-08-25T08:28:21.675129286+02:00');

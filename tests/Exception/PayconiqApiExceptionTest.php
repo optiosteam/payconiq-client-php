@@ -7,12 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class PayconiqApiExceptionTest extends TestCase
 {
-    public function testException(): void{
+    public function testException(): void
+    {
         $exception = new PayconiqApiException(
-            'a message',
-            'code',
-            'trace-id',
-            'span-id'
+            payconiqMessage: 'a message',
+            payconiqCode: 'code',
+            traceId: 'trace-id',
+            spanId: 'span-id',
         );
 
         $this->assertEquals('a message', $exception->getPayconiqMessage());

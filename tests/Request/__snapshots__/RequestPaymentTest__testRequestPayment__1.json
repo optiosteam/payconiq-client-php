@@ -1,6 +1,6 @@
 {
-    "amount": 2,
-    "currency": "USD",
+    "amount": 1,
+    "currency": "EUR",
     "callbackUrl": "some-uri",
     "reference": "ref",
     "description": "description",

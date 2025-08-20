@@ -15,12 +15,8 @@ class RequestPaymentTest extends TestCase
         $requestPayment = RequestPayment::createForStaticQR(1, 'posId');
 
         $this->assertEquals(1, $requestPayment->getAmount());
-        $requestPayment->setAmount(2);
-        $this->assertEquals(2, $requestPayment->getAmount());
 
         $this->assertEquals('EUR', $requestPayment->getCurrency());
-        $requestPayment->setCurrency('USD');
-        $this->assertEquals('USD', $requestPayment->getCurrency());
 
         $this->assertNull($requestPayment->getCallbackUrl());
         $requestPayment->setCallbackUrl('some-uri');

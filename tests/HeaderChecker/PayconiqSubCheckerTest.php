@@ -12,9 +12,9 @@ class PayconiqSubCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checker = new PayconiqSubChecker('abcdef');
-
         parent::setUp();
+
+        $this->checker = new PayconiqSubChecker('abcdef');
     }
 
     public function testCheckHeader()

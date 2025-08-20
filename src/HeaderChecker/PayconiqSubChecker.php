@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Optios\Payconiq\HeaderChecker;
 
@@ -10,43 +10,35 @@ use Jose\Component\Checker\InvalidHeaderException;
  * Class PayconiqSubChecker
  * @package Optios\Payconiq\HeaderChecker
  */
-final class PayconiqSubChecker implements HeaderChecker
+final readonly class PayconiqSubChecker implements HeaderChecker
 {
     private const HEADER_NAME = 'https://payconiq.com/sub';
 
-    /**
-     * @var string
-     */
-    private $paymentProfileId;
-
-    /**
-     * PayconiqSubChecker constructor.
-     *
-     * @param string $paymentProfileId
-     */
-    public function __construct(string $paymentProfileId)
+    public function __construct(
+        private string $paymentProfileId,
+    )
     {
-        $this->paymentProfileId = $paymentProfileId;
     }
 
     /**
      * {@inheritdoc}
+     * @throws InvalidHeaderException
      */
     public function checkHeader($value): void
     {
-        if (! is_string($value)) {
+        if (false === is_string($value)) {
             throw new InvalidHeaderException(
-                sprintf('"%s" must be a string.', self::HEADER_NAME),
-                self::HEADER_NAME,
-                $value
+                message: sprintf('"%s" must be a string.', self::HEADER_NAME),
+                header: self::HEADER_NAME,
+                value: $value,
             );
         }
 
         if ($value !== $this->paymentProfileId) {
             throw new InvalidHeaderException(
-                sprintf('"%s" should match the Payment profile ID', self::HEADER_NAME),
-                self::HEADER_NAME,
-                $value
+                message: sprintf('"%s" should match the Payment profile ID', self::HEADER_NAME),
+                header: self::HEADER_NAME,
+                value: $value,
             );
         }
     }

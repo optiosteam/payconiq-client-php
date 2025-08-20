@@ -19,16 +19,20 @@
         }
     ],
     "require": {
-        "php": ">=7.2|>=8.0",
+        "php": ">=8.2",
         "composer/ca-bundle": "^1.1",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.0|^7.0",
-        "league/url": "^3.3",
-        "nesbot/carbon": "^2.41",
-        "symfony/cache": "^3.4|^4.0|^5.0|^6.0",
-        "web-token/jwt-checker": "^2.2",
-        "web-token/jwt-signature": "^2.2",
-        "web-token/jwt-signature-algorithm-ecdsa": "^2.2"
+        "guzzlehttp/guzzle": "^7.5",
+        "nesbot/carbon": "^3.0",
+        "symfony/cache": "^5.4|^6.0|^7.0",
+        "web-token/jwt-library": "^4.0",
+        "league/uri": "^7.5",
+        "league/uri-components": "^7.5"
+    },
+    "conflict": {
+        "web-token/jwt-checker": "*",
+        "web-token/jwt-signature": "*",
+        "web-token/jwt-signature-algorithm-ecdsa": "*"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +47,7 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
         "phpmd/phpmd": "^2.9",
-        "phpunit/phpunit": "^8.5",
-        "spatie/phpunit-snapshot-assertions": "3.0|4.2.15"
+        "phpunit/phpunit": "^11.2",
+        "spatie/phpunit-snapshot-assertions": "^5.0"
     }
 }
