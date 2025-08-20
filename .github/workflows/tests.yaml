@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
@@ -41,8 +41,9 @@ jobs:
 
       - name: Send test coverage to codecov.io
         if: matrix.php-versions == '8.4'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: clover.xml
           flags: php-${{ matrix.php-versions }}
           fail_ci_if_error: true
