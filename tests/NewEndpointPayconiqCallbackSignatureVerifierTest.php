@@ -23,27 +23,26 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     private $useProd;
     private $jwsLoader;
 
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
         parent::setUp();
 
         CarbonImmutable::setTestNow(
             CarbonImmutable::parse(
                 MigrationHelper::SWITCH_DATETIME,
-                MigrationHelper::TIMEZONE
-            )
+                MigrationHelper::TIMEZONE,
+            ),
         );
 
         $this->paymentProfileId = 'profileId';
-        $this->httpClient       = $this->createMock(Client::class);
-        $this->cache            = $this->createMock(FilesystemAdapter::class);
-        $this->useProd          = false;
+        $this->httpClient = $this->createMock(Client::class);
+        $this->cache = $this->createMock(FilesystemAdapter::class);
+        $this->useProd = false;
 
         $this->payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier(
             $this->paymentProfileId,
             $this->httpClient,
             $this->cache,
-            $this->useProd
+            $this->useProd,
         );
 
         $this->jwsLoader = $this->createMock(JWSLoader::class);
@@ -51,20 +50,18 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         // Because the jwsLoader is not injected in to the verifier,
         // we need to do some magic to make sure we can mock it.
         // Ideally this should be refactored to DI.
-        $class    = new \ReflectionClass(PayconiqCallbackSignatureVerifier::class);
+        $class = new \ReflectionClass(PayconiqCallbackSignatureVerifier::class);
         $property = $class->getProperty('jwsLoader');
         $property->setAccessible(true);
         $property->setValue($this->payconiqCallbackSignatureVerifier, $this->jwsLoader);
     }
 
-    protected function tearDown(): void
-    {
+    protected function tearDown(): void {
         CarbonImmutable::setTestNow();
     }
 
-    public function testIsValid(): void
-    {
-        $url        = 'https://jwks.preprod.bancontact.net';
+    public function testIsValid(): void {
+        $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -81,9 +78,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertTrue($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testIsInvalid(): void
-    {
-        $url        = 'https://jwks.preprod.bancontact.net';
+    public function testIsInvalid(): void {
+        $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -101,9 +97,8 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $this->assertFalse($this->payconiqCallbackSignatureVerifier->isValid('some-token'));
     }
 
-    public function testLoadAndVerifyJWS(): void
-    {
-        $url        = 'https://jwks.preprod.bancontact.net';
+    public function testLoadAndVerifyJWS(): void {
+        $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())
@@ -120,13 +115,12 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
 
         $this->assertInstanceOf(
             JWS::class,
-            $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token')
+            $this->payconiqCallbackSignatureVerifier->loadAndVerifyJWS('some-token'),
         );
     }
 
-    public function testLoadAndVerifyJWSItShouldThrow(): void
-    {
-        $url        = 'https://jwks.preprod.bancontact.net';
+    public function testLoadAndVerifyJWSItShouldThrow(): void {
+        $url = 'https://jwks.preprod.bancontact.net';
         $jwkSetJson = json_encode(['keys' => [['kty' => 'string']]]);
         $this->cache
             ->expects($this->once())

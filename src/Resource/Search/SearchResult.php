@@ -17,16 +17,14 @@ final readonly class SearchResult
         private int $totalElements,
         private int $number,
         private array $details,
-    )
-    {
+    ) {
     }
 
     /**
      * @throws \JsonException
      * @throws \Exception
      */
-    public static function createFromResponse(ResponseInterface $response): self
-    {
+    public static function createFromResponse(ResponseInterface $response): self {
         $response = json_decode(
             json: $response->getBody()->getContents(),
             associative: false,
@@ -50,61 +48,39 @@ final readonly class SearchResult
         );
     }
 
-    public function toArray(): array
-    {
-//        $array = [
-//            'size' => $this->size,
-//            'totalPages' => $this->totalPages,
-//            'totalElements' => $this->totalElements,
-//            'number' => $this->number,
-//        ];
-//
-//        $details = [];
-//        foreach ($this->details as $payment) {
-//            $details[] = $payment->toArray();
-//        }
-//
-//        $array['details'] = $details;
-//
-//        return $array;
-
+    public function toArray(): array {
         return [
             'size' => $this->size,
             'totalPages' => $this->totalPages,
             'totalElements' => $this->totalElements,
             'number' => $this->number,
             'details' => array_map(
-                callback: static fn(Payment $p) => $p->toArray(),
+                callback: static fn(Payment $payment) => $payment->toArray(),
                 array: $this->details,
             ),
         ];
     }
 
-    public function getSize(): int
-    {
+    public function getSize(): int {
         return $this->size;
     }
 
-    public function getTotalPages(): int
-    {
+    public function getTotalPages(): int {
         return $this->totalPages;
     }
 
-    public function getTotalElements(): int
-    {
+    public function getTotalElements(): int {
         return $this->totalElements;
     }
 
-    public function getNumber(): int
-    {
+    public function getNumber(): int {
         return $this->number;
     }
 
     /**
      * @return array<Payment>
      */
-    public function getDetails(): array
-    {
+    public function getDetails(): array {
         return $this->details;
     }
 }

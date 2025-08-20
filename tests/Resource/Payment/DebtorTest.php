@@ -10,8 +10,7 @@ class DebtorTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testDebtor(): void
-    {
+    public function testDebtor(): void {
         $obj = new \stdClass();
         $debtor = Debtor::createFromObject($obj);
 

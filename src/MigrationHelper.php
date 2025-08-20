@@ -17,8 +17,7 @@ class MigrationHelper
     public const SWITCH_DATETIME = '2025-09-21 03:00:00'; // switch to new endpoints at 3AM CET (1 hour buffer)
     public const TIMEZONE = 'Europe/Brussels'; // CET
 
-    public static function switchToNewEndpoints(): bool
-    {
+    public static function switchToNewEndpoints(): bool {
         $now = CarbonImmutable::now(self::TIMEZONE);
         $switch = CarbonImmutable::parse(self::SWITCH_DATETIME, self::TIMEZONE);
 

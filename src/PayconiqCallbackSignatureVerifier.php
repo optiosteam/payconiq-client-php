@@ -57,8 +57,7 @@ class PayconiqCallbackSignatureVerifier
         AdapterInterface $cache = null,
         bool $useProd = true,
         bool $useNewPreProductionEnv = false,
-    )
-    {
+    ) {
         if (
             true === $useProd
             && true === $useNewPreProductionEnv
@@ -86,8 +85,7 @@ class PayconiqCallbackSignatureVerifier
         $this->jwsLoader = $this->initializeJwsLoader($paymentProfileId);
     }
 
-    private function getCertificatesUrl(): string
-    {
+    private function getCertificatesUrl(): string {
         if (true === $this->useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
             // new endpoints
             return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_NEW : self::CERTIFICATES_STAGING_URL_NEW);
@@ -97,8 +95,7 @@ class PayconiqCallbackSignatureVerifier
         return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_LEGACY : self::CERTIFICATES_STAGING_URL_LEGACY);
     }
 
-    public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool
-    {
+    public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool {
         try {
             $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
@@ -111,8 +108,7 @@ class PayconiqCallbackSignatureVerifier
     /**
      * @throws PayconiqCallbackSignatureVerificationException
      */
-    public function loadAndVerifyJWS(string $token, ?string $payload = null, ?int $signature = 0): JWS
-    {
+    public function loadAndVerifyJWS(string $token, ?string $payload = null, ?int $signature = 0): JWS {
         try {
             return $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
@@ -128,8 +124,7 @@ class PayconiqCallbackSignatureVerifier
     /**
      * @throws PayconiqJWKSetException
      */
-    private function getJWKSet(): JWKSet
-    {
+    private function getJWKSet(): JWKSet {
         try {
             $url = $this->getCertificatesUrl();
 
@@ -155,8 +150,7 @@ class PayconiqCallbackSignatureVerifier
         }
     }
 
-    private function initializeJwsLoader(string $paymentProfileId): JWSLoader
-    {
+    private function initializeJwsLoader(string $paymentProfileId): JWSLoader {
         return new JWSLoader(
             new JWSSerializerManager([
                 new CompactSerializer(),

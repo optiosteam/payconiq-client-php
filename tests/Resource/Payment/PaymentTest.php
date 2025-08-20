@@ -12,8 +12,7 @@ class PaymentTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testPayment(): void
-    {
+    public function testPayment(): void {
         $obj = new \stdClass();
         $obj->paymentId = 'payment-id';
         $obj->createdAt = '2022-01-25';

@@ -25,8 +25,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
     private $httpClient;
     private $useProd;
 
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
         parent::setUp();
 
         CarbonImmutable::setTestNow(CarbonImmutable::parse('2025-09-01 12:00:00', MigrationHelper::TIMEZONE));
@@ -42,19 +41,16 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         );
     }
 
-    protected function tearDown(): void
-    {
+    protected function tearDown(): void {
         CarbonImmutable::setTestNow();
     }
 
-    public function testSetApiKey(): void
-    {
+    public function testSetApiKey(): void {
         $this->payconiqApiClient->setApiKey('new-api-key');
         $this->assertEquals('new-api-key', $this->payconiqApiClient->getApiKey());
     }
 
-    public function testRequestPayment(): void
-    {
+    public function testRequestPayment(): void {
         $requestPayment = RequestPayment::createForStaticQR(10, 'pos-id');
 
         $this->httpClient
@@ -84,8 +80,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->requestPayment($requestPayment);
     }
 
-    public function testRequestPaymentItShouldThrow(): void
-    {
+    public function testRequestPaymentItShouldThrow(): void {
         $requestPayment = RequestPayment::createForStaticQR(10, 'pos-id');
 
         $this->httpClient
@@ -111,8 +106,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->requestPayment($requestPayment);
     }
 
-    public function testGetPayment(): void
-    {
+    public function testGetPayment(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())
@@ -140,8 +134,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->getPayment($paymentId);
     }
 
-    public function testGetPaymentItShouldThrow(): void
-    {
+    public function testGetPaymentItShouldThrow(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())
@@ -165,8 +158,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->getPayment($paymentId);
     }
 
-    public function testCancelPayment(): void
-    {
+    public function testCancelPayment(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())
@@ -183,8 +175,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->cancelPayment($paymentId);
     }
 
-    public function testCancelPaymentItShouldThrow(): void
-    {
+    public function testCancelPaymentItShouldThrow(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())
@@ -209,8 +200,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->cancelPayment($paymentId);
     }
 
-    public function testSearchPayments(): void
-    {
+    public function testSearchPayments(): void {
         $searchPayments = new SearchPayments(new \DateTime('2022-01-25'));
 
         $this->httpClient
@@ -240,8 +230,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->searchPayments($searchPayments, 0, 100);
     }
 
-    public function testSearchPaymentsItShouldThrow(): void
-    {
+    public function testSearchPaymentsItShouldThrow(): void {
         $searchPayments = new SearchPayments(new \DateTime('2022-01-25'));
 
         $this->httpClient
@@ -268,8 +257,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->searchPayments($searchPayments, 0, 100);
     }
 
-    public function testRefundPayment(): void
-    {
+    public function testRefundPayment(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())
@@ -279,8 +267,7 @@ class LegacyEndpointPayconiqApiClientTest extends TestCase
         $this->payconiqApiClient->refundPayment($paymentId);
     }
 
-    public function testRefundPaymentItShouldThrow(): void
-    {
+    public function testRefundPaymentItShouldThrow(): void {
         $paymentId = 'payment-id';
         $this->httpClient
             ->expects($this->once())

@@ -10,8 +10,7 @@ class CreditorTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testCreditor(): void
-    {
+    public function testCreditor(): void {
         $obj = new \stdClass();
         $obj->profileId = 'profile-id';
         $obj->merchantId = 'merchant-id';

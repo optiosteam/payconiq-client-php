@@ -10,15 +10,13 @@ use Jose\Component\Checker\InvalidHeaderException;
 final class PayconiqIssuedAtChecker implements HeaderChecker
 {
     public const IAT_FORMAT = 'Y-m-d\TH:i:s.uO';
-
     private const HEADER_NAME = 'https://payconiq.com/iat';
 
     /**
      * {@inheritdoc}
      * @throws InvalidHeaderException
      */
-    public function checkHeader($value): void
-    {
+    public function checkHeader($value): void {
         try {
             // Payconiq unexpectedly changed their format on 2023-08-23 to include nanoseconds,
             // Since PHP doesn't support nanoseconds, we're "hacking" it by trimming it to microseconds
@@ -51,13 +49,11 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
         }
     }
 
-    public function supportedHeader(): string
-    {
+    public function supportedHeader(): string {
         return self::HEADER_NAME;
     }
 
-    public function protectedHeaderOnly(): bool
-    {
+    public function protectedHeaderOnly(): bool {
         return false;
     }
 }

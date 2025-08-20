@@ -7,6 +7,9 @@ use Carbon\CarbonImmutable;
 use Optios\Payconiq\Enum\PaymentStatus;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ */
 final readonly class Payment
 {
     private function __construct(
@@ -29,16 +32,14 @@ final readonly class Payment
         private ?string $refundLink = null,
         private ?string $checkoutLink = null,
         private ?string $reference = null,
-    )
-    {
+    ) {
     }
 
     /**
      * @throws \JsonException
      * @throws \Exception
      */
-    public static function createFromResponse(ResponseInterface $response): self
-    {
+    public static function createFromResponse(ResponseInterface $response): self {
         $decoded = json_decode(
             json: $response->getBody()->getContents(),
             associative: false,
@@ -52,49 +53,50 @@ final readonly class Payment
      * @throws \Exception
      * @deprecated Use createFromObject() instead.
      */
-    public static function createFromStdClass(\stdClass $response): self
-    {
+    public static function createFromStdClass(\stdClass $response): self {
         return self::createFromObject($response);
     }
 
     /**
      * @throws \ValueError if status is unknown (via PaymentStatus::from).
      * @throws \Exception  if date parsing fails.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function createFromObject(object $r): self
-    {
-        $expiresAt = (isset($r->expiresAt) && $r->expiresAt !== '')
-            ? new CarbonImmutable((string)$r->expiresAt)
+    public static function createFromObject(object $obj): self {
+        $expiresAt = (isset($obj->expiresAt) && $obj->expiresAt !== '')
+            ? new CarbonImmutable((string)$obj->expiresAt)
             : null;
 
-        $transferAmount = isset($r->transferAmount) ? (int)$r->transferAmount : null;
-        $tippingAmount = isset($r->tippingAmount) ? (int)$r->tippingAmount : null;
-        $totalAmount = isset($r->totalAmount) ? (int)$r->totalAmount : null;
+        $transferAmount = isset($obj->transferAmount) ? (int)$obj->transferAmount : null;
+        $tippingAmount = isset($obj->tippingAmount) ? (int)$obj->tippingAmount : null;
+        $totalAmount = isset($obj->totalAmount) ? (int)$obj->totalAmount : null;
 
-        $description = isset($r->description) ? (string)$r->description : null;
-        $bulkId = isset($r->bulkId) ? (string)$r->bulkId : null;
-        $reference = isset($r->reference) ? (string)$r->reference : null;
+        $description = isset($obj->description) ? (string)$obj->description : null;
+        $bulkId = isset($obj->bulkId) ? (string)$obj->bulkId : null;
+        $reference = isset($obj->reference) ? (string)$obj->reference : null;
 
-        $creditor = isset($r->creditor)
-            ? Creditor::createFromObject($r->creditor)
+        $creditor = isset($obj->creditor)
+            ? Creditor::createFromObject($obj->creditor)
             : null;
 
-        $debtor = isset($r->debtor)
-            ? Debtor::createFromObject($r->debtor)
+        $debtor = isset($obj->debtor)
+            ? Debtor::createFromObject($obj->debtor)
             : null;
 
-        $selfLink = $r->_links?->self?->href ?? null;
-        $deepLink = $r->_links?->deeplink?->href ?? null;
-        $qrLink = $r->_links?->qrcode?->href ?? null;
-        $refundLink = $r->_links?->refund?->href ?? null;
-        $checkoutLink = $r->_links?->checkout?->href ?? null;
+        $selfLink = $obj->_links?->self?->href ?? null;
+        $deepLink = $obj->_links?->deeplink?->href ?? null;
+        $qrLink = $obj->_links?->qrcode?->href ?? null;
+        $refundLink = $obj->_links?->refund?->href ?? null;
+        $checkoutLink = $obj->_links?->checkout?->href ?? null;
 
         return new self(
-            paymentId: $r->paymentId,
-            createdAt: new CarbonImmutable($r->createdAt),
-            status: PaymentStatus::from($r->status),
-            amount: $r->amount,
-            currency: $r->currency ?? 'EUR',
+            paymentId: $obj->paymentId,
+            createdAt: new CarbonImmutable($obj->createdAt),
+            status: PaymentStatus::from($obj->status),
+            amount: $obj->amount,
+            currency: $obj->currency ?? 'EUR',
             expiresAt: $expiresAt,
             creditor: $creditor,
             debtor: $debtor,
@@ -112,8 +114,7 @@ final readonly class Payment
         );
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         return [
             'paymentId' => $this->paymentId,
             'createdAt' => $this->createdAt->toAtomString(),
@@ -135,102 +136,81 @@ final readonly class Payment
             'checkoutLink' => $this->checkoutLink,
             'reference' => $this->reference,
         ];
-
-//        return array_filter($array);
     }
 
-    public function getPaymentId(): string
-    {
+    public function getPaymentId(): string {
         return $this->paymentId;
     }
 
-    public function getCreatedAt(): CarbonImmutable
-    {
+    public function getCreatedAt(): CarbonImmutable {
         return $this->createdAt;
     }
 
-    public function getStatus(): PaymentStatus
-    {
+    public function getStatus(): PaymentStatus {
         return $this->status;
     }
 
-    public function getAmount(): int
-    {
+    public function getAmount(): int {
         return $this->amount;
     }
 
-    public function getCurrency(): string
-    {
+    public function getCurrency(): string {
         return $this->currency;
     }
 
-    public function getExpiresAt(): ?CarbonImmutable
-    {
+    public function getExpiresAt(): ?CarbonImmutable {
         return $this->expiresAt;
     }
 
-    public function getCreditor(): ?Creditor
-    {
+    public function getCreditor(): ?Creditor {
         return $this->creditor;
     }
 
-    public function getDebtor(): ?Debtor
-    {
+    public function getDebtor(): ?Debtor {
         return $this->debtor;
     }
 
-    public function getTransferAmount(): ?int
-    {
+    public function getTransferAmount(): ?int {
         return $this->transferAmount;
     }
 
-    public function getTippingAmount(): ?int
-    {
+    public function getTippingAmount(): ?int {
         return $this->tippingAmount;
     }
 
-    public function getTotalAmount(): ?int
-    {
+    public function getTotalAmount(): ?int {
         return $this->totalAmount;
     }
 
-    public function getDescription(): ?string
-    {
+    public function getDescription(): ?string {
         return $this->description;
     }
 
-    public function getBulkId(): ?string
-    {
+    public function getBulkId(): ?string {
         return $this->bulkId;
     }
 
-    public function getSelfLink(): ?string
-    {
+    public function getSelfLink(): ?string {
         return $this->selfLink;
     }
 
-    public function getDeepLink(): ?string
-    {
+    public function getDeepLink(): ?string {
         return $this->deepLink;
     }
 
-    public function getQrLink(): ?string
-    {
+    public function getQrLink(): ?string {
         return $this->qrLink;
     }
 
-    public function getRefundLink(): ?string
-    {
+    public function getRefundLink(): ?string {
         return $this->refundLink;
     }
 
-    public function getCheckoutLink(): ?string
-    {
+    public function getCheckoutLink(): ?string {
         return $this->checkoutLink;
     }
 
-    public function getReference(): ?string
-    {
+    public function getReference(): ?string {
         return $this->reference;
     }
 }

@@ -12,8 +12,7 @@ class SearchPaymentsTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testSearchPayments(): void
-    {
+    public function testSearchPayments(): void {
         $searchPayments = new SearchPayments(new \DateTime('2022-01-25'));
 
         $this->assertEquals(new Carbon('2022-01-25'), $searchPayments->getFrom());

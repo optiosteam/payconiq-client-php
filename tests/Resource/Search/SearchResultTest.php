@@ -11,8 +11,7 @@ class SearchResultTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testSearchResult(): void
-    {
+    public function testSearchResult(): void {
         $searchResult = SearchResult::createFromResponse(new Response(200, [], json_encode([
             'details' => [
                 json_decode('{

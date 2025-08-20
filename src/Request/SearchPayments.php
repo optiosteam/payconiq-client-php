@@ -18,13 +18,11 @@ final class SearchPayments
     private array $paymentStatuses = [];
     private ?string $reference = null;
 
-    public function __construct(\DateTime $from)
-    {
+    public function __construct(\DateTime $from) {
         $this->setFrom($from);
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         $array = [
             'from' => $this->from->format(self::SEARCH_DATE_FORMAT),
         ];
@@ -35,7 +33,7 @@ final class SearchPayments
 
         if (false === empty($this->paymentStatuses)) {
             $array['paymentStatuses'] = array_map(
-                callback: static fn(PaymentStatus $s) => $s->value,
+                callback: static fn(PaymentStatus $status) => $status->value,
                 array: $this->paymentStatuses,
             );
         }
@@ -47,13 +45,11 @@ final class SearchPayments
         return $array;
     }
 
-    public function getFrom(): CarbonImmutable
-    {
+    public function getFrom(): CarbonImmutable {
         return $this->from;
     }
 
-    public function setFrom(\DateTime $from): self
-    {
+    public function setFrom(\DateTime $from): self {
         if (false === $from instanceof CarbonImmutable) {
             $from = new CarbonImmutable($from);
         }
@@ -63,13 +59,11 @@ final class SearchPayments
         return $this;
     }
 
-    public function getTo(): ?CarbonImmutable
-    {
+    public function getTo(): ?CarbonImmutable {
         return $this->to;
     }
 
-    public function setTo(?\DateTime $to): self
-    {
+    public function setTo(?\DateTime $to): self {
         if (null === $to) {
             $this->to = null;
 
@@ -88,30 +82,28 @@ final class SearchPayments
     /**
      * @return array<PaymentStatus>
      */
-    public function getPaymentStatuses(): array
-    {
+    public function getPaymentStatuses(): array {
         return $this->paymentStatuses;
     }
 
     /**
      * @param array<PaymentStatus|string> $paymentStatuses
      */
-    public function setPaymentStatuses(array $paymentStatuses): self
-    {
+    public function setPaymentStatuses(array $paymentStatuses): self {
         $this->paymentStatuses = array_map(
-            callback: static fn($s) => $s instanceof PaymentStatus ? $s : PaymentStatus::from((string)$s),
-            array: $paymentStatuses
+            callback: static fn($status) => $status instanceof PaymentStatus
+                ? $status
+                : PaymentStatus::from((string)$status),
+            array: $paymentStatuses,
         );
         return $this;
     }
 
-    public function getReference(): ?string
-    {
+    public function getReference(): ?string {
         return $this->reference;
     }
 
-    public function setReference(?string $reference): self
-    {
+    public function setReference(?string $reference): self {
         $this->reference = $reference;
 
         return $this;

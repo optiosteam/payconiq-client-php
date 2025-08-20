@@ -9,13 +9,11 @@ abstract class PayconiqBaseException extends \Exception
         protected bool $useProd = true,
         $message = "",
         $code = 0, \Throwable $previous = null,
-    )
-    {
+    ) {
         parent::__construct($message, $code, $previous);
     }
 
-    public function isUseProd(): bool
-    {
+    public function isUseProd(): bool {
         return $this->useProd;
     }
 }

@@ -41,8 +41,7 @@ class PayconiqApiClient
         ?ClientInterface $httpClient = null,
         bool $useProd = true,
         bool $useNewPreProductionEnv = false,
-    )
-    {
+    ) {
         if (
             true === $useProd
             && true === $useNewPreProductionEnv
@@ -65,13 +64,11 @@ class PayconiqApiClient
         $this->useNewPreProductionEnv = $useNewPreProductionEnv;
     }
 
-    public function getApiEndpointBase(): string
-    {
+    public function getApiEndpointBase(): string {
         return $this->getEndpoint() . self::API_VERSION;
     }
 
-    private function getEndpoint(): string
-    {
+    private function getEndpoint(): string {
         if (true === $this->useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
             // new endpoints
             return ($this->useProd ? self::API_ENDPOINT_PRODUCTION_NEW : self::API_ENDPOINT_STAGING_NEW);
@@ -84,8 +81,7 @@ class PayconiqApiClient
     /**
      * @throws PayconiqApiException
      */
-    public function requestPayment(RequestPayment $requestPayment): Payment
-    {
+    public function requestPayment(RequestPayment $requestPayment): Payment {
         try {
             $uri = $this->getApiEndpointBase() . '/payments' . ($requestPayment->getPosId() ? '/pos' : null);
             $response = $this->httpClient->post(
@@ -107,8 +103,7 @@ class PayconiqApiClient
     /**
      * @throws PayconiqApiException
      */
-    public function getPayment(string $paymentId): Payment
-    {
+    public function getPayment(string $paymentId): Payment {
         try {
             $response = $this->httpClient->get(
                 uri: $this->getApiEndpointBase() . '/payments/' . $paymentId,
@@ -128,8 +123,7 @@ class PayconiqApiClient
     /**
      * @throws PayconiqApiException
      */
-    public function cancelPayment(string $paymentId): bool
-    {
+    public function cancelPayment(string $paymentId): bool {
         try {
             $this->httpClient->delete(
                 uri: $this->getApiEndpointBase() . '/payments/' . $paymentId,
@@ -153,8 +147,7 @@ class PayconiqApiClient
         SearchPayments $search,
         int $page = 0,
         int $size = 50,
-    ): SearchResult
-    {
+    ): SearchResult {
         try {
             $uri = Modifier::from(
                 Http::new($this->getApiEndpointBase() . '/payments/search'),
@@ -184,8 +177,7 @@ class PayconiqApiClient
     /**
      * @throws PayconiqApiException
      */
-    public function refundPayment(string $paymentId)
-    {
+    public function refundPayment(string $paymentId) {
         try {
             $this->httpClient->get(
                 uri: $this->getApiEndpointBase() . '/payments/' . $paymentId . '/debtor/refundIban',
@@ -197,18 +189,15 @@ class PayconiqApiClient
         return true;
     }
 
-    public function getApiKey(): string
-    {
+    public function getApiKey(): string {
         return $this->apiKey;
     }
 
-    public function setApiKey(string $apiKey): void
-    {
+    public function setApiKey(string $apiKey): void {
         $this->apiKey = $apiKey;
     }
 
-    private function convertToPayconiqApiException(ClientException $e): PayconiqApiException
-    {
+    private function convertToPayconiqApiException(ClientException $e): PayconiqApiException {
         $contents = $e->getResponse()->getBody()->getContents() ?? null;
         if (empty($contents)) {
             return new PayconiqApiException(

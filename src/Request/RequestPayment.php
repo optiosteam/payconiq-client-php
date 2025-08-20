@@ -19,14 +19,12 @@ final class RequestPayment
     public function __construct(
         int $amount,
         string $currency = 'EUR',
-    )
-    {
+    ) {
         $this->amount = $amount;
         $this->currency = $currency;
     }
 
-    public static function createForStaticQR(int $amount, string $posId, string $currency = 'EUR'): self
-    {
+    public static function createForStaticQR(int $amount, string $posId, string $currency = 'EUR'): self {
         $self = new self(
             amount: $amount,
             currency: $currency,
@@ -36,8 +34,7 @@ final class RequestPayment
         return $self;
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         $array = [
             'amount' => $this->amount,
             'currency' => $this->currency,
@@ -54,107 +51,89 @@ final class RequestPayment
         return array_filter($array);
     }
 
-    public function getAmount(): int
-    {
+    public function getAmount(): int {
         return $this->amount;
     }
 
-    public function getCurrency(): string
-    {
+    public function getCurrency(): string {
         return $this->currency;
     }
 
-    public function getCallbackUrl(): ?string
-    {
+    public function getCallbackUrl(): ?string {
         return $this->callbackUrl;
     }
 
-    public function setCallbackUrl(?string $callbackUrl): self
-    {
+    public function setCallbackUrl(?string $callbackUrl): self {
         $this->callbackUrl = $callbackUrl;
 
         return $this;
     }
 
-    public function getReference(): ?string
-    {
+    public function getReference(): ?string {
         return $this->reference;
     }
 
-    public function setReference(?string $reference): self
-    {
+    public function setReference(?string $reference): self {
         $this->reference = $reference;
 
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
+    public function getDescription(): ?string {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
-    {
+    public function setDescription(?string $description): self {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getBulkId(): ?string
-    {
+    public function getBulkId(): ?string {
         return $this->bulkId;
     }
 
-    public function setBulkId(?string $bulkId): self
-    {
+    public function setBulkId(?string $bulkId): self {
         $this->bulkId = $bulkId;
 
         return $this;
     }
 
-    public function getPosId(): ?string
-    {
+    public function getPosId(): ?string {
         return $this->posId;
     }
 
-    public function setPosId(?string $posId): self
-    {
+    public function setPosId(?string $posId): self {
         $this->posId = $posId;
 
         return $this;
     }
 
-    public function getShopId(): ?string
-    {
+    public function getShopId(): ?string {
         return $this->shopId;
     }
 
-    public function setShopId(?string $shopId): self
-    {
+    public function setShopId(?string $shopId): self {
         $this->shopId = $shopId;
 
         return $this;
     }
 
-    public function getShopName(): ?string
-    {
+    public function getShopName(): ?string {
         return $this->shopName;
     }
 
-    public function setShopName(?string $shopName): self
-    {
+    public function setShopName(?string $shopName): self {
         $this->shopName = $shopName;
 
         return $this;
     }
 
-    public function getReturnUrl(): ?string
-    {
+    public function getReturnUrl(): ?string {
         return $this->returnUrl;
     }
 
-    public function setReturnUrl(?string $returnUrl): self
-    {
+    public function setReturnUrl(?string $returnUrl): self {
         $this->returnUrl = $returnUrl;
 
         return $this;
