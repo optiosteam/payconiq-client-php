@@ -19,7 +19,7 @@ final class SearchPayments
     private array $paymentStatuses = [];
     private ?string $reference = null;
 
-    public function __construct(\DateTime $from)
+    public function __construct(\DateTimeInterface $from)
     {
         $this->setFrom($from);
     }
@@ -53,7 +53,7 @@ final class SearchPayments
         return $this->from;
     }
 
-    public function setFrom(\DateTime $from): self
+    public function setFrom(\DateTimeInterface $from): self
     {
         if (false === $from instanceof CarbonImmutable) {
             $from = new CarbonImmutable($from);
@@ -69,7 +69,7 @@ final class SearchPayments
         return $this->to;
     }
 
-    public function setTo(?\DateTime $to): self
+    public function setTo(?\DateTimeInterface $to): self
     {
         if (null === $to) {
             $this->to = null;
