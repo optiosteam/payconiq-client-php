@@ -132,9 +132,10 @@ class PayconiqCallbackSignatureVerifier
     {
         try {
             $url = $this->getCertificatesUrl();
+            $cacheKey = 'payconiq_certificates_' . md5($url);
 
             $JWKSetJson = $this->cache->get(
-                key: $url,
+                key: $cacheKey,
                 callback: function (ItemInterface $item) use ($url) {
                     $item->expiresAfter(CarbonInterval::hour(12));
 
