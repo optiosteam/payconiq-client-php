@@ -39,7 +39,7 @@ The code has been updated for PHP 8 (constructor property promotion, enums, immu
 
 All resources (`Payment`, `Creditor`, `Debtor`, `SearchResult`) are now immutable.
 
-So if you are migration your code from 1.x to 2.x, make sure to use the enums for PaymentStatus, QR code size, color & format.
+**So if you are migrating your code from 1.x to 2.x, make sure to use the enums for PaymentStatus, QR code size, color & format, instead of the old constants**
 
 Setters on resources no longer exist.
 
