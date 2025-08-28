@@ -18,9 +18,9 @@ class PayconiqQrCodeGenerator
     public const LOCATION_URL_SCHEME_STATIC = 'https://payconiq.com/l/1/';
     public const LOCATION_URL_SCHEME_METADATA = 'https://payconiq.com/t/1/';
 
-    private static function getEndpoint(): string
+    private static function getEndpoint(bool $useNewPreProductionEnv = false): string
     {
-        if (true === MigrationHelper::switchToNewEndpoints()) {
+        if (true === $useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
             // new endpoints
             return self::PORTAL_URL_NEW;
         }
@@ -63,10 +63,11 @@ class PayconiqQrCodeGenerator
         QrImageFormat $format = QrImageFormat::PNG,
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
+        bool $useNewPreProductionEnv = false,
     ): string {
         $urlPayload = self::LOCATION_URL_SCHEME_STATIC . $paymentProfileId . '/' . $posId;
 
-        $uri = Modifier::from(Http::new(self::getEndpoint()))
+        $uri = Modifier::from(Http::new(self::getEndpoint($useNewPreProductionEnv)))
             ->mergeQueryParameters(['c' => $urlPayload])
             ->getUri();
 
@@ -89,6 +90,7 @@ class PayconiqQrCodeGenerator
         QrImageFormat $format = QrImageFormat::PNG,
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
+        bool $useNewPreProductionEnv = false,
     ): string {
         $payloadUri = Http::new(self::LOCATION_URL_SCHEME_METADATA . $paymentProfileId);
 
@@ -121,7 +123,7 @@ class PayconiqQrCodeGenerator
             $payloadUri = Modifier::from($payloadUri)->mergeQueryParameters($query)->getUri();
         }
 
-        $uri = Modifier::from(Http::new(self::getEndpoint()))
+        $uri = Modifier::from(Http::new(self::getEndpoint($useNewPreProductionEnv)))
             ->mergeQueryParameters(['c' => (string) $payloadUri])
             ->getUri();
 
