@@ -26,6 +26,8 @@ use Optios\Payconiq\HeaderChecker\PayconiqIssuedAtChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqJtiChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqPathChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqSubChecker;
+use phpseclib3\Crypt\EC\Formats\Signature\ASN1 as EcdsaAsn1;
+use phpseclib3\Crypt\EC\Formats\Signature\IEEE as EcdsaP1363;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -100,6 +102,7 @@ class PayconiqCallbackSignatureVerifier
     public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool
     {
         try {
+            $token = self::normalizeEcdsaSigIfNeeded($token, 32);
             $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
             return false;
@@ -114,6 +117,7 @@ class PayconiqCallbackSignatureVerifier
     public function loadAndVerifyJWS(string $token, ?string $payload = null, ?int $signature = 0): JWS
     {
         try {
+            $token = self::normalizeEcdsaSigIfNeeded($token, 32);
             return $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
             throw new PayconiqCallbackSignatureVerificationException(
@@ -153,6 +157,35 @@ class PayconiqCallbackSignatureVerifier
                 $e->getCode(),
                 $e,
             );
+        }
+    }
+
+    /**
+     * If the compact JWS uses a DER-encoded ECDSA signature, convert it to JOSE raw (r||s).
+     * $partLen: 32 for ES256, 48 for ES384, 66 for ES512.
+     */
+    private static function normalizeEcdsaSigIfNeeded(string $compactJws, int $partLen = 32): string
+    {
+        [$h, $p, $sB64u] = explode('.', $compactJws, 3) + [null, null, null];
+        if ($sB64u === null || $sB64u === '') return $compactJws;
+
+        // base64url decode signature
+        $pad = (4 - strlen($sB64u) % 4) % 4;
+        $sig = base64_decode(strtr($sB64u, '-_', '+/') . str_repeat('=', $pad), true);
+        if ($sig === false) return $compactJws;
+
+        // already raw r||s of expected length? nothing to do.
+        if (strlen($sig) === 2 * $partLen) return $compactJws;
+
+        // Try DER → raw using phpseclib helpers
+        try {
+            $rs  = EcdsaAsn1::load($sig);                              // ['r'=>BigInteger,'s'=>BigInteger]
+            $raw = EcdsaP1363::save($rs['r'], $rs['s'], null, $partLen); // fixed-length P-1363
+            $sB64u = rtrim(strtr(base64_encode($raw), '+/', '-_'), '=');
+            return "$h.$p.$sB64u";
+        } catch (\Throwable) {
+            // Not DER / not parseable — leave as-is and let the verifier decide
+            return $compactJws;
         }
     }
 
