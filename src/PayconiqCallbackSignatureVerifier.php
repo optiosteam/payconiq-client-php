@@ -167,15 +167,21 @@ class PayconiqCallbackSignatureVerifier
     private static function normalizeEcdsaSigIfNeeded(string $compactJws, int $partLen = 32): string
     {
         [$h, $p, $sB64u] = explode('.', $compactJws, 3) + [null, null, null];
-        if ($sB64u === null || $sB64u === '') return $compactJws;
+        if ($sB64u === null || $sB64u === '') {
+            return $compactJws;
+        }
 
         // base64url decode signature
         $pad = (4 - strlen($sB64u) % 4) % 4;
         $sig = base64_decode(strtr($sB64u, '-_', '+/') . str_repeat('=', $pad), true);
-        if ($sig === false) return $compactJws;
+        if ($sig === false) {
+            return $compactJws;
+        }
 
         // already raw r||s of expected length? nothing to do.
-        if (strlen($sig) === 2 * $partLen) return $compactJws;
+        if (strlen($sig) === 2 * $partLen) {
+            return $compactJws;
+        }
 
         // Try DER → raw using phpseclib helpers
         try {
