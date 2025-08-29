@@ -12,9 +12,9 @@ class PayconiqJtiCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checker = new PayconiqJtiChecker();
-
         parent::setUp();
+
+        $this->checker = new PayconiqJtiChecker();
     }
 
     public function testCheckHeader()

@@ -1,0 +1,22 @@
+codecov:
+  require_ci_to_pass: yes
+
+coverage:
+  status:
+    project:
+      default:
+        target: 90%
+        threshold: 2%
+        informational: false
+    patch:
+      default:
+        target: 90%
+        threshold: 2%
+        informational: false
+
+ignore:
+  - "vendor/**"
+  - "examples/**"
+  - "build/**"
+  - "coverage/**"
+  - "tests/**/Fixtures/**"

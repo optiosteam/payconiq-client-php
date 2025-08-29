@@ -10,17 +10,13 @@ class DebtorTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testDebtor(): void{
-        $obj    = new \stdClass();
-        $debtor = Debtor::createFromStdClass($obj);
+    public function testDebtor(): void
+    {
+        $obj = new \stdClass();
+        $debtor = Debtor::createFromObject($obj);
 
         $this->assertNull($debtor->getName());
-        $debtor->setName('new-name');
-        $this->assertEquals('new-name', $debtor->getName());
-
         $this->assertNull($debtor->getIban());
-        $debtor->setIban('new-iban');
-        $this->assertEquals('new-iban', $debtor->getIban());
 
         $this->assertMatchesJsonSnapshot($debtor->toArray());
     }

@@ -1,186 +1,94 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Optios\Payconiq\Resource\Search;
 
 use Optios\Payconiq\Resource\Payment\Payment;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class SearchResult
- * @package Optios\Payconiq\Resource\Search
- */
-class SearchResult
+final readonly class SearchResult
 {
     /**
-     * @var int
+     * @param array<Payment> $details
      */
-    private $size;
-
-    /**
-     * @var int
-     */
-    private $totalPages;
-
-    /**
-     * @var int
-     */
-    private $totalElements;
-
-    /**
-     * @var int
-     */
-    private $number;
-
-    /**
-     * @var Payment[]
-     */
-    private $details;
-
-    /**
-     * SearchResult constructor.
-     *
-     * @param int       $size
-     * @param int       $totalPages
-     * @param int       $totalElements
-     * @param int       $number
-     * @param Payment[] $details
-     */
-    public function __construct(int $size, int $totalPages, int $totalElements, int $number, array $details)
-    {
-        $this->size          = $size;
-        $this->totalPages    = $totalPages;
-        $this->totalElements = $totalElements;
-        $this->number        = $number;
-        $this->details       = $details;
+    private function __construct(
+        private int $size,
+        private int $totalPages,
+        private int $totalElements,
+        private int $number,
+        private array $details,
+    ) {
     }
 
     /**
-     * @param ResponseInterface $response
-     *
-     * @return static
+     * @throws \JsonException
      * @throws \Exception
      */
     public static function createFromResponse(ResponseInterface $response): self
     {
-        $response = json_decode($response->getBody()->getContents());
+        $response = json_decode(
+            json: $response->getBody()->getContents(),
+            associative: false,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $details = [];
 
-        if (! empty($response->details)) {
+        if (false === empty($response->details)) {
             foreach ($response->details as $paymentDetail) {
-                $details[] = Payment::createFromStdClass($paymentDetail);
+                $details[] = Payment::createFromObject($paymentDetail);
             }
         }
 
         return new self(
-            $response->size,
-            $response->totalPages,
-            $response->totalElements,
-            $response->number,
-            $details
+            size: $response->size,
+            totalPages: $response->totalPages,
+            totalElements: $response->totalElements,
+            number: $response->number,
+            details: $details,
         );
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
-        $array = [
+        return [
             'size' => $this->size,
             'totalPages' => $this->totalPages,
             'totalElements' => $this->totalElements,
             'number' => $this->number,
+            'details' => array_map(
+                callback: static fn(Payment $payment) => $payment->toArray(),
+                array: $this->details,
+            ),
         ];
-
-        $details = [];
-        foreach ($this->details as $payment) {
-            $details[] = $payment->toArray();
-        }
-
-        $array[ 'details' ] = $details;
-
-        return $array;
     }
 
-    /**
-     * @return int
-     */
     public function getSize(): int
     {
         return $this->size;
     }
 
-    /**
-     * @param int $size
-     */
-    public function setSize(int $size): void
-    {
-        $this->size = $size;
-    }
-
-    /**
-     * @return int
-     */
     public function getTotalPages(): int
     {
         return $this->totalPages;
     }
 
-    /**
-     * @param int $totalPages
-     */
-    public function setTotalPages(int $totalPages): void
-    {
-        $this->totalPages = $totalPages;
-    }
-
-    /**
-     * @return int
-     */
     public function getTotalElements(): int
     {
         return $this->totalElements;
     }
 
-    /**
-     * @param int $totalElements
-     */
-    public function setTotalElements(int $totalElements): void
-    {
-        $this->totalElements = $totalElements;
-    }
-
-    /**
-     * @return int
-     */
     public function getNumber(): int
     {
         return $this->number;
     }
 
     /**
-     * @param int $number
-     */
-    public function setNumber(int $number): void
-    {
-        $this->number = $number;
-    }
-
-    /**
-     * @return Payment[]
+     * @return array<Payment>
      */
     public function getDetails(): array
     {
         return $this->details;
-    }
-
-    /**
-     * @param Payment[] $details
-     */
-    public function setDetails(array $details): void
-    {
-        $this->details = $details;
     }
 }

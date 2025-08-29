@@ -1,7 +1,7 @@
 [![CI](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/optiosteam/payconiq-client-php/actions/workflows/tests.yaml)
 [![codecov](https://codecov.io/gh/optiosteam/payconiq-client-php/branch/main/graph/badge.svg?token=S62YDUXV7A)](https://codecov.io/gh/optiosteam/payconiq-client-php)
 
-# PHP Payconiq API Client (unofficial)
+# PHP Payconiq/Wero/Bancontact API Client (unofficial)
 
 Supported API version: v3
 
@@ -26,11 +26,22 @@ Not supported yet:
 
 ## Installation
 
-**Requirement**: PHP version >=7.2
+**Requirement**: PHP version >=8.2
 
 ```
 composer require optiosteam/payconiq-client-php
 ```
+
+## Migrating from 1.x to 2.x: Migration Payconiq > WERO/Bancontact
+On `2025-09-21 03:00:00 CET` the endpoints will be updated automatically to use the new endpoints according to https://docs.payconiq.be/guides/general/preprod072025v4
+
+The code has been updated for PHP 8 (constructor property promotion, enums, immutable with `readonly`, ...)
+
+All resources (`Payment`, `Creditor`, `Debtor`, `SearchResult`) are now immutable.
+
+**So if you are migrating your code from 1.x to 2.x, make sure to use the enums for PaymentStatus, QR code size, color & format, instead of the old constants**
+
+Setters on resources no longer exist.
 
 ## Description
 This library provides 3 main classes:
@@ -157,6 +168,9 @@ var_dump($payconiqCallbackSignatureVerifier->loadAndVerifyJWS($signature, $paylo
 
 ### QR link generation
 ```php
+use Optios\Payconiq\Enum\QrImageColor;
+use Optios\Payconiq\Enum\QrImageFormat;
+use Optios\Payconiq\Enum\QrImageSize;
 use Optios\Payconiq\PayconiqQrCodeGenerator;
 
 //Example 1: customized QR code (defaults are PNG, SMALL, MAGENTO)
@@ -164,9 +178,9 @@ use Optios\Payconiq\PayconiqQrCodeGenerator;
 $qrLink = 'https://portal.payconiq.com/qrcode?c=https%3A%2F%2Fpayconiq.com%2Fpay%2F2%2F73a222xxxxxxxxx00964';
 $customizedQRLink  = PayconiqQrCodeGenerator::customizePaymentQrLink(
     $qrLink,
-    PayconiqQrCodeGenerator::FORMAT_PNG,
-    PayconiqQrCodeGenerator::SIZE_EXTRA_LARGE,
-    PayconiqQrCodeGenerator::COLOR_BLACK
+    QrImageFormat::PNG,
+    QrImageSize::EXTRA_LARGE,
+    QrImageColor::BLACK,
 );
 var_dump($customizedQRLink);
 

@@ -1,12 +1,12 @@
 {
-    "amount": 2,
-    "currency": "USD",
-    "callbackUrl": "some-uri",
-    "reference": "ref",
-    "description": "description",
-    "bulkId": "bulk-id",
-    "posId": "posId",
-    "shopId": "shop-id",
-    "shopName": "shop-name",
-    "returnUrl": "some-uri"
+  "amount": 1,
+  "currency": "EUR",
+  "callbackUrl": "some-uri",
+  "reference": "ref",
+  "description": "description",
+  "bulkId": "bulk-id",
+  "posId": "posId",
+  "shopId": "shop-id",
+  "shopName": "shop-name",
+  "returnUrl": "some-uri"
 }

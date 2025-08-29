@@ -1,24 +1,21 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Optios\Payconiq\HeaderChecker;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Jose\Component\Checker\HeaderChecker;
 use Jose\Component\Checker\InvalidHeaderException;
 
-/**
- * Class PayconiqIssuedAtChecker
- * @package Optios\Payconiq\HeaderChecker
- */
 final class PayconiqIssuedAtChecker implements HeaderChecker
 {
     public const IAT_FORMAT = 'Y-m-d\TH:i:s.uO';
-
     private const HEADER_NAME = 'https://payconiq.com/iat';
 
     /**
      * {@inheritdoc}
+     * @throws InvalidHeaderException
      */
     public function checkHeader($value): void
     {
@@ -30,26 +27,26 @@ final class PayconiqIssuedAtChecker implements HeaderChecker
             // their api, the regex determines if it's nanosecond or microsecond format and trims when needed
 
             if (preg_match('/(?:\.)(\d{9})(?:Z|\+|-)/', $value)) { // format with nanoseconds
-                $pos     = strpos($value, '.');
+                $pos = strpos($value, '.');
                 $trimmed = substr($value, 0, $pos + 7) . substr($value, $pos + 10);
 
-                $iat = Carbon::createFromFormat(self::IAT_FORMAT, $trimmed);
+                $iat = CarbonImmutable::createFromFormat(self::IAT_FORMAT, $trimmed);
             } else {
-                $iat = new Carbon($value);
+                $iat = new CarbonImmutable($value);
             }
         } catch (\Exception $e) {
             throw new InvalidHeaderException(
-                sprintf('"%s" has an invalid date format', self::HEADER_NAME),
-                self::HEADER_NAME,
-                $value
+                message: sprintf('"%s" has an invalid date format', self::HEADER_NAME),
+                header: self::HEADER_NAME,
+                value: $value,
             );
         }
 
-        if ($iat->setMicroseconds(0)->gt(Carbon::now('UTC'))) {
+        if ($iat->setMicroseconds(0)->gt(CarbonImmutable::now('UTC'))) {
             throw new InvalidHeaderException(
-                'The JWT is issued in the future.',
-                self::HEADER_NAME,
-                $value
+                message: 'The JWT is issued in the future.',
+                header: self::HEADER_NAME,
+                value: $value,
             );
         }
     }

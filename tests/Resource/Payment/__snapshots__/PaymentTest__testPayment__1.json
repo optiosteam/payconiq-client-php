@@ -1,29 +1,30 @@
 {
-    "paymentId": "new-payment-id",
-    "createdAt": "2022-01-26T00:00:00+00:00",
-    "status": "new-status",
-    "reference": "reference",
-    "amount": 20,
-    "currency": "USD",
-    "creditor": {
-        "profileId": "profile-id2",
-        "merchantId": "merchant-id",
-        "name": "name",
-        "iban": "iban"
-    },
-    "debtor": {
-        "name": "name",
-        "iban": "iban"
-    },
-    "expiresAt": "2022-01-26T00:00:00+00:00",
-    "transferAmount": 10,
-    "tippingAmount": 10,
-    "totalAmount": 10,
-    "description": "desc",
-    "bulkId": "bulk-id",
-    "selfLink": "some-uri",
-    "deepLink": "some-uri",
-    "qrLink": "some-uri",
-    "refundLink": "some-uri",
-    "checkoutLink": "some-uri"
+  "paymentId": "payment-id",
+  "createdAt": "2022-01-25T00:00:00+00:00",
+  "status": "SUCCEEDED",
+  "reference": null,
+  "amount": 10,
+  "currency": "EUR",
+  "creditor": {
+    "callbackUrl": null,
+    "profileId": "profile-id",
+    "merchantId": "merchant-id",
+    "name": "name",
+    "iban": "iban"
+  },
+  "debtor": {
+    "name": null,
+    "iban": null
+  },
+  "expiresAt": null,
+  "transferAmount": null,
+  "tippingAmount": null,
+  "totalAmount": null,
+  "description": null,
+  "bulkId": null,
+  "selfLink": null,
+  "deepLink": null,
+  "qrLink": null,
+  "refundLink": null,
+  "checkoutLink": null
 }

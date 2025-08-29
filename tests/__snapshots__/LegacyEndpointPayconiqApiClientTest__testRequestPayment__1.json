@@ -1,0 +1,10 @@
+{
+  "headers": {
+    "Authorization": "Bearer some-api-key"
+  },
+  "json": {
+    "amount": 10,
+    "currency": "EUR",
+    "posId": "pos-id"
+  }
+}

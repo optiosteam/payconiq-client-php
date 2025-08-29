@@ -12,9 +12,9 @@ class PayconiqPathCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checker = new PayconiqPathChecker();
-
         parent::setUp();
+
+        $this->checker = new PayconiqPathChecker();
     }
 
     public function testCheckHeader()

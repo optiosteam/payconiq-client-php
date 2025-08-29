@@ -1,51 +1,29 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Optios\Payconiq\Request;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Optios\Payconiq\Enum\PaymentStatus;
 
-/**
- * Class SearchPayments
- * @package Payconiq\Request
- */
-class SearchPayments
+final class SearchPayments
 {
     private const SEARCH_DATE_FORMAT = 'Y-m-d\TH:i:s.v\Z';
 
+    private readonly CarbonImmutable $from;
+    private ?CarbonImmutable $to = null;
     /**
-     * @var Carbon
+     * @var array<PaymentStatus>
      */
-    private $from;
+    private array $paymentStatuses = [];
+    private ?string $reference = null;
 
-    /**
-     * @var Carbon|null
-     */
-    private $to;
-
-    /**
-     * @var string[]
-     */
-    private $paymentStatuses;
-
-    /**
-     * @var string|null
-     */
-    private $reference;
-
-    /**
-     * SearchPayments constructor.
-     *
-     * @param \DateTime $from
-     */
-    public function __construct(\DateTime $from)
+    public function __construct(\DateTimeInterface $from)
     {
         $this->setFrom($from);
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         $array = [
@@ -53,89 +31,92 @@ class SearchPayments
         ];
 
         if (null !== $this->to) {
-            $array[ 'to' ] = $this->to->format(self::SEARCH_DATE_FORMAT);
+            $array['to'] = $this->to->format(self::SEARCH_DATE_FORMAT);
         }
 
-        if (! empty($this->paymentStatuses)) {
-            $array[ 'paymentStatuses' ] = $this->paymentStatuses;
+        if (false === empty($this->paymentStatuses)) {
+            $array['paymentStatuses'] = array_map(
+                callback: static fn(PaymentStatus $status) => $status->value,
+                array: $this->paymentStatuses,
+            );
         }
 
-        if (! empty($this->reference)) {
-            $array[ 'reference' ] = $this->reference;
+        if (null !== $this->reference && '' !== $this->reference) {
+            $array['reference'] = $this->reference;
         }
 
         return $array;
     }
 
-    /**
-     * @return Carbon
-     */
-    public function getFrom(): Carbon
+    public function getFrom(): CarbonImmutable
     {
         return $this->from;
     }
 
-    /**
-     * @param \DateTime $from
-     */
-    public function setFrom(\DateTime $from): void
+    public function setFrom(\DateTimeInterface $from): self
     {
-        if (! $from instanceof Carbon) {
-            $from = new Carbon($from);
+        if (false === $from instanceof CarbonImmutable) {
+            $from = new CarbonImmutable($from);
         }
 
-        $this->from = $from->clone()->setTimezone('UTC');
+        $this->from = $from->setTimezone('UTC');
+
+        return $this;
     }
 
-    /**
-     * @return Carbon|null
-     */
-    public function getTo(): ?Carbon
+    public function getTo(): ?CarbonImmutable
     {
         return $this->to;
     }
 
-    /**
-     * @param \DateTime|null $to
-     */
-    public function setTo(?\DateTime $to): void
+    public function setTo(?\DateTimeInterface $to): self
     {
-        if (! $to instanceof Carbon) {
-            $to = new Carbon($to);
+        if (null === $to) {
+            $this->to = null;
+
+            return $this;
         }
 
-        $this->to = $to->clone()->setTimezone('UTC');
+        if (false === $to instanceof CarbonImmutable) {
+            $to = new CarbonImmutable($to);
+        }
+
+        $this->to = $to->setTimezone('UTC');
+
+        return $this;
     }
 
     /**
-     * @return string[]
+     * @return array<PaymentStatus>
      */
-    public function getPaymentStatuses(): ?array
+    public function getPaymentStatuses(): array
     {
         return $this->paymentStatuses;
     }
 
     /**
-     * @param string[] $paymentStatuses
+     * @param array<PaymentStatus|string> $paymentStatuses
      */
-    public function setPaymentStatuses(array $paymentStatuses): void
+    public function setPaymentStatuses(array $paymentStatuses): self
     {
-        $this->paymentStatuses = $paymentStatuses;
+        $this->paymentStatuses = array_map(
+            callback: static fn($status) => $status instanceof PaymentStatus
+                ? $status
+                : PaymentStatus::from((string) $status),
+            array: $paymentStatuses,
+        );
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getReference(): ?string
     {
         return $this->reference;
     }
 
-    /**
-     * @param string|null $reference
-     */
-    public function setReference(?string $reference): void
+    public function setReference(?string $reference): self
     {
         $this->reference = $reference;
+
+        return $this;
     }
 }

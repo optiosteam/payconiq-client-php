@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Optios\Payconiq;
 
@@ -25,56 +26,49 @@ use Optios\Payconiq\HeaderChecker\PayconiqIssuedAtChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqJtiChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqPathChecker;
 use Optios\Payconiq\HeaderChecker\PayconiqSubChecker;
+use phpseclib3\Crypt\EC\Formats\Signature\ASN1 as EcdsaAsn1;
+use phpseclib3\Crypt\EC\Formats\Signature\IEEE as EcdsaP1363;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Class PayconiqCallbackSignatureVerifier
- * @package Optios\Payconiq
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PayconiqCallbackSignatureVerifier
 {
-    public const  CERTIFICATES_URL     = 'https://payconiq.com/certificates';
-    public const  CERTIFICATES_EXT_URL = 'https://ext.payconiq.com/certificates';
-    private const TIMEOUT              = 10;
-    private const CONNECT_TIMEOUT      = 2;
+    // Legacy endpoints
+    public const  CERTIFICATES_PRODUCTION_URL_LEGACY = 'https://payconiq.com/certificates';
+    public const  CERTIFICATES_STAGING_URL_LEGACY = 'https://ext.payconiq.com/certificates';
 
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    // New endpoints
+    public const  CERTIFICATES_PRODUCTION_URL_NEW = 'https://jwks.bancontact.net';
+    public const  CERTIFICATES_STAGING_URL_NEW = 'https://jwks.preprod.bancontact.net';
 
-    /**
-     * @var AdapterInterface
-     */
-    private $cache;
+    private const TIMEOUT = 10;
+    private const CONNECT_TIMEOUT = 2;
 
-    /**
-     * @var bool
-     */
-    private $useProd;
+    private ClientInterface $httpClient;
+    private AdapterInterface $cache;
+    private bool $useProd;
+    private bool $useNewPreProductionEnv; // only used for the new pre-production testing
+    private JWSLoader $jwsLoader;
 
-    /**
-     * @var JWSLoader
-     */
-    private $jwsLoader;
-
-    /**
-     * PayconiqCallbackSignatureVerifier constructor.
-     *
-     * @param string                $paymentProfileId
-     * @param ClientInterface|null  $httpClient
-     * @param AdapterInterface|null $cache
-     * @param bool                  $useProd
-     */
     public function __construct(
         string $paymentProfileId,
         ClientInterface $httpClient = null,
         AdapterInterface $cache = null,
-        bool $useProd = true
+        bool $useProd = true,
+        bool $useNewPreProductionEnv = false,
     ) {
+        if (
+            true === $useProd
+            && true === $useNewPreProductionEnv
+            && false === MigrationHelper::switchToNewEndpoints()
+        ) {
+            throw new \InvalidArgumentException('You can not use the new pre production env in production mode yet');
+        }
+
         if (null === $httpClient) {
             $httpClient = new Client([
                 RequestOptions::TIMEOUT => self::TIMEOUT,
@@ -87,22 +81,28 @@ class PayconiqCallbackSignatureVerifier
         }
 
         $this->httpClient = $httpClient;
-        $this->cache      = $cache;
-        $this->useProd    = $useProd;
+        $this->cache = $cache;
+        $this->useProd = $useProd;
+        $this->useNewPreProductionEnv = $useNewPreProductionEnv;
 
         $this->jwsLoader = $this->initializeJwsLoader($paymentProfileId);
     }
 
-    /**
-     * @param string      $token
-     * @param string|null $payload
-     * @param int|null    $signature
-     *
-     * @return bool
-     */
+    private function getCertificatesUrl(): string
+    {
+        if (true === $this->useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
+            // new endpoints
+            return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_NEW : self::CERTIFICATES_STAGING_URL_NEW);
+        }
+
+        // legacy endpoints
+        return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_LEGACY : self::CERTIFICATES_STAGING_URL_LEGACY);
+    }
+
     public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool
     {
         try {
+            $token = self::normalizeEcdsaSigIfNeeded($token, 32);
             $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
             return false;
@@ -112,45 +112,41 @@ class PayconiqCallbackSignatureVerifier
     }
 
     /**
-     * @param string      $token
-     * @param string|null $payload
-     * @param int|null    $signature
-     *
-     * @return JWS
      * @throws PayconiqCallbackSignatureVerificationException
      */
     public function loadAndVerifyJWS(string $token, ?string $payload = null, ?int $signature = 0): JWS
     {
         try {
+            $token = self::normalizeEcdsaSigIfNeeded($token, 32);
             return $this->jwsLoader->loadAndVerifyWithKeySet($token, $this->getJWKSet(), $signature, $payload);
         } catch (\Throwable $e) {
             throw new PayconiqCallbackSignatureVerificationException(
                 $this->useProd,
                 sprintf('Something went wrong while loading and verifying the JWS. Error: %s', $e->getMessage()),
                 $e->getCode(),
-                $e
+                $e,
             );
         }
     }
 
     /**
-     * @return JWKSet
      * @throws PayconiqJWKSetException
      */
     private function getJWKSet(): JWKSet
     {
         try {
-            $url      = $this->useProd ? self::CERTIFICATES_URL : self::CERTIFICATES_EXT_URL;
-            $cacheKey = 'payconiq_certificates_' . ($this->useProd ? 'prod' : 'ext');
+            $url = $this->getCertificatesUrl();
+            $cacheKey = 'payconiq_certificates_' . md5($url);
 
-            $JWKSetJson = $this->cache->get($cacheKey,
-                function(ItemInterface $item) use ($url) {
+            $JWKSetJson = $this->cache->get(
+                key: $cacheKey,
+                callback: function (ItemInterface $item) use ($url) {
                     $item->expiresAfter(CarbonInterval::hour(12));
 
                     $response = $this->httpClient->get($url);
 
                     return $response->getBody()->getContents();
-                }
+                },
             );
 
             return JWKSet::createFromJson($JWKSetJson);
@@ -159,16 +155,46 @@ class PayconiqCallbackSignatureVerifier
                 $this->useProd,
                 sprintf('Something went wrong while fetching the JWK Set. Error: %s', $e->getMessage()),
                 $e->getCode(),
-                $e
+                $e,
             );
         }
     }
 
     /**
-     * @param string $paymentProfileId
-     *
-     * @return JWSLoader
+     * If the compact JWS uses a DER-encoded ECDSA signature, convert it to JOSE raw (r||s).
+     * $partLen: 32 for ES256, 48 for ES384, 66 for ES512.
      */
+    private static function normalizeEcdsaSigIfNeeded(string $compactJws, int $partLen = 32): string
+    {
+        [$h, $p, $sB64u] = explode('.', $compactJws, 3) + [null, null, null];
+        if ($sB64u === null || $sB64u === '') {
+            return $compactJws;
+        }
+
+        // base64url decode signature
+        $pad = (4 - strlen($sB64u) % 4) % 4;
+        $sig = base64_decode(strtr($sB64u, '-_', '+/') . str_repeat('=', $pad), true);
+        if ($sig === false) {
+            return $compactJws;
+        }
+
+        // already raw r||s of expected length? nothing to do.
+        if (strlen($sig) === 2 * $partLen) {
+            return $compactJws;
+        }
+
+        // Try DER → raw using phpseclib helpers
+        try {
+            $rs  = EcdsaAsn1::load($sig);                              // ['r'=>BigInteger,'s'=>BigInteger]
+            $raw = EcdsaP1363::save($rs['r'], $rs['s'], null, $partLen); // fixed-length P-1363
+            $sB64u = rtrim(strtr(base64_encode($raw), '+/', '-_'), '=');
+            return "$h.$p.$sB64u";
+        } catch (\Throwable) {
+            // Not DER / not parseable — leave as-is and let the verifier decide
+            return $compactJws;
+        }
+    }
+
     private function initializeJwsLoader(string $paymentProfileId): JWSLoader
     {
         return new JWSLoader(
@@ -178,7 +204,7 @@ class PayconiqCallbackSignatureVerifier
             new JWSVerifier(
                 new AlgorithmManager([
                     new ES256(),
-                ])
+                ]),
             ),
             new HeaderCheckerManager(
                 [
@@ -191,8 +217,8 @@ class PayconiqCallbackSignatureVerifier
                 ],
                 [
                     new JWSTokenSupport(),
-                ]
-            )
+                ],
+            ),
         );
     }
 }
