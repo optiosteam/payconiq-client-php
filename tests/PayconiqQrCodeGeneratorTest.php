@@ -2,44 +2,25 @@
 
 namespace Tests\Optios\Payconiq;
 
-use Carbon\CarbonImmutable;
 use Optios\Payconiq\Enum\QrImageColor;
 use Optios\Payconiq\Enum\QrImageFormat;
 use Optios\Payconiq\Enum\QrImageSize;
-use Optios\Payconiq\MigrationHelper;
 use Optios\Payconiq\PayconiqQrCodeGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
+class PayconiqQrCodeGeneratorTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        CarbonImmutable::setTestNow(
-            CarbonImmutable::parse(
-                MigrationHelper::SWITCH_DATETIME,
-                MigrationHelper::TIMEZONE,
-            ),
-        );
-    }
-
-    protected function tearDown(): void
-    {
-        CarbonImmutable::setTestNow();
-    }
-
     #[DataProvider('getCustomizePaymentQrLinkData')]
     public function testCustomizePaymentQrLink(array $data, string $expected)
     {
         $this->assertEquals(
             $expected,
             PayconiqQrCodeGenerator::customizePaymentQrLink(
-                $data['link'],
-                $data['format'],
-                $data['size'],
-                $data['color'],
+                qrLink: $data['link'],
+                format: $data['format'],
+                size: $data['size'],
+                color: $data['color'],
             ),
         );
     }
@@ -87,11 +68,11 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         $this->assertEquals(
             $expected,
             PayconiqQrCodeGenerator::generateStaticQRCodeLink(
-                $data['payment_profile_id'],
-                $data['pos_id'],
-                $data['format'],
-                $data['size'],
-                $data['color'],
+                paymentProfileId: $data['payment_profile_id'],
+                posId: $data['pos_id'],
+                format: $data['format'],
+                size: $data['size'],
+                color: $data['color'],
             ),
         );
     }
@@ -146,13 +127,13 @@ class NewEndpointPayconiqQrCodeGeneratorTest extends TestCase
         }
 
         $result = PayconiqQrCodeGenerator::generateQRCodeWithMetadata(
-            $data['payment_profile_id'],
-            $data['description'],
-            $data['amount'],
-            $data['reference'],
-            $data['format'],
-            $data['size'],
-            $data['color'],
+            paymentProfileId: $data['payment_profile_id'],
+            description: $data['description'],
+            amount: $data['amount'],
+            reference: $data['reference'],
+            format: $data['format'],
+            size: $data['size'],
+            color: $data['color'],
         );
 
         $this->assertEquals($expected, $result);

@@ -12,22 +12,10 @@ use Optios\Payconiq\Enum\QrImageSize;
 
 class PayconiqQrCodeGenerator
 {
-    public const PORTAL_URL_LEGACY = 'https://portal.payconiq.com/qrcode';
-    public const PORTAL_URL_NEW = 'https://qrcodegenerator.api.bancontact.net/qrcode';
+    public const QRCODE_GENERATOR_URL = 'https://qrcodegenerator.api.bancontact.net/qrcode';
 
     public const LOCATION_URL_SCHEME_STATIC = 'https://payconiq.com/l/1/';
     public const LOCATION_URL_SCHEME_METADATA = 'https://payconiq.com/t/1/';
-
-    private static function getEndpoint(bool $useNewPreProductionEnv = false): string
-    {
-        if (true === $useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
-            // new endpoints
-            return self::PORTAL_URL_NEW;
-        }
-
-        // legacy endpoints
-        return self::PORTAL_URL_LEGACY;
-    }
 
     /**
      * Used for customizing QR links returned in the Payment.
@@ -63,11 +51,10 @@ class PayconiqQrCodeGenerator
         QrImageFormat $format = QrImageFormat::PNG,
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
-        bool $useNewPreProductionEnv = false,
     ): string {
         $urlPayload = self::LOCATION_URL_SCHEME_STATIC . $paymentProfileId . '/' . $posId;
 
-        $uri = Modifier::from(Http::new(self::getEndpoint($useNewPreProductionEnv)))
+        $uri = Modifier::from(Http::new(self::QRCODE_GENERATOR_URL))
             ->mergeQueryParameters(['c' => $urlPayload])
             ->getUri();
 
@@ -90,7 +77,6 @@ class PayconiqQrCodeGenerator
         QrImageFormat $format = QrImageFormat::PNG,
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
-        bool $useNewPreProductionEnv = false,
     ): string {
         $payloadUri = Http::new(self::LOCATION_URL_SCHEME_METADATA . $paymentProfileId);
 
@@ -123,7 +109,7 @@ class PayconiqQrCodeGenerator
             $payloadUri = Modifier::from($payloadUri)->mergeQueryParameters($query)->getUri();
         }
 
-        $uri = Modifier::from(Http::new(self::getEndpoint($useNewPreProductionEnv)))
+        $uri = Modifier::from(Http::new(self::QRCODE_GENERATOR_URL))
             ->mergeQueryParameters(['c' => (string) $payloadUri])
             ->getUri();
 

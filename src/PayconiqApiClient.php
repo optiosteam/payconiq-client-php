@@ -21,13 +21,8 @@ class PayconiqApiClient
 {
     public const  API_VERSION = 'v3';
 
-    // Legacy endpoints
-    public const  API_ENDPOINT_PRODUCTION_LEGACY = 'https://api.payconiq.com/';
-    public const  API_ENDPOINT_STAGING_LEGACY = 'https://api.ext.payconiq.com/';
-
-    // New endpoints
-    public const  API_ENDPOINT_PRODUCTION_NEW = 'https://merchant.api.bancontact.net/';
-    public const  API_ENDPOINT_STAGING_NEW = 'https://merchant.api.preprod.bancontact.net/';
+    public const  API_ENDPOINT_PRODUCTION = 'https://merchant.api.bancontact.net/';
+    public const  API_ENDPOINT_STAGING = 'https://merchant.api.preprod.bancontact.net/';
 
     private const TIMEOUT = 10;
     private const CONNECT_TIMEOUT = 2;
@@ -35,22 +30,12 @@ class PayconiqApiClient
     private string $apiKey;
     private ClientInterface $httpClient;
     private bool $useProd;
-    private bool $useNewPreProductionEnv; // only used for the new pre-production testing
 
     public function __construct(
         string $apiKey,
         ?ClientInterface $httpClient = null,
         bool $useProd = true,
-        bool $useNewPreProductionEnv = false,
     ) {
-        if (
-            true === $useProd
-            && true === $useNewPreProductionEnv
-            && false === MigrationHelper::switchToNewEndpoints()
-        ) {
-            throw new \InvalidArgumentException('You can not use the new pre production env in production mode yet');
-        }
-
         if (null === $httpClient) {
             $httpClient = new Client([
                 RequestOptions::TIMEOUT => self::TIMEOUT,
@@ -62,7 +47,6 @@ class PayconiqApiClient
         $this->apiKey = $apiKey;
         $this->httpClient = $httpClient;
         $this->useProd = $useProd;
-        $this->useNewPreProductionEnv = $useNewPreProductionEnv;
     }
 
     public function getApiEndpointBase(): string
@@ -72,13 +56,7 @@ class PayconiqApiClient
 
     private function getEndpoint(): string
     {
-        if (true === $this->useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
-            // new endpoints
-            return ($this->useProd ? self::API_ENDPOINT_PRODUCTION_NEW : self::API_ENDPOINT_STAGING_NEW);
-        }
-
-        // legacy endpoints
-        return ($this->useProd ? self::API_ENDPOINT_PRODUCTION_LEGACY : self::API_ENDPOINT_STAGING_LEGACY);
+        return $this->useProd ? self::API_ENDPOINT_PRODUCTION : self::API_ENDPOINT_STAGING;
     }
 
     /**
