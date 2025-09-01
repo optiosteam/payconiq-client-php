@@ -14,7 +14,7 @@ class MigrationHelper
      *  > Any update before or after this deadline will result in your integration stopping.
      */
 
-    public const SWITCH_DATETIME = '2025-09-21 03:00:00'; // switch to new endpoints at 3AM CET (1 hour buffer)
+    public const SWITCH_DATETIME = '2025-09-21 05:50:00';
     public const TIMEZONE = 'Europe/Brussels'; // CET
 
     public static function switchToNewEndpoints(): bool

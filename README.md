@@ -33,7 +33,7 @@ composer require optiosteam/payconiq-client-php
 ```
 
 ## Migrating from 1.x to 2.x: Migration Payconiq > WERO/Bancontact
-On `2025-09-21 03:00:00 CET` the endpoints will be updated automatically to use the new endpoints according to https://docs.payconiq.be/guides/general/preprod072025v4
+On `2025-09-21 05:50:00 CET` the endpoints will be updated automatically to use the new endpoints according to https://docs.payconiq.be/guides/general/preprod072025v4
 
 The code has been updated for PHP 8 (constructor property promotion, enums, immutable with `readonly`, ...)
 
