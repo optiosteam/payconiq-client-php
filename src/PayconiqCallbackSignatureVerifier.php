@@ -74,7 +74,7 @@ class PayconiqCallbackSignatureVerifier
 
     private function getCertificatesUrl(): string
     {
-        return $this->useProd ? self::CERTIFICATES_PRODUCTION_URL : self::CERTIFICATES_STAGING_URL;
+        return true === $this->useProd ? self::CERTIFICATES_PRODUCTION_URL : self::CERTIFICATES_STAGING_URL;
     }
 
     public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool

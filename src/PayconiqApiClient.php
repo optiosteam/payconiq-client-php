@@ -56,7 +56,7 @@ class PayconiqApiClient
 
     private function getEndpoint(): string
     {
-        return $this->useProd ? self::API_ENDPOINT_PRODUCTION : self::API_ENDPOINT_STAGING;
+        return true === $this->useProd ? self::API_ENDPOINT_PRODUCTION : self::API_ENDPOINT_STAGING;
     }
 
     /**
