@@ -26,12 +26,12 @@ final class MigrationHelperTest extends TestCase
 
     public static function provideSwitchCases(): iterable
     {
-        // SWITCH_DATETIME = '2025-09-21 03:00:00' in Europe/Brussels
-        yield 'day before' => ['2025-09-20 12:00:00', false];
-        yield 'one second before' => ['2025-09-21 05:49:59', false];
-        yield 'exact switch time' => ['2025-09-21 05:50:00', true];
-        yield 'one second after' => ['2025-09-21 05:50:01', true];
-        yield 'day after' => ['2025-09-22 12:00:00', true];
-        yield 'month after' => ['2025-10-21 05:50:00', true];
+        // SWITCH_DATETIME = '2025-10-19 05:50:00' in Europe/Brussels
+        yield 'day before' => ['2025-10-18 12:00:00', false];
+        yield 'one second before' => ['2025-10-19 05:49:59', false];
+        yield 'exact switch time' => ['2025-10-19 05:50:00', true];
+        yield 'one second after' => ['2025-10-19 05:50:01', true];
+        yield 'day after' => ['2025-10-20 12:00:00', true];
+        yield 'month after' => ['2025-11-19 05:50:00', true];
     }
 }
