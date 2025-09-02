@@ -33,6 +33,7 @@ composer require optiosteam/payconiq-client-php
 ```
 
 ## Migrating from 1.x to 2.x: Migration Payconiq > WERO/Bancontact
+
 The code has been updated for PHP 8 (constructor property promotion, enums, immutable with `readonly`, ...)
 
 All resources (`Payment`, `Creditor`, `Debtor`, `SearchResult`) are now immutable.
