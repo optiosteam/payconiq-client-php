@@ -42,6 +42,8 @@ All resources (`Payment`, `Creditor`, `Debtor`, `SearchResult`) are now immutabl
 
 Setters on resources no longer exist.
 
+From version 2.1.0 onward, `transferAmount`, `tippingAmount` and `totalAmount` have been removed from the Payment resource since they are no longer returned by the API (see [here](https://github.com/optiosteam/payconiq-client-php/issues/18#issuecomment-3306512880)).
+
 ## Description
 This library provides 3 main classes:
 - `PayconiqApiClient`
