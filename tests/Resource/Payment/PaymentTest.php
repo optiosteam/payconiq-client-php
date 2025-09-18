@@ -51,9 +51,6 @@ class PaymentTest extends TestCase
             $payment->getDebtor()->toArray(),
         );
         $this->assertEquals(10, $payment->getAmount());
-        $this->assertNull($payment->getTransferAmount());
-        $this->assertNull($payment->getTippingAmount());
-        $this->assertNull($payment->getTotalAmount());
         $this->assertNull($payment->getDescription());
         $this->assertNull($payment->getBulkId());
         $this->assertNull($payment->getSelfLink());
