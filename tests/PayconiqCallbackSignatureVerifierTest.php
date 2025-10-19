@@ -2,19 +2,17 @@
 
 namespace Tests\Optios\Payconiq;
 
-use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSLoader;
 use Optios\Payconiq\Exception\PayconiqCallbackSignatureVerificationException;
-use Optios\Payconiq\MigrationHelper;
 use Optios\Payconiq\PayconiqCallbackSignatureVerifier;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
+class PayconiqCallbackSignatureVerifierTest extends TestCase
 {
     private $payconiqCallbackSignatureVerifier;
     private $paymentProfileId;
@@ -27,23 +25,16 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
     {
         parent::setUp();
 
-        CarbonImmutable::setTestNow(
-            CarbonImmutable::parse(
-                MigrationHelper::SWITCH_DATETIME,
-                MigrationHelper::TIMEZONE,
-            ),
-        );
-
         $this->paymentProfileId = 'profileId';
         $this->httpClient = $this->createMock(Client::class);
         $this->cache = $this->createMock(FilesystemAdapter::class);
         $this->useProd = false;
 
         $this->payconiqCallbackSignatureVerifier = new PayconiqCallbackSignatureVerifier(
-            $this->paymentProfileId,
-            $this->httpClient,
-            $this->cache,
-            $this->useProd,
+            paymentProfileId: $this->paymentProfileId,
+            httpClient: $this->httpClient,
+            cache: $this->cache,
+            useProd: $this->useProd,
         );
 
         $this->jwsLoader = $this->createMock(JWSLoader::class);
@@ -55,11 +46,6 @@ class NewEndpointPayconiqCallbackSignatureVerifierTest extends TestCase
         $property = $class->getProperty('jwsLoader');
         $property->setAccessible(true);
         $property->setValue($this->payconiqCallbackSignatureVerifier, $this->jwsLoader);
-    }
-
-    protected function tearDown(): void
-    {
-        CarbonImmutable::setTestNow();
     }
 
     public function testIsValid(): void

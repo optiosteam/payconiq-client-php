@@ -37,13 +37,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class PayconiqCallbackSignatureVerifier
 {
-    // Legacy endpoints
-    public const  CERTIFICATES_PRODUCTION_URL_LEGACY = 'https://payconiq.com/certificates';
-    public const  CERTIFICATES_STAGING_URL_LEGACY = 'https://ext.payconiq.com/certificates';
-
-    // New endpoints
-    public const  CERTIFICATES_PRODUCTION_URL_NEW = 'https://jwks.bancontact.net';
-    public const  CERTIFICATES_STAGING_URL_NEW = 'https://jwks.preprod.bancontact.net';
+    public const  CERTIFICATES_PRODUCTION_URL = 'https://jwks.bancontact.net';
+    public const  CERTIFICATES_STAGING_URL = 'https://jwks.preprod.bancontact.net';
 
     private const TIMEOUT = 10;
     private const CONNECT_TIMEOUT = 2;
@@ -51,7 +46,6 @@ class PayconiqCallbackSignatureVerifier
     private ClientInterface $httpClient;
     private AdapterInterface $cache;
     private bool $useProd;
-    private bool $useNewPreProductionEnv; // only used for the new pre-production testing
     private JWSLoader $jwsLoader;
 
     public function __construct(
@@ -59,16 +53,7 @@ class PayconiqCallbackSignatureVerifier
         ClientInterface $httpClient = null,
         AdapterInterface $cache = null,
         bool $useProd = true,
-        bool $useNewPreProductionEnv = false,
     ) {
-        if (
-            true === $useProd
-            && true === $useNewPreProductionEnv
-            && false === MigrationHelper::switchToNewEndpoints()
-        ) {
-            throw new \InvalidArgumentException('You can not use the new pre production env in production mode yet');
-        }
-
         if (null === $httpClient) {
             $httpClient = new Client([
                 RequestOptions::TIMEOUT => self::TIMEOUT,
@@ -83,20 +68,13 @@ class PayconiqCallbackSignatureVerifier
         $this->httpClient = $httpClient;
         $this->cache = $cache;
         $this->useProd = $useProd;
-        $this->useNewPreProductionEnv = $useNewPreProductionEnv;
 
         $this->jwsLoader = $this->initializeJwsLoader($paymentProfileId);
     }
 
     private function getCertificatesUrl(): string
     {
-        if (true === $this->useNewPreProductionEnv || true === MigrationHelper::switchToNewEndpoints()) {
-            // new endpoints
-            return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_NEW : self::CERTIFICATES_STAGING_URL_NEW);
-        }
-
-        // legacy endpoints
-        return ($this->useProd ? self::CERTIFICATES_PRODUCTION_URL_LEGACY : self::CERTIFICATES_STAGING_URL_LEGACY);
+        return true === $this->useProd ? self::CERTIFICATES_PRODUCTION_URL : self::CERTIFICATES_STAGING_URL;
     }
 
     public function isValid(string $token, ?string $payload = null, ?int $signature = 0): bool
@@ -185,12 +163,12 @@ class PayconiqCallbackSignatureVerifier
 
         // Try DER → raw using phpseclib helpers
         try {
-            $rs  = EcdsaAsn1::load($sig);                              // ['r'=>BigInteger,'s'=>BigInteger]
+            $rs = EcdsaAsn1::load($sig); // ['r'=>BigInteger,'s'=>BigInteger]
             $raw = EcdsaP1363::save($rs['r'], $rs['s'], null, $partLen); // fixed-length P-1363
             $sB64u = rtrim(strtr(base64_encode($raw), '+/', '-_'), '=');
             return "$h.$p.$sB64u";
         } catch (\Throwable) {
-            // Not DER / not parseable — leave as-is and let the verifier decide
+            // Not DER / not parseable - leave as-is and let the verifier decide
             return $compactJws;
         }
     }

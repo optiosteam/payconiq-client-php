@@ -33,9 +33,6 @@ composer require optiosteam/payconiq-client-php
 ```
 
 ## Migrating from 1.x to 2.x: Migration Payconiq > WERO/Bancontact
-On `2025-10-19 05:50:00 CET` the endpoints will be switched automatically to use the new ones according to https://docs.payconiq.be/guides/general/preprod072025v4
-
-If you have been migrated before 05:50:00 CET, you will be able to use the upcoming 2.1.0 release that only includes the new endpoints.
 
 The code has been updated for PHP 8 (constructor property promotion, enums, immutable with `readonly`, ...)
 
@@ -44,6 +41,8 @@ All resources (`Payment`, `Creditor`, `Debtor`, `SearchResult`) are now immutabl
 **So if you are migrating your code from 1.x to 2.x, make sure to use the enums for PaymentStatus, QR code size, color & format, instead of the old constants**
 
 Setters on resources no longer exist.
+
+From version 2.1.0 onward, `transferAmount`, `tippingAmount` and `totalAmount` have been removed from the Payment resource since they are no longer returned by the API (see [here](https://github.com/optiosteam/payconiq-client-php/issues/18#issuecomment-3306512880)).
 
 ## Description
 This library provides 3 main classes:

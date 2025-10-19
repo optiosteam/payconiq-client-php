@@ -17,9 +17,6 @@
     "iban": null
   },
   "expiresAt": null,
-  "transferAmount": null,
-  "tippingAmount": null,
-  "totalAmount": null,
   "description": null,
   "bulkId": null,
   "selfLink": null,

@@ -22,9 +22,6 @@ final readonly class Payment
         private ?CarbonImmutable $expiresAt = null,
         private ?Creditor $creditor = null,
         private ?Debtor $debtor = null,
-        private ?int $transferAmount = null,
-        private ?int $tippingAmount = null,
-        private ?int $totalAmount = null,
         private ?string $description = null,
         private ?string $bulkId = null,
         private ?string $selfLink = null,
@@ -75,10 +72,6 @@ final readonly class Payment
             ? new CarbonImmutable((string) $obj->expiresAt)
             : null;
 
-        $transferAmount = isset($obj->transferAmount) ? (int) $obj->transferAmount : null;
-        $tippingAmount = isset($obj->tippingAmount) ? (int) $obj->tippingAmount : null;
-        $totalAmount = isset($obj->totalAmount) ? (int) $obj->totalAmount : null;
-
         $description = isset($obj->description) ? (string) $obj->description : null;
         $bulkId = isset($obj->bulkId) ? (string) $obj->bulkId : null;
         $reference = isset($obj->reference) ? (string) $obj->reference : null;
@@ -106,9 +99,6 @@ final readonly class Payment
             expiresAt: $expiresAt,
             creditor: $creditor,
             debtor: $debtor,
-            transferAmount: $transferAmount,
-            tippingAmount: $tippingAmount,
-            totalAmount: $totalAmount,
             description: $description,
             bulkId: $bulkId,
             selfLink: $selfLink,
@@ -132,9 +122,6 @@ final readonly class Payment
             'creditor' => $this->creditor?->toArray(),
             'debtor' => $this->debtor?->toArray(),
             'expiresAt' => $this->expiresAt?->toAtomString(),
-            'transferAmount' => $this->transferAmount,
-            'tippingAmount' => $this->tippingAmount,
-            'totalAmount' => $this->totalAmount,
             'description' => $this->description,
             'bulkId' => $this->bulkId,
             'selfLink' => $this->selfLink,
@@ -184,21 +171,6 @@ final readonly class Payment
     public function getDebtor(): ?Debtor
     {
         return $this->debtor;
-    }
-
-    public function getTransferAmount(): ?int
-    {
-        return $this->transferAmount;
-    }
-
-    public function getTippingAmount(): ?int
-    {
-        return $this->tippingAmount;
-    }
-
-    public function getTotalAmount(): ?int
-    {
-        return $this->totalAmount;
     }
 
     public function getDescription(): ?string

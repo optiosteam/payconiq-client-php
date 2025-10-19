@@ -33,9 +33,6 @@ class SearchResultTest extends TestCase
         "iban": "iban"
     },
     "expiresAt": "2022-01-26T00:00:00+00:00",
-    "transferAmount": 10,
-    "tippingAmount": 10,
-    "totalAmount": 10,
     "description": "desc",
     "bulkId": "bulk-id",
     "selfLink": "some-uri",

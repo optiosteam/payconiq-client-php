@@ -2,21 +2,19 @@
 
 namespace Tests\Optios\Payconiq;
 
-use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Optios\Payconiq\Exception\PayconiqApiException;
-use Optios\Payconiq\MigrationHelper;
 use Optios\Payconiq\PayconiqApiClient;
 use Optios\Payconiq\Request\RequestPayment;
 use Optios\Payconiq\Request\SearchPayments;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class NewEndpointPayconiqApiClientTest extends TestCase
+class PayconiqApiClientTest extends TestCase
 {
     use MatchesSnapshots;
 
@@ -29,27 +27,15 @@ class NewEndpointPayconiqApiClientTest extends TestCase
     {
         parent::setUp();
 
-        CarbonImmutable::setTestNow(
-            CarbonImmutable::parse(
-                MigrationHelper::SWITCH_DATETIME,
-                MigrationHelper::TIMEZONE,
-            ),
-        );
-
         $this->apiKey = 'some-api-key';
         $this->httpClient = $this->createMock(Client::class);
         $this->useProd = false;
 
         $this->payconiqApiClient = new PayconiqApiClient(
-            $this->apiKey,
-            $this->httpClient,
-            $this->useProd,
+            apiKey: $this->apiKey,
+            httpClient: $this->httpClient,
+            useProd: $this->useProd,
         );
-    }
-
-    protected function tearDown(): void
-    {
-        CarbonImmutable::setTestNow();
     }
 
     public function testSetApiKey(): void
