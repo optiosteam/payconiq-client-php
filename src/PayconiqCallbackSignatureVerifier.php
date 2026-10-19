@@ -50,8 +50,8 @@ class PayconiqCallbackSignatureVerifier
 
     public function __construct(
         string $paymentProfileId,
-        ClientInterface $httpClient = null,
-        AdapterInterface $cache = null,
+        ?ClientInterface $httpClient = null,
+        ?AdapterInterface $cache = null,
         bool $useProd = true,
     ) {
         if (null === $httpClient) {
