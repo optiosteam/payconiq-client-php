@@ -32,13 +32,13 @@ class PayconiqQrCodeGenerator
         QrImageSize $size = QrImageSize::SMALL,
         QrImageColor $color = QrImageColor::MAGENTA,
     ): string {
-        return (string) Modifier::from(Http::new($qrLink))
+        return (string) Modifier::wrap(Http::new($qrLink))
             ->mergeQueryParameters([
                 'f' => $format->value,
                 's' => $size->value,
                 'cl' => $color->value,
             ])
-            ->getUri();
+            ->unwrap();
     }
 
     /**
@@ -54,9 +54,9 @@ class PayconiqQrCodeGenerator
     ): string {
         $urlPayload = self::LOCATION_URL_SCHEME_STATIC . $paymentProfileId . '/' . $posId;
 
-        $uri = Modifier::from(Http::new(self::QRCODE_GENERATOR_URL))
+        $uri = Modifier::wrap(Http::new(self::QRCODE_GENERATOR_URL))
             ->mergeQueryParameters(['c' => $urlPayload])
-            ->getUri();
+            ->unwrap();
 
         return self::customizePaymentQrLink((string) $uri, $format, $size, $color);
     }
@@ -106,12 +106,12 @@ class PayconiqQrCodeGenerator
         }
 
         if (false === empty($query)) {
-            $payloadUri = Modifier::from($payloadUri)->mergeQueryParameters($query)->getUri();
+            $payloadUri = Modifier::wrap($payloadUri)->mergeQueryParameters($query)->unwrap();
         }
 
-        $uri = Modifier::from(Http::new(self::QRCODE_GENERATOR_URL))
+        $uri = Modifier::wrap(Http::new(self::QRCODE_GENERATOR_URL))
             ->mergeQueryParameters(['c' => (string) $payloadUri])
-            ->getUri();
+            ->unwrap();
 
         return self::customizePaymentQrLink((string) $uri, $format, $size, $color);
     }

@@ -10,7 +10,7 @@ abstract class PayconiqBaseException extends \Exception
         protected bool $useProd = true,
         $message = "",
         $code = 0,
-        \Throwable $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
     }

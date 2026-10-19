@@ -14,7 +14,7 @@ class PayconiqApiException extends PayconiqBaseException
         bool $isProd = true,
         $message = "",
         $code = 0,
-        \Throwable $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($isProd, $message, $code, $previous);
     }

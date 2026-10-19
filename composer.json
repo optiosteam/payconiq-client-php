@@ -26,8 +26,8 @@
         "nesbot/carbon": "^3.0",
         "symfony/cache": "^5.4|^6.0|^7.0",
         "web-token/jwt-library": "^4.0",
-        "league/uri": "^7.5",
-        "league/uri-components": "^7.5",
+        "league/uri": "^7.6",
+        "league/uri-components": "^7.6",
         "phpseclib/phpseclib": "^3.0"
     },
     "conflict": {

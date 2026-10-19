@@ -133,14 +133,14 @@ class PayconiqApiClient
         int $size = 50,
     ): SearchResult {
         try {
-            $uri = Modifier::from(
+            $uri = Modifier::wrap(
                 Http::new($this->getApiEndpointBase() . '/payments/search'),
             )
                 ->mergeQueryParameters([
                     'page' => $page,
                     'size' => $size,
                 ])
-                ->getUri();
+                ->unwrap();
 
             $response = $this->httpClient->post(
                 uri: (string) $uri,
